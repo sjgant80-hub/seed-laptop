@@ -11,14 +11,15 @@ import csv, io, json, os, subprocess, sys, zipfile, shutil, hashlib
 from email.message import EmailMessage
 from email import policy
 
-out = sys.argv[1]
+out = os.path.abspath(sys.argv[1])
 os.makedirs(out, exist_ok=True)
 C = json.load(open(os.path.join(os.path.dirname(__file__), 'corpus-content.json'), encoding='utf-8'))
 truth, writers = {}, {}
 tmp = os.path.join(out, '_tmp'); os.makedirs(tmp, exist_ok=True)
 
 def soffice(args, cwd):
-    subprocess.run(['soffice', '--headless', '--norestore'] + args, cwd=cwd, check=True, timeout=180, capture_output=True)
+    r = subprocess.run(['soffice', '--headless', '--norestore'] + args, cwd=cwd, timeout=180, capture_output=True, text=True)
+    print('soffice', ' '.join(args), '->', r.returncode, r.stdout.strip()[-200:], r.stderr.strip()[-200:])
 
 def words(texts):
     return ' '.join(texts)
@@ -40,7 +41,7 @@ writers['letter-pythondocx.docx'] = 'python-docx ' + pydocx.__version__ if hasat
 
 html = '<!doctype html><html><head><meta charset="utf-8"><title>Letter</title></head><body>' + ''.join('<p>' + p + '</p>' for p in letter['paragraphs']) + '<table border="1">' + ''.join('<tr>' + ''.join('<td>' + c + '</td>' for c in row) + '</tr>' for row in letter['table']) + '</table></body></html>'
 open(os.path.join(tmp, 'letter.html'), 'w', encoding='utf-8').write(html)
-soffice(['--convert-to', 'docx:MS Word 2007 XML', '--outdir', tmp, 'letter.html'], tmp)
+soffice(['--infilter=HTML (StarWriter)', '--convert-to', 'docx:MS Word 2007 XML', '--outdir', tmp, 'letter.html'], tmp)
 shutil.copy(os.path.join(tmp, 'letter.docx'), os.path.join(out, 'letter-libreoffice.docx'))
 truth['letter-libreoffice.docx'] = {'type': 'docx', 'paragraphs': letter['paragraphs'], 'cells': table_text}
 writers['letter-libreoffice.docx'] = 'LibreOffice Writer (headless, from HTML)'

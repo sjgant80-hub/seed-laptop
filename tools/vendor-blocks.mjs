@@ -52,7 +52,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
       const local = readFileSync(join(ROOT, 'blocks', f.id, f.path));
       if (sha(local) !== f.sha256 || local.length !== f.bytes) { bad++; console.log('✗ blocks/' + f.id + '/' + f.path + ' differs from its pin'); }
       if (args.includes('--remote')) {
-        const up = await fetchAt(f.repo, f.commit, f.path);
+        const up = await fetchAt(f.repo.replace(/^sjgant80-hub\//, ''), f.commit, f.path);
         if (sha(up) !== f.sha256) { bad++; console.log('✗ ' + f.repo + '@' + f.commit.slice(0, 7) + ':' + f.path + ' is not the pinned bytes'); }
       }
     }

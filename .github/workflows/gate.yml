@@ -12,12 +12,14 @@ jobs:
         run: node tools/vendor-blocks.mjs --check && node tools/vendor-blocks.mjs --remote
       - name: the stock seed opens under the pinned key and carries exactly those blocks
         run: node tools/make-seed.mjs --check
+      - name: the office's offline list names exactly the files it has now
+        run: node tools/build-office.mjs --check
       - name: unit, pin and hostile-input suites (G1 fuzz included)
         run: node --test test/*.test.mjs
       - name: plant the stock seed with no network permission (the planting cannot reach the network)
         run: |
           mkdir -p .out/ci-home
-          SEED_PHRASE="a public CI owner phrase, not a secret" node --permission --allow-fs-read="$PWD" --allow-fs-write="$PWD/.out/ci-home/*" tools/plant.mjs --seed seeds/stock.full --home .out/ci-home
+          SEED_PHRASE="a public CI owner phrase, not a secret" node --permission --allow-fs-read="$PWD" --allow-fs-read="$PWD/*" --allow-fs-write="$PWD/.out/ci-home/*" tools/plant.mjs --seed seeds/stock.full --home .out/ci-home
   witness:
     runs-on: ubuntu-latest
     steps:
@@ -37,7 +39,7 @@ jobs:
         run: docker run --rm --network none --read-only seed-base node tools/probe.mjs --json | tee probe.json
       - name: plant the full seed INSIDE the base, no network device at all, root filesystem read-only
         run: |
-          docker run --rm --network none --read-only --tmpfs /home/node/office:uid=1000,gid=1000 -e SEED_PHRASE="a public CI owner phrase, not a secret" seed-base             node --permission --allow-fs-read=/plant --allow-fs-write='/home/node/office/*' tools/plant.mjs --seed seeds/stock.full --home /home/node/office/h | tee plant.json
+          docker run --rm --network none --read-only --tmpfs /home/node/office:uid=1000,gid=1000 -e SEED_PHRASE="a public CI owner phrase, not a secret" seed-base             node --permission --allow-fs-read=/plant --allow-fs-read='/plant/*' --allow-fs-write='/home/node/office/*' tools/plant.mjs --seed seeds/stock.full --home /home/node/office/h | tee plant.json
           grep -q '"ok":true' plant.json
       - name: what is in the base, exactly (refused if it differs from base/MANIFEST.json)
         run: |

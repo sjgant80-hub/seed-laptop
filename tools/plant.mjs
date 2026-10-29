@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // tools/plant.mjs — plant a seed on this machine (the host-OS mode, or inside the minimal base) and grow the office.
 //
-//   SEED_PHRASE=<the owner's phrase> node --permission --allow-fs-read=<repo> --allow-fs-write=<home> \
+//   SEED_PHRASE=<the owner's phrase> node --permission --allow-fs-read=<repo> --allow-fs-read=<repo>/* --allow-fs-write=<home>/* \
 //       tools/plant.mjs --seed seeds/stock.full --home <empty folder>
 //   … --genome seeds/stock.genome.json --mirror <folder>       a light seed: blocks from the owner's own mirror
 //
