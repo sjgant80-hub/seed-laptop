@@ -56,6 +56,10 @@ const RULES = {
     facts: { keys: count, owner: hexid },
     says: (f) => 'Your office grew back from your vault: ' + plural(f.keys, 'thing', 'things') + ' restored, byte for byte, for ' + short(f.owner) + '. This device has a key of its own, and your behaviour watch starts fresh, refusing nothing while it learns.',
   },
+  upgraded: {
+    facts: { keys: count, from: hexid, orphaned: count },
+    says: (f) => 'Your office came across from a vault saved under an earlier seed (' + short(f.from) + '): ' + plural(f.keys, 'thing', 'things') + ' merged in, nothing dropped' + (f.orphaned ? ', ' + plural(f.orphaned, 'block\'s', 'blocks\'') + ' data kept although this seed no longer grows ' + (f.orphaned === 1 ? 'it' : 'them') : '') + '.',
+  },
   synced: {
     facts: { changes: count },
     says: (f) => plural(f.changes, 'change', 'changes') + ' arrived from your other device, each checked before it was read.',

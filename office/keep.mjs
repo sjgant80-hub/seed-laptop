@@ -6,6 +6,7 @@ import { entriesOf, restore, watchOf, eventOf } from '../src/regrow.mjs';
 import { plant } from '../vendor/fall-kit-core/seed.mjs';
 import { POLICY } from '../src/germinate.mjs';
 import { step } from '../vendor/bes-inward/watch.mjs';
+import { merge } from '../src/store.mjs';
 
 const $ = (id) => document.getElementById(id);
 
@@ -47,7 +48,33 @@ export function besWatch(owner, saved) {
   };
 }
 
+/** An update: this office was grown from a newer seed; bring the owner's office across from a vault saved under an
+ * earlier one. Merged into what is here (src/store.mjs merge), so nothing in either is lost. */
+export async function upgradeFrom(ctx, vaultBytes, phrase) {
+  if ((await ownerOf(phrase)) !== ctx.owner.founder) return { ok: false, why: 'that is not the phrase this office was planted with' };
+  const o = await open(vaultBytes, phrase);
+  if (!o.ok) return { ok: false, why: o.why };
+  const r = restore(o.entries, { digest: ctx.digest, owner: { id: ctx.owner.founder }, blocks: ctx.blocks.map((b) => b.id) }, { upgrade: true });
+  if (!r.ok) return r;
+  if (!r.from) return { ok: false, why: 'this vault was saved under this same seed, so there is nothing to bring across (on a new machine, use Regrow)' };
+  const m = merge(ctx.store(), r.store);
+  if (!m.ok) return { ok: false, why: m.why };
+  return { ok: true, store: m.store, keys: Object.keys(r.store.keys).length, from: r.from, orphaned: r.orphaned.length };
+}
+
 export function installKeep(ctx) {
+  $('vault-upgrade').addEventListener('change', async () => {
+    const says = $('backup-says'), f = $('vault-upgrade').files[0];
+    if (!f) return;
+    says.textContent = 'Opening the vault…';
+    const r = await upgradeFrom(ctx, new Uint8Array(await f.arrayBuffer()), $('backup-phrase').value);
+    $('vault-upgrade').value = '';
+    if (!r.ok) { says.textContent = 'Not brought across: ' + r.why + '.'; return; }
+    $('backup-phrase').value = '';
+    ctx.setStore(r.store);
+    says.textContent = r.keys + ' things brought across and merged in; nothing dropped.';
+    ctx.receipt('upgraded', { keys: r.keys, from: r.from, orphaned: r.orphaned });
+  });
   $('backup-save').addEventListener('click', async () => {
     const says = $('backup-says');
     says.textContent = 'Sealing your vault…';

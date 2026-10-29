@@ -69,3 +69,22 @@ test('eventOf: an office action as the watch reads it', () => {
   assert.equal(eventOf({ do: 'toString' }, 1).kind, 'other');
   assert.equal(eventOf({ do: 'send', size: 0 }, 1).size, 1);
 });
+
+test('an update: the owner brings their office across into one grown from a newer seed; nobody else can', () => {
+  const D1 = 'a'.repeat(64), D2 = 'b'.repeat(64), OWNER = 'c'.repeat(64), OTHER = 'e'.repeat(64);
+  let st = emptyStore();
+  for (const [k, v] of [['b/crm/ls/theme', ['s', 'dark']], ['b/fax/ls/x', ['s', 'old block']], ['kar/receipts/1', ['s', '{}']]]) st = write(st, 'd0'.repeat(16), k, v).store;
+  const entries = entriesOf(st, { digest: D1, founder: OWNER });
+  assert.match(restore(entries, { digest: D2, owner: { id: OWNER }, blocks: ['crm'] }).why, /another seed/, 'not without asking for it');
+  for (const opts of [null, 5, { upgrade: 'yes' }, { upgrade: 1 }]) assert.equal(restore(entries, { digest: D2, owner: { id: OWNER }, blocks: ['crm'] }, opts).ok, false, JSON.stringify(opts));
+  const up = restore(entries, { digest: D2, owner: { id: OWNER }, blocks: ['crm'] }, { upgrade: true });
+  assert.equal(up.ok, true);
+  assert.equal(up.from, D1, 'the earlier office is named');
+  assert.deepEqual(up.orphaned, ['fax'], 'data the new seed no longer grows is reported, and kept');
+  assert.equal(Object.keys(up.store.keys).length, 3, 'nothing dropped');
+  assert.deepEqual(restore(entries, { digest: D2, owner: { id: OWNER } }, { upgrade: true }).orphaned, ['crm', 'fax'], 'a seed naming no blocks orphans them all, still keeping them');
+  assert.match(restore(entries, { digest: D2, owner: { id: OTHER }, blocks: ['crm'] }, { upgrade: true }).why, /another owner/, 'another phrase cannot');
+  const same = restore(entries, { digest: D1, owner: { id: OWNER }, blocks: ['crm'] }, { upgrade: true });
+  assert.equal(same.ok, true);
+  assert.equal('from' in same, false, 'the same seed is no upgrade');
+});

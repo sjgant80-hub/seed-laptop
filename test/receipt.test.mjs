@@ -78,7 +78,7 @@ test('imported, quarantined, exported: the edges leave receipts', () => {
   assert.equal(receipt('quarantined', { file: 'a.pdf', why: '' }, AT), null);
   assert.equal(receipt('exported', { file: 'quote.pdf', format: 'pdf', bytes: 1 }, AT).says, "You saved quote.pdf (pdf, 1 byte) to this device. It carries nothing of your office's keys or internals.");
   assert.equal(receipt('exported', { file: 'quote.pdf', format: 'pdf', bytes: 2048 }, AT).says.includes('2048 bytes'), true);
-  assert.deepEqual(Object.keys(KINDS), ['grew', 'refused', 'opened', 'saved', 'asked', 'imported', 'quarantined', 'backed-up', 'regrown', 'synced', 'paired', 'exported']);
+  assert.deepEqual(Object.keys(KINDS), ['grew', 'refused', 'opened', 'saved', 'asked', 'imported', 'quarantined', 'backed-up', 'regrown', 'upgraded', 'synced', 'paired', 'exported']);
 });
 
 test('backed-up, regrown, synced, paired', () => {
@@ -88,4 +88,12 @@ test('backed-up, regrown, synced, paired', () => {
   assert.equal(receipt('synced', { changes: 3 }, AT).says, '3 changes arrived from your other device, each checked before it was read.');
   assert.equal(receipt('paired', { device: h }, AT).says, 'A new device (abababab) is on your list of devices, signed with your phrase.');
   assert.equal(receipt('paired', { device: 'zz' }, AT), null);
+});
+
+test('upgraded: an office brought across from an earlier seed, its orphaned blocks named only when there are some', () => {
+  const from = 'ab'.repeat(32);
+  assert.equal(receipt('upgraded', { keys: 12, from, orphaned: 0 }, AT).says, 'Your office came across from a vault saved under an earlier seed (abababab): 12 things merged in, nothing dropped.');
+  assert.match(receipt('upgraded', { keys: 1, from, orphaned: 1 }, AT).says, /1 thing merged in, nothing dropped, 1 block's data kept although this seed no longer grows it\.$/);
+  assert.match(receipt('upgraded', { keys: 3, from, orphaned: 2 }, AT).says, /2 blocks' data kept although this seed no longer grows them\.$/);
+  assert.equal(receipt('upgraded', { keys: 1, from: 'nothex', orphaned: 0 }, AT), null);
 });

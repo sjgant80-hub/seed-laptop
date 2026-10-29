@@ -1,13 +1,13 @@
 // office/precache.mjs — written by tools/build-office.mjs: every file the office needs offline, with its SHA-256.
-export const VERSION = "e4e297688ce2";
+export const VERSION = "1ec10f7be615";
 export const FILES = [
  {
   "path": "index.html",
-  "sha256": "a716d6d8fec81b77ff00c0630c711cc1c141b4ff2bc4a8bcdbd30ebd35c87686"
+  "sha256": "520b060d6391b635aaad14ee203e9297a9e875cb8de10b6724f9c428e313b6d8"
  },
  {
   "path": "shell.mjs",
-  "sha256": "0ec3b53be58e7301ff169e5cafbf728b2297bf7109acfd09aa4a3a0e8eb8673a"
+  "sha256": "69067a3975863ec19479c0d0cb012e35827d90a3ec560ec580cec8ab1cbf1bd9"
  },
  {
   "path": "edges.mjs",
@@ -15,7 +15,7 @@ export const FILES = [
  },
  {
   "path": "keep.mjs",
-  "sha256": "cfe7f5699481d5d8d5df1102d8ab26def1860a788dcf80d76b968e56ac890224"
+  "sha256": "5863e5ed5cd36559985e7e4cb1e3dcc32cf5c40144597bbec1c17f41933b5c90"
  },
  {
   "path": "devices.mjs",
@@ -127,11 +127,11 @@ export const FILES = [
  },
  {
   "path": "../src/receipt.mjs",
-  "sha256": "8318214424ed6b8d5fd4f47cac3c573b1f1ee34d85e3a0efc3c3f494d951843a"
+  "sha256": "4cd475dcb50556bcbd718dcbecb68328ef4d9af49e722e3db38632d0c585e065"
  },
  {
   "path": "../src/regrow.mjs",
-  "sha256": "2ac82abae1d2696b992cbe12c0284980c423bba3d2afa01891605e76b0ba0f39"
+  "sha256": "f2bd80e9f2350acc6fce2c720bcf1c3acf2c82def1aecf0fde6622b597aef6c9"
  },
  {
   "path": "../src/runtime.mjs",

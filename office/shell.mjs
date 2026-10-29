@@ -160,7 +160,7 @@ function openOffice() {
     owner: office.owner, blocks: office.manifest.blocks, genome: office.manifest.genome, frames, note,
   });
   edges.render();
-  if (!keep) keep = installKeep({ store: () => store, digest: office.digest, owner: office.owner, receipt: (k, f) => addReceipt(k, f) });
+  if (!keep) keep = installKeep({ store: () => store, setStore: (x) => { store = x; persist(); }, digest: office.digest, owner: office.owner, blocks: office.manifest.blocks, receipt: (k, f) => addReceipt(k, f) });
   if (!bes) getState('bes').then((saved) => { bes = besWatch(office.owner.founder, saved); $('bes-says').textContent = bes.says(); });
   if (!devices) Promise.all([getState('device'), getState('sync')]).then(async ([seedHex, saved]) => {
     if (!me && seedHex) me = await makeIdentity(unhex(seedHex));

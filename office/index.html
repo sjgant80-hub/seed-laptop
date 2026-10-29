@@ -83,7 +83,8 @@
       <h2>Your vault</h2>
       <p>One encrypted file holds everything this office keeps. Only your phrase opens it: the vault holds no key, and nobody else holds your phrase, so nobody else can open it, or recover it for you. Keep a copy somewhere safe, off this machine.</p>
       <input id="backup-phrase" type="password" autocomplete="current-password" placeholder="Your phrase" aria-label="Your phrase">
-      <div class="exports"><button id="backup-save" class="primary">Save my vault</button></div>
+      <div class="exports"><button id="backup-save" class="primary">Save my vault</button><label class="file">Bring my office across from an earlier seed… <input id="vault-upgrade" type="file" accept=".slv,application/octet-stream"></label></div>
+      <p class="runtime">After an update (a newer seed, planted), type your phrase above and choose a vault saved under the earlier seed: everything in it is merged into this office, and nothing in either is lost.</p>
       <p id="backup-says" class="says" role="status" aria-live="polite"></p>
       <p id="bes-says" class="runtime"></p>
     </section>
