@@ -1,0 +1,53 @@
+{
+ "note": "Fixed, fictional content for the L2a corpus: every organisation, person and address is invented; e-mail addresses use the reserved example.com / example.org domains, and phone numbers are in Ofcom's range reserved for drama (07700 900000 to 900999). The mainstream writers on GitHub's runner turn this into real files (measure/corpus.py).",
+ "letter": {
+  "title": "Northgate Joinery Ltd",
+  "paragraphs": [
+   "Northgate Joinery Ltd",
+   "Unit 4, Tannery Yard, Example Lane",
+   "Dear Ms Okafor,",
+   "Thank you for confirming the order for twelve oak window frames. Our surveyor will measure the openings on Monday morning.",
+   "The frames will be made in our workshop over three weeks and fitted in two days, weather permitting.",
+   "A deposit of 30% is due before work begins; the balance falls due within fourteen days of fitting.",
+   "Please call Priya Shah if the access arrangements change.",
+   "Yours sincerely,",
+   "Tom Ellery, Director"
+  ],
+  "table": [["Item", "Quantity", "Unit price"], ["Oak casement frame", "12", "485.00"], ["Fitting (per day)", "2", "640.00"], ["Survey visit", "1", "120.00"]]
+ },
+ "sheet": {
+  "name": "Orders",
+  "rows": [["Customer", "Item", "Quantity", "Total", "Paid"], ["Okafor", "Oak casement frame", 12, 5820, true], ["Lindqvist", "Sash window", 4, 2360.5, false], ["Abara", "Door frame", 2, 910, true], ["Moreau", "Skirting (metre)", 48, 432.75, false]]
+ },
+ "notes": [
+  "Site meeting notes for the Tannery Yard workshop extension",
+  "Present: Tom Ellery, Priya Shah and the building inspector.",
+  "The inspector approved the foundation depth and asked for a second fire exit on the east wall.",
+  "Priya will order the steel lintels this week; delivery is expected before the end of the month.",
+  "Open questions: drainage on the north side, and whether the old kiln chimney can stay."
+ ],
+ "mail": [
+  { "from": "Priya Shah <priya.shah@example.com>", "to": "Tom Ellery <tom.ellery@example.org>", "subject": "Lintel order confirmed", "date": "Mon, 02 Nov 2026 09:14:00 +0000", "text": "Tom,\n\nThe steel lintels are ordered and due on the 24th.\nI have asked the yard to keep the east gate clear.\n\nPriya" },
+  { "from": "Tom Ellery <tom.ellery@example.org>", "to": "Amaka Okafor <amaka.okafor@example.com>", "subject": "Survey on Monday — café entrance", "date": "Tue, 03 Nov 2026 16:40:00 +0000", "text": "Dear Ms Okafor,\n\nOur surveyor will arrive at 9 am and use the café entrance.\nThe visit takes about an hour.\n\nTom", "attachment": { "name": "survey-checklist.txt", "text": "1. Measure every opening\n2. Photograph the sills\n3. Note any rot\n" } },
+  { "from": "Lena Lindqvist <lena@example.com>", "to": "Tom Ellery <tom.ellery@example.org>", "subject": "Sash window quote — question", "date": "Wed, 04 Nov 2026 11:05:00 +0000", "text": "Hello Tom,\n\nDoes the quote for the four sash windows include the glass?\nKind regards,\nLena", "html": true }
+ ],
+ "events": [
+  { "uid": "survey-okafor@example.org", "summary": "Survey: Okafor window openings", "start": "20261109T090000Z", "end": "20261109T100000Z", "location": "14 Example Road" },
+  { "uid": "inspection-yard@example.org", "summary": "Building inspection, Tannery Yard", "start": "20261112T140000Z", "end": "20261112T150000Z", "location": "Unit 4, Tannery Yard" },
+  { "uid": "delivery-lintels@example.org", "summary": "Steel lintel delivery", "start": "20261124T080000Z", "end": "20261124T090000Z", "location": "East gate" }
+ ],
+ "contacts": [
+  { "fn": "Priya Shah", "family": "Shah", "given": "Priya", "email": "priya.shah@example.com", "tel": "+44 7700 900123", "org": "Northgate Joinery Ltd", "title": "Operations Manager" },
+  { "fn": "Amaka Okafor", "family": "Okafor", "given": "Amaka", "email": "amaka.okafor@example.com", "tel": "+44 7700 900456", "org": "", "title": "" },
+  { "fn": "Lena Lindqvist", "family": "Lindqvist", "given": "Lena", "email": "lena@example.com", "tel": "+44 7700 900789", "org": "Lindqvist Interiors", "title": "Designer" }
+ ],
+ "images": [
+  { "name": "logo", "width": 320, "height": 120 },
+  { "name": "photo", "width": 640, "height": 480 }
+ ],
+ "archive": [
+  { "name": "readme.txt", "text": "Workshop drawings, revision C.\n" },
+  { "name": "drawings/east-wall.txt", "text": "East wall: second fire exit, 900 mm clear.\n" },
+  { "name": "drawings/lintels.txt", "text": "Steel lintels: four at 2.4 m, two at 1.8 m.\n" }
+ ]
+}

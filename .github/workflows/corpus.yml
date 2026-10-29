@@ -1,0 +1,22 @@
+name: corpus
+# The L2a corpus, written once by mainstream writers on GitHub's runner and committed (pinned in seal 2).
+# Run by hand only; a measurement never regenerates it.
+on: workflow_dispatch
+jobs:
+  write:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: the writers (LibreOffice from Ubuntu; the Python writers from PyPI; Chrome is on the runner)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-writer libreoffice-calc
+          python3 -m pip install --quiet python-docx openpyxl reportlab pymupdf icalendar vobject pillow
+          soffice --version; google-chrome --version
+      - name: write the corpus
+        run: python3 measure/corpus.py corpus
+      - uses: actions/upload-artifact@v4
+        with:
+          name: corpus
+          path: corpus/
+          if-no-files-found: error
