@@ -1,0 +1,154 @@
+{
+ "kind": "seed-laptop.receipt",
+ "v": 1,
+ "claims": "L5",
+ "commit": "7f03325588d124c35c3cb11663a8ada4d655695a",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "node": "v25.7.0"
+ },
+ "facts": {
+  "L5": {
+   "relay": {
+    "rounds": [
+     {
+      "round": 1,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0,
+      "keys": 30,
+      "share": 0.25
+     },
+     {
+      "round": 2,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0,
+      "keys": 55,
+      "share": 0.3
+     },
+     {
+      "round": 3,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0,
+      "keys": 73,
+      "share": 0.4
+     },
+     {
+      "round": 4,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0,
+      "keys": 95,
+      "share": 0.2
+     },
+     {
+      "round": 5,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0,
+      "keys": 116,
+      "share": 0.4
+     },
+     {
+      "round": 6,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0,
+      "keys": 130,
+      "share": 0.4
+     }
+    ],
+    "regrow": {
+     "restored": true,
+     "equal": true,
+     "lostBefore": 0,
+     "lostWithA": 7,
+     "aUnsynced": 7,
+     "lostOther": 0,
+     "newKey": true
+    },
+    "after": [
+     {
+      "round": 7,
+      "equal": true,
+      "lostB": 0,
+      "lostC": 0,
+      "share": 0.35
+     },
+     {
+      "round": 8,
+      "equal": true,
+      "lostB": 0,
+      "lostC": 0,
+      "share": 0.25
+     },
+     {
+      "round": 9,
+      "equal": true,
+      "lostB": 0,
+      "lostC": 0,
+      "share": 0.1
+     }
+    ],
+    "edits": 360,
+    "shared": 131,
+    "sharedShare": 0.3638888888888889,
+    "minShare": 0.1,
+    "refusedPackets": 0
+   },
+   "webrtc": {
+    "rounds": [
+     {
+      "round": 1,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0
+     },
+     {
+      "round": 2,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0
+     },
+     {
+      "round": 3,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0
+     },
+     {
+      "round": 4,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0
+     },
+     {
+      "round": 5,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0
+     },
+     {
+      "round": 6,
+      "equal": true,
+      "lostA": 0,
+      "lostB": 0
+     }
+    ],
+    "equal": true,
+    "dtls": true,
+    "ms": 2404,
+    "browser": "Chrome/155.0.0.0"
+   }
+  }
+ },
+ "verdicts": [
+  {
+   "id": "L5",
+   "verdict": "HELD",
+   "says": "Over the relay: 6 of 6 syncs equal with no write lost (360 edits, every round at least 10% on keys the other device edited too); device A destroyed, C regrown from the vault: equal to B, 0 shared writes lost, 7 of A's 7 never-synced writes gone with it; then 3 of 3 more syncs equal. Over WebRTC in Chrome/155.0.0.0: every round equal, nothing lost, DTLS connected."
+  }
+ ]
+}

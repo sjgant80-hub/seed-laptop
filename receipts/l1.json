@@ -1,0 +1,188 @@
+{
+ "kind": "seed-laptop.receipt",
+ "v": 1,
+ "claims": "L1",
+ "commit": "7f03325588d124c35c3cb11663a8ada4d655695a",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "cores": 12,
+  "node": "v25.7.0"
+ },
+ "facts": {
+  "L1a": {
+   "runs": [
+    {
+     "ok": true,
+     "signed": true,
+     "checked": 8,
+     "blocks": 7,
+     "office": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+     "receipt": true,
+     "owner": "1f1a8c0a4f6e130587e2910ec5febac8dc244eb9544abb721d0ef75a86c53e7b",
+     "empty": true,
+     "ms": 1532
+    },
+    {
+     "ok": true,
+     "signed": true,
+     "checked": 8,
+     "blocks": 7,
+     "office": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+     "receipt": true,
+     "owner": "1f1a8c0a4f6e130587e2910ec5febac8dc244eb9544abb721d0ef75a86c53e7b",
+     "empty": true,
+     "ms": 1529
+    },
+    {
+     "ok": true,
+     "signed": true,
+     "checked": 8,
+     "blocks": 7,
+     "office": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+     "receipt": true,
+     "owner": "1f1a8c0a4f6e130587e2910ec5febac8dc244eb9544abb721d0ef75a86c53e7b",
+     "empty": true,
+     "ms": 1513
+    },
+    {
+     "ok": true,
+     "signed": true,
+     "checked": 8,
+     "blocks": 7,
+     "office": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+     "receipt": true,
+     "owner": "1f1a8c0a4f6e130587e2910ec5febac8dc244eb9544abb721d0ef75a86c53e7b",
+     "empty": true,
+     "ms": 1711
+    },
+    {
+     "ok": true,
+     "signed": true,
+     "checked": 8,
+     "blocks": 7,
+     "office": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+     "receipt": true,
+     "owner": "1f1a8c0a4f6e130587e2910ec5febac8dc244eb9544abb721d0ef75a86c53e7b",
+     "empty": true,
+     "ms": 1529
+    }
+   ],
+   "named": 7,
+   "files": 8,
+   "digest": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+   "owner": "1f1a8c0a4f6e130587e2910ec5febac8dc244eb9544abb721d0ef75a86c53e7b",
+   "netDenied": true,
+   "flags": "--permission --allow-fs-read=<repo> --allow-fs-read=<repo>/* --allow-fs-write=<home>/* (no --allow-net, --allow-child-process, --allow-worker)"
+  },
+  "L1b": {
+   "chrome": "Chrome/155.0.8059.85",
+   "offline": true,
+   "digest": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+   "l1aDigest": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+   "named": 7,
+   "blocks": [
+    {
+     "id": "office",
+     "loaded": true,
+     "elements": 0,
+     "exceptions": 0,
+     "bridged": 1
+    },
+    {
+     "id": "crm",
+     "loaded": true,
+     "elements": 0,
+     "exceptions": 0,
+     "bridged": 12
+    },
+    {
+     "id": "ledger",
+     "loaded": true,
+     "elements": 0,
+     "exceptions": 0,
+     "bridged": 7
+    },
+    {
+     "id": "pdf",
+     "loaded": true,
+     "elements": 0,
+     "exceptions": 0,
+     "bridged": 3
+    },
+    {
+     "id": "mind",
+     "loaded": true,
+     "elements": 0,
+     "exceptions": 0,
+     "bridged": 1
+    },
+    {
+     "id": "image",
+     "loaded": true,
+     "elements": 0,
+     "exceptions": 0,
+     "bridged": 1
+    },
+    {
+     "id": "layout",
+     "loaded": true,
+     "elements": 0,
+     "exceptions": 0,
+     "bridged": 1
+    }
+   ],
+   "left": 0,
+   "refused": 10,
+   "refusedHosts": [
+    "fonts.googleapis.com",
+    "sjgant80-hub.github.io"
+   ],
+   "kar": true,
+   "ms": 3150,
+   "pageExceptions": 0
+  },
+  "L1c": {
+   "genomeBits": 16856,
+   "genomeFlips": 16856,
+   "genomeRefused": 16856,
+   "genomeFetches": 0,
+   "named": 7,
+   "files": 8,
+   "blockCases": 448,
+   "blockRefused": 448,
+   "mirrorCases": 8,
+   "mirrorRefused": 8,
+   "composed": 0
+  },
+  "L1d": {
+   "lightDigest": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+   "fullDigest": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+   "checked": 8,
+   "fetched": 8,
+   "files": 8
+  }
+ },
+ "verdicts": [
+  {
+   "id": "L1a",
+   "verdict": "HELD",
+   "says": "5 of 5 plantings with no network permission grew the office (7 blocks, 8 files, every one checked against its pin); median 1.53 s from process start to Kar's first receipt; a connection tried under the same permissions was refused."
+  },
+  {
+   "id": "L1b",
+   "verdict": "FAILED",
+   "says": "In Chrome with the network off: 0 of 7 blocks started clean in their sandboxes, the office digest equals the planted one, 0 requests left the page (10 the blocks' own code tried were refused inside the browser), Kar open, 3.15 s from choosing the seed."
+  },
+  {
+   "id": "L1c",
+   "verdict": "HELD",
+   "says": "16856 of 16856 one-bit changes of the genome refused with 0 blocks fetched; 448 of 448 changed blocks refused, 0 offices composed; 8 of 8 altered mirror files refused."
+  },
+  {
+   "id": "L1d",
+   "verdict": "HELD",
+   "says": "The light seed fetched 8 files from the mirror, checked 8, and grew an office whose digest equals the full seed's."
+  }
+ ]
+}

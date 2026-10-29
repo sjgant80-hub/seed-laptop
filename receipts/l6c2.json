@@ -1,0 +1,35 @@
+{
+ "kind": "seed-laptop.receipt",
+ "v": 1,
+ "claims": "L6c2",
+ "commit": "f46ffc2e3b722efdcf563c10bb416e4437d2a345",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "node": "v25.7.0"
+ },
+ "facts": {
+  "L6c2": {
+   "tab": {
+    "actions": 303,
+    "plan": 303,
+    "unmade": 0,
+    "receipts": 320,
+    "left": 0,
+    "refused": 10,
+    "hosts": [
+     "fonts.googleapis.com",
+     "sjgant80-hub.github.io"
+    ],
+    "ms": 243946,
+    "chrome": "Chrome/155.0.8059.85"
+   }
+  }
+ },
+ "verdicts": [
+  {
+   "id": "L6c2",
+   "verdict": "FAILED",
+   "says": "In a Chrome tab, every frame found after it opened: 303 of 303 planned actions made (0 not made), 320 receipts, 0 requests left the page (10 refused inside the browser)."
+  }
+ ]
+}

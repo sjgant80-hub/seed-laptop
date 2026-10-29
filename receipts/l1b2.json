@@ -1,0 +1,94 @@
+{
+ "kind": "seed-laptop.receipt",
+ "v": 1,
+ "claims": "L1b2",
+ "commit": "22be1436e2e84512429a4d26c2d8456e611d8d04",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "cores": 12,
+  "node": "v25.7.0"
+ },
+ "facts": {
+  "chrome": "Chrome/155.0.8059.85",
+  "offline": true,
+  "digest": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+  "l1aDigest": "35ab7f50145a5e2e1a08a209d2c2f4b3e8b81dfe321ca049d2d895924b51dc3f",
+  "named": 7,
+  "blocks": [
+   {
+    "id": "office",
+    "loaded": true,
+    "frame": "found",
+    "elements": 56,
+    "exceptions": 0,
+    "bridged": 1
+   },
+   {
+    "id": "crm",
+    "loaded": true,
+    "frame": "found",
+    "elements": 325,
+    "exceptions": 0,
+    "bridged": 12
+   },
+   {
+    "id": "ledger",
+    "loaded": true,
+    "frame": "found",
+    "elements": 120,
+    "exceptions": 0,
+    "bridged": 13
+   },
+   {
+    "id": "pdf",
+    "loaded": true,
+    "frame": "found",
+    "elements": 169,
+    "exceptions": 0,
+    "bridged": 3
+   },
+   {
+    "id": "mind",
+    "loaded": true,
+    "frame": "found",
+    "elements": 39,
+    "exceptions": 0,
+    "bridged": 1
+   },
+   {
+    "id": "image",
+    "loaded": true,
+    "frame": "found",
+    "elements": 87,
+    "exceptions": 0,
+    "bridged": 1
+   },
+   {
+    "id": "layout",
+    "loaded": true,
+    "frame": "found",
+    "elements": 164,
+    "exceptions": 0,
+    "bridged": 1
+   }
+  ],
+  "left": 0,
+  "refused": 10,
+  "refusedHosts": [
+   "fonts.googleapis.com",
+   "sjgant80-hub.github.io"
+  ],
+  "kar": true,
+  "ms": 3141,
+  "frameTargets": 7,
+  "unnamedExceptions": 0
+ },
+ "verdicts": [
+  {
+   "id": "L1b2",
+   "verdict": "HELD",
+   "says": "In Chrome with the network off, every frame named after loading: 7 of 7 blocks started clean in their sandboxes (office 56 elements, crm 325 elements, ledger 120 elements, pdf 169 elements, mind 39 elements, image 87 elements, layout 164 elements), the office digest equals the planted one, 0 requests left the page (10 the blocks' own code tried were refused inside the browser), Kar open, 3.14 s from choosing the seed."
+  }
+ ]
+}

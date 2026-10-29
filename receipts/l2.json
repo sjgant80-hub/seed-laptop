@@ -1,0 +1,2297 @@
+{
+ "kind": "seed-laptop.receipt",
+ "v": 1,
+ "claims": "L2",
+ "commit": "7f03325588d124c35c3cb11663a8ada4d655695a",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "node": "v25.7.0"
+ },
+ "facts": {
+  "L2a": {
+   "benign": [
+    {
+     "name": "contacts.vcf",
+     "type": "vcf",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 13,
+     "exact": 13
+    },
+    {
+     "name": "diary.ics",
+     "type": "ics",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 12,
+     "exact": 12
+    },
+    {
+     "name": "drawings.zip",
+     "type": "zip",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 3,
+     "exact": 3
+    },
+    {
+     "name": "letter-libreoffice.docx",
+     "type": "docx",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 21,
+     "exact": 21
+    },
+    {
+     "name": "letter-libreoffice.pdf",
+     "type": "pdf",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 103,
+     "exact": 103
+    },
+    {
+     "name": "letter-pythondocx.docx",
+     "type": "docx",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 21,
+     "exact": 21
+    },
+    {
+     "name": "letter-reportlab.pdf",
+     "type": "pdf",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 82,
+     "exact": 82
+    },
+    {
+     "name": "logo.gif",
+     "type": "gif",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 2,
+     "exact": 2
+    },
+    {
+     "name": "logo.png",
+     "type": "png",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 2,
+     "exact": 2
+    },
+    {
+     "name": "mail-1.eml",
+     "type": "eml",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 5,
+     "exact": 5
+    },
+    {
+     "name": "mail-2.eml",
+     "type": "eml",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 6,
+     "exact": 6
+    },
+    {
+     "name": "mail-3.eml",
+     "type": "eml",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 5,
+     "exact": 5
+    },
+    {
+     "name": "notes-chrome.pdf",
+     "type": "pdf",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 67,
+     "exact": 64
+    },
+    {
+     "name": "notes-pymupdf.pdf",
+     "type": "pdf",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 67,
+     "exact": 67
+    },
+    {
+     "name": "orders-libreoffice.csv",
+     "type": "csv",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 25,
+     "exact": 25
+    },
+    {
+     "name": "orders-libreoffice.xlsx",
+     "type": "xlsx",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 25,
+     "exact": 25
+    },
+    {
+     "name": "orders-openpyxl.xlsx",
+     "type": "xlsx",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 25,
+     "exact": 25
+    },
+    {
+     "name": "orders-python.csv",
+     "type": "csv",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 25,
+     "exact": 25
+    },
+    {
+     "name": "photo.jpg",
+     "type": "jpeg",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 2,
+     "exact": 2
+    },
+    {
+     "name": "photo.webp",
+     "type": "webp",
+     "verified": true,
+     "stage": null,
+     "parsed": true,
+     "why": null,
+     "fields": 2,
+     "exact": 2
+    }
+   ]
+  },
+  "L2b": {
+   "hostile": [
+    {
+     "name": "contacts.cut-50.vcf",
+     "kind": "cut-50",
+     "declared": "vcf",
+     "outcome": "quarantined",
+     "why": "a contact card is cut short: it never ends",
+     "killed": false
+    },
+    {
+     "name": "contacts.cut-90.vcf",
+     "kind": "cut-90",
+     "declared": "vcf",
+     "outcome": "quarantined",
+     "why": "a contact card is cut short: it never ends",
+     "killed": false
+    },
+    {
+     "name": "contacts.flip-0.vcf",
+     "kind": "flip-0",
+     "declared": "vcf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "contacts.flip-1.vcf",
+     "kind": "flip-1",
+     "declared": "vcf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "contacts.flip-2.vcf",
+     "kind": "flip-2",
+     "declared": "vcf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "contacts.flip-3.vcf",
+     "kind": "flip-3",
+     "declared": "vcf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "contacts.flip-4.vcf",
+     "kind": "flip-4",
+     "declared": "vcf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "contacts.flip-5.vcf",
+     "kind": "flip-5",
+     "declared": "vcf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "contacts.flip-6.vcf",
+     "kind": "flip-6",
+     "declared": "vcf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "contacts.flip-7.vcf",
+     "kind": "flip-7",
+     "declared": "vcf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "contacts.zeroed.vcf",
+     "kind": "zeroed",
+     "declared": "vcf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "contacts.oversized.vcf",
+     "kind": "oversized",
+     "declared": "vcf",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a vcf file is 1 byte to 5 MB"
+    },
+    {
+     "name": "contacts.polyglot.vcf",
+     "kind": "polyglot",
+     "declared": "vcf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "contacts.mislabelled.csv",
+     "kind": "mislabelled",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "diary.cut-50.ics",
+     "kind": "cut-50",
+     "declared": "ics",
+     "outcome": "quarantined",
+     "why": "the calendar is cut short: VEVENT never ends",
+     "killed": false
+    },
+    {
+     "name": "diary.cut-90.ics",
+     "kind": "cut-90",
+     "declared": "ics",
+     "outcome": "quarantined",
+     "why": "the calendar is cut short: VEVENT never ends",
+     "killed": false
+    },
+    {
+     "name": "diary.flip-0.ics",
+     "kind": "flip-0",
+     "declared": "ics",
+     "outcome": "admitted"
+    },
+    {
+     "name": "diary.flip-1.ics",
+     "kind": "flip-1",
+     "declared": "ics",
+     "outcome": "admitted"
+    },
+    {
+     "name": "diary.flip-2.ics",
+     "kind": "flip-2",
+     "declared": "ics",
+     "outcome": "admitted"
+    },
+    {
+     "name": "diary.flip-3.ics",
+     "kind": "flip-3",
+     "declared": "ics",
+     "outcome": "admitted"
+    },
+    {
+     "name": "diary.flip-4.ics",
+     "kind": "flip-4",
+     "declared": "ics",
+     "outcome": "admitted"
+    },
+    {
+     "name": "diary.flip-5.ics",
+     "kind": "flip-5",
+     "declared": "ics",
+     "outcome": "quarantined",
+     "why": "the calendar is cut short: VCALENDAR never ends",
+     "killed": false
+    },
+    {
+     "name": "diary.flip-6.ics",
+     "kind": "flip-6",
+     "declared": "ics",
+     "outcome": "admitted"
+    },
+    {
+     "name": "diary.flip-7.ics",
+     "kind": "flip-7",
+     "declared": "ics",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "diary.zeroed.ics",
+     "kind": "zeroed",
+     "declared": "ics",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "diary.oversized.ics",
+     "kind": "oversized",
+     "declared": "ics",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a ics file is 1 byte to 5 MB"
+    },
+    {
+     "name": "diary.polyglot.ics",
+     "kind": "polyglot",
+     "declared": "ics",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "diary.mislabelled.vcf",
+     "kind": "mislabelled",
+     "declared": "vcf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a contact card begins with BEGIN:VCARD"
+    },
+    {
+     "name": "drawings.cut-50.zip",
+     "kind": "cut-50",
+     "declared": "zip",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "drawings.cut-90.zip",
+     "kind": "cut-90",
+     "declared": "zip",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "drawings.flip-0.zip",
+     "kind": "flip-0",
+     "declared": "zip",
+     "outcome": "quarantined",
+     "why": "entry readme.txt runs past the file",
+     "killed": false
+    },
+    {
+     "name": "drawings.flip-1.zip",
+     "kind": "flip-1",
+     "declared": "zip",
+     "outcome": "admitted"
+    },
+    {
+     "name": "drawings.flip-2.zip",
+     "kind": "flip-2",
+     "declared": "zip",
+     "outcome": "quarantined",
+     "why": "entry drawings/east-wall.txt does not inflate to its declared size",
+     "killed": false
+    },
+    {
+     "name": "drawings.flip-3.zip",
+     "kind": "flip-3",
+     "declared": "zip",
+     "outcome": "admitted"
+    },
+    {
+     "name": "drawings.flip-4.zip",
+     "kind": "flip-4",
+     "declared": "zip",
+     "outcome": "admitted"
+    },
+    {
+     "name": "drawings.flip-5.zip",
+     "kind": "flip-5",
+     "declared": "zip",
+     "outcome": "admitted"
+    },
+    {
+     "name": "drawings.flip-6.zip",
+     "kind": "flip-6",
+     "declared": "zip",
+     "outcome": "admitted"
+    },
+    {
+     "name": "drawings.flip-7.zip",
+     "kind": "flip-7",
+     "declared": "zip",
+     "outcome": "admitted"
+    },
+    {
+     "name": "drawings.zeroed.zip",
+     "kind": "zeroed",
+     "declared": "zip",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "drawings.oversized.zip",
+     "kind": "oversized",
+     "declared": "zip",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a zip file is 1 byte to 100 MB"
+    },
+    {
+     "name": "drawings.polyglot.zip",
+     "kind": "polyglot",
+     "declared": "zip",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "drawings.mislabelled.docx",
+     "kind": "mislabelled",
+     "declared": "docx",
+     "outcome": "quarantined",
+     "why": "an Office file has [Content_Types].xml",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.cut-50.docx",
+     "kind": "cut-50",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-libreoffice.cut-90.docx",
+     "kind": "cut-90",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-libreoffice.flip-0.docx",
+     "kind": "flip-0",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-libreoffice.flip-1.docx",
+     "kind": "flip-1",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-libreoffice.flip-2.docx",
+     "kind": "flip-2",
+     "declared": "docx",
+     "outcome": "quarantined",
+     "why": "word/document.xml does not read: entry word/document.xml does not inflate to its declared size",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.flip-3.docx",
+     "kind": "flip-3",
+     "declared": "docx",
+     "outcome": "quarantined",
+     "why": "word/document.xml does not read: entry word/document.xml does not inflate to its declared size",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.flip-4.docx",
+     "kind": "flip-4",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-libreoffice.flip-5.docx",
+     "kind": "flip-5",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-libreoffice.flip-6.docx",
+     "kind": "flip-6",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-libreoffice.flip-7.docx",
+     "kind": "flip-7",
+     "declared": "docx",
+     "outcome": "quarantined",
+     "why": "central directory entry 6 is broken",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.zeroed.docx",
+     "kind": "zeroed",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "letter-libreoffice.oversized.docx",
+     "kind": "oversized",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a docx file is 1 byte to 25 MB"
+    },
+    {
+     "name": "letter-libreoffice.polyglot.docx",
+     "kind": "polyglot",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-libreoffice.macro.docx",
+     "kind": "macro",
+     "declared": "docx",
+     "outcome": "quarantined",
+     "why": "the file carries an Office macro (vbaProject.bin): macros are refused as a rule",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.mislabelled.pdf",
+     "kind": "mislabelled",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says pdf but the bytes are zip"
+    },
+    {
+     "name": "letter-libreoffice.cut-50.pdf",
+     "kind": "cut-50",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-libreoffice.cut-90.pdf",
+     "kind": "cut-90",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-libreoffice.flip-0.pdf",
+     "kind": "flip-0",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.flip-1.pdf",
+     "kind": "flip-1",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.flip-2.pdf",
+     "kind": "flip-2",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.flip-3.pdf",
+     "kind": "flip-3",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.flip-4.pdf",
+     "kind": "flip-4",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-libreoffice.flip-5.pdf",
+     "kind": "flip-5",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-libreoffice.flip-6.pdf",
+     "kind": "flip-6",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-libreoffice.flip-7.pdf",
+     "kind": "flip-7",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-libreoffice.zeroed.pdf",
+     "kind": "zeroed",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "letter-libreoffice.oversized.pdf",
+     "kind": "oversized",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a pdf file is 1 byte to 50 MB"
+    },
+    {
+     "name": "letter-libreoffice.polyglot.pdf",
+     "kind": "polyglot",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "bytes after the PDF's %%EOF"
+    },
+    {
+     "name": "letter-libreoffice.mislabelled.docx",
+     "kind": "mislabelled",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says docx but the bytes are pdf"
+    },
+    {
+     "name": "letter-pythondocx.cut-50.docx",
+     "kind": "cut-50",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-pythondocx.cut-90.docx",
+     "kind": "cut-90",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-pythondocx.flip-0.docx",
+     "kind": "flip-0",
+     "declared": "docx",
+     "outcome": "quarantined",
+     "why": "word/document.xml does not read: entry word/document.xml does not inflate to its declared size",
+     "killed": false
+    },
+    {
+     "name": "letter-pythondocx.flip-1.docx",
+     "kind": "flip-1",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-pythondocx.flip-2.docx",
+     "kind": "flip-2",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-pythondocx.flip-3.docx",
+     "kind": "flip-3",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-pythondocx.flip-4.docx",
+     "kind": "flip-4",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-pythondocx.flip-5.docx",
+     "kind": "flip-5",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-pythondocx.flip-6.docx",
+     "kind": "flip-6",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-pythondocx.flip-7.docx",
+     "kind": "flip-7",
+     "declared": "docx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-pythondocx.zeroed.docx",
+     "kind": "zeroed",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "letter-pythondocx.oversized.docx",
+     "kind": "oversized",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a docx file is 1 byte to 25 MB"
+    },
+    {
+     "name": "letter-pythondocx.polyglot.docx",
+     "kind": "polyglot",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-pythondocx.macro.docx",
+     "kind": "macro",
+     "declared": "docx",
+     "outcome": "quarantined",
+     "why": "the file carries an Office macro (vbaProject.bin): macros are refused as a rule",
+     "killed": false
+    },
+    {
+     "name": "letter-pythondocx.mislabelled.pdf",
+     "kind": "mislabelled",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says pdf but the bytes are zip"
+    },
+    {
+     "name": "letter-reportlab.cut-50.pdf",
+     "kind": "cut-50",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-reportlab.cut-90.pdf",
+     "kind": "cut-90",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "letter-reportlab.flip-0.pdf",
+     "kind": "flip-0",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-reportlab.flip-1.pdf",
+     "kind": "flip-1",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-reportlab.flip-2.pdf",
+     "kind": "flip-2",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-reportlab.flip-3.pdf",
+     "kind": "flip-3",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-reportlab.flip-4.pdf",
+     "kind": "flip-4",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-reportlab.flip-5.pdf",
+     "kind": "flip-5",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "letter-reportlab.flip-6.pdf",
+     "kind": "flip-6",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-reportlab.flip-7.pdf",
+     "kind": "flip-7",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "letter-reportlab.zeroed.pdf",
+     "kind": "zeroed",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "letter-reportlab.oversized.pdf",
+     "kind": "oversized",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a pdf file is 1 byte to 50 MB"
+    },
+    {
+     "name": "letter-reportlab.polyglot.pdf",
+     "kind": "polyglot",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "bytes after the PDF's %%EOF"
+    },
+    {
+     "name": "letter-reportlab.mislabelled.docx",
+     "kind": "mislabelled",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says docx but the bytes are pdf"
+    },
+    {
+     "name": "logo.cut-50.gif",
+     "kind": "cut-50",
+     "declared": "gif",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a GIF ends with its trailer byte"
+    },
+    {
+     "name": "logo.cut-90.gif",
+     "kind": "cut-90",
+     "declared": "gif",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a GIF ends with its trailer byte"
+    },
+    {
+     "name": "logo.flip-0.gif",
+     "kind": "flip-0",
+     "declared": "gif",
+     "outcome": "admitted"
+    },
+    {
+     "name": "logo.flip-1.gif",
+     "kind": "flip-1",
+     "declared": "gif",
+     "outcome": "admitted"
+    },
+    {
+     "name": "logo.flip-2.gif",
+     "kind": "flip-2",
+     "declared": "gif",
+     "outcome": "admitted"
+    },
+    {
+     "name": "logo.flip-3.gif",
+     "kind": "flip-3",
+     "declared": "gif",
+     "outcome": "admitted"
+    },
+    {
+     "name": "logo.flip-4.gif",
+     "kind": "flip-4",
+     "declared": "gif",
+     "outcome": "admitted"
+    },
+    {
+     "name": "logo.flip-5.gif",
+     "kind": "flip-5",
+     "declared": "gif",
+     "outcome": "admitted"
+    },
+    {
+     "name": "logo.flip-6.gif",
+     "kind": "flip-6",
+     "declared": "gif",
+     "outcome": "admitted"
+    },
+    {
+     "name": "logo.flip-7.gif",
+     "kind": "flip-7",
+     "declared": "gif",
+     "outcome": "admitted"
+    },
+    {
+     "name": "logo.zeroed.gif",
+     "kind": "zeroed",
+     "declared": "gif",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "logo.oversized.gif",
+     "kind": "oversized",
+     "declared": "gif",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a gif file is 1 byte to 25 MB"
+    },
+    {
+     "name": "logo.polyglot.gif",
+     "kind": "polyglot",
+     "declared": "gif",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a GIF ends with its trailer byte"
+    },
+    {
+     "name": "logo.mislabelled.webp",
+     "kind": "mislabelled",
+     "declared": "webp",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says webp but the bytes are gif"
+    },
+    {
+     "name": "logo.cut-50.png",
+     "kind": "cut-50",
+     "declared": "png",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PNG ends with its IEND chunk"
+    },
+    {
+     "name": "logo.cut-90.png",
+     "kind": "cut-90",
+     "declared": "png",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PNG ends with its IEND chunk"
+    },
+    {
+     "name": "logo.flip-0.png",
+     "kind": "flip-0",
+     "declared": "png",
+     "outcome": "quarantined",
+     "why": "PNG chunk IHDR fails its CRC",
+     "killed": false
+    },
+    {
+     "name": "logo.flip-1.png",
+     "kind": "flip-1",
+     "declared": "png",
+     "outcome": "quarantined",
+     "why": "PNG chunk IDAT fails its CRC",
+     "killed": false
+    },
+    {
+     "name": "logo.flip-2.png",
+     "kind": "flip-2",
+     "declared": "png",
+     "outcome": "quarantined",
+     "why": "PNG chunk IDAT fails its CRC",
+     "killed": false
+    },
+    {
+     "name": "logo.flip-3.png",
+     "kind": "flip-3",
+     "declared": "png",
+     "outcome": "quarantined",
+     "why": "PNG chunk IDAT fails its CRC",
+     "killed": false
+    },
+    {
+     "name": "logo.flip-4.png",
+     "kind": "flip-4",
+     "declared": "png",
+     "outcome": "quarantined",
+     "why": "PNG chunk IDAT fails its CRC",
+     "killed": false
+    },
+    {
+     "name": "logo.flip-5.png",
+     "kind": "flip-5",
+     "declared": "png",
+     "outcome": "quarantined",
+     "why": "PNG chunk IDAT fails its CRC",
+     "killed": false
+    },
+    {
+     "name": "logo.flip-6.png",
+     "kind": "flip-6",
+     "declared": "png",
+     "outcome": "quarantined",
+     "why": "PNG chunk IDAT fails its CRC",
+     "killed": false
+    },
+    {
+     "name": "logo.flip-7.png",
+     "kind": "flip-7",
+     "declared": "png",
+     "outcome": "quarantined",
+     "why": "PNG chunk IDAT fails its CRC",
+     "killed": false
+    },
+    {
+     "name": "logo.zeroed.png",
+     "kind": "zeroed",
+     "declared": "png",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "logo.oversized.png",
+     "kind": "oversized",
+     "declared": "png",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a png file is 1 byte to 25 MB"
+    },
+    {
+     "name": "logo.polyglot.png",
+     "kind": "polyglot",
+     "declared": "png",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PNG ends with its IEND chunk"
+    },
+    {
+     "name": "logo.mislabelled.jpg",
+     "kind": "mislabelled",
+     "declared": "jpeg",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says jpeg but the bytes are png"
+    },
+    {
+     "name": "mail-1.cut-50.eml",
+     "kind": "cut-50",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-1.cut-90.eml",
+     "kind": "cut-90",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-1.flip-0.eml",
+     "kind": "flip-0",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-1.flip-1.eml",
+     "kind": "flip-1",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-1.flip-2.eml",
+     "kind": "flip-2",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-1.flip-3.eml",
+     "kind": "flip-3",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-1.flip-4.eml",
+     "kind": "flip-4",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-1.flip-5.eml",
+     "kind": "flip-5",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-1.flip-6.eml",
+     "kind": "flip-6",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-1.flip-7.eml",
+     "kind": "flip-7",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-1.zeroed.eml",
+     "kind": "zeroed",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-1.oversized.eml",
+     "kind": "oversized",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a eml file is 1 byte to 25 MB"
+    },
+    {
+     "name": "mail-1.polyglot.eml",
+     "kind": "polyglot",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-1.mislabelled.ics",
+     "kind": "mislabelled",
+     "declared": "ics",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a calendar begins with BEGIN:VCALENDAR"
+    },
+    {
+     "name": "mail-2.cut-50.eml",
+     "kind": "cut-50",
+     "declared": "eml",
+     "outcome": "quarantined",
+     "why": "a multipart part has no closing boundary: it is cut short",
+     "killed": false
+    },
+    {
+     "name": "mail-2.cut-90.eml",
+     "kind": "cut-90",
+     "declared": "eml",
+     "outcome": "quarantined",
+     "why": "a multipart part has no closing boundary: it is cut short",
+     "killed": false
+    },
+    {
+     "name": "mail-2.flip-0.eml",
+     "kind": "flip-0",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-2.flip-1.eml",
+     "kind": "flip-1",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-2.flip-2.eml",
+     "kind": "flip-2",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-2.flip-3.eml",
+     "kind": "flip-3",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-2.flip-4.eml",
+     "kind": "flip-4",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-2.flip-5.eml",
+     "kind": "flip-5",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-2.flip-6.eml",
+     "kind": "flip-6",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-2.flip-7.eml",
+     "kind": "flip-7",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-2.zeroed.eml",
+     "kind": "zeroed",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-2.oversized.eml",
+     "kind": "oversized",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a eml file is 1 byte to 25 MB"
+    },
+    {
+     "name": "mail-2.polyglot.eml",
+     "kind": "polyglot",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-2.mislabelled.ics",
+     "kind": "mislabelled",
+     "declared": "ics",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a calendar begins with BEGIN:VCALENDAR"
+    },
+    {
+     "name": "mail-3.cut-50.eml",
+     "kind": "cut-50",
+     "declared": "eml",
+     "outcome": "quarantined",
+     "why": "a multipart part has no closing boundary: it is cut short",
+     "killed": false
+    },
+    {
+     "name": "mail-3.cut-90.eml",
+     "kind": "cut-90",
+     "declared": "eml",
+     "outcome": "quarantined",
+     "why": "a multipart part has no closing boundary: it is cut short",
+     "killed": false
+    },
+    {
+     "name": "mail-3.flip-0.eml",
+     "kind": "flip-0",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-3.flip-1.eml",
+     "kind": "flip-1",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-3.flip-2.eml",
+     "kind": "flip-2",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-3.flip-3.eml",
+     "kind": "flip-3",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-3.flip-4.eml",
+     "kind": "flip-4",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-3.flip-5.eml",
+     "kind": "flip-5",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-3.flip-6.eml",
+     "kind": "flip-6",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-3.flip-7.eml",
+     "kind": "flip-7",
+     "declared": "eml",
+     "outcome": "admitted"
+    },
+    {
+     "name": "mail-3.zeroed.eml",
+     "kind": "zeroed",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-3.oversized.eml",
+     "kind": "oversized",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a eml file is 1 byte to 25 MB"
+    },
+    {
+     "name": "mail-3.polyglot.eml",
+     "kind": "polyglot",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "mail-3.mislabelled.ics",
+     "kind": "mislabelled",
+     "declared": "ics",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a calendar begins with BEGIN:VCALENDAR"
+    },
+    {
+     "name": "notes-chrome.cut-50.pdf",
+     "kind": "cut-50",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "notes-chrome.cut-90.pdf",
+     "kind": "cut-90",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "notes-chrome.flip-0.pdf",
+     "kind": "flip-0",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-chrome.flip-1.pdf",
+     "kind": "flip-1",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "notes-chrome.flip-2.pdf",
+     "kind": "flip-2",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-chrome.flip-3.pdf",
+     "kind": "flip-3",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-chrome.flip-4.pdf",
+     "kind": "flip-4",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-chrome.flip-5.pdf",
+     "kind": "flip-5",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-chrome.flip-6.pdf",
+     "kind": "flip-6",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-chrome.flip-7.pdf",
+     "kind": "flip-7",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-chrome.zeroed.pdf",
+     "kind": "zeroed",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "notes-chrome.oversized.pdf",
+     "kind": "oversized",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a pdf file is 1 byte to 50 MB"
+    },
+    {
+     "name": "notes-chrome.polyglot.pdf",
+     "kind": "polyglot",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "bytes after the PDF's %%EOF"
+    },
+    {
+     "name": "notes-chrome.mislabelled.docx",
+     "kind": "mislabelled",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says docx but the bytes are pdf"
+    },
+    {
+     "name": "notes-pymupdf.cut-50.pdf",
+     "kind": "cut-50",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "notes-pymupdf.cut-90.pdf",
+     "kind": "cut-90",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "notes-pymupdf.flip-0.pdf",
+     "kind": "flip-0",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-pymupdf.flip-1.pdf",
+     "kind": "flip-1",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "notes-pymupdf.flip-2.pdf",
+     "kind": "flip-2",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-pymupdf.flip-3.pdf",
+     "kind": "flip-3",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-pymupdf.flip-4.pdf",
+     "kind": "flip-4",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "notes-pymupdf.flip-5.pdf",
+     "kind": "flip-5",
+     "declared": "pdf",
+     "outcome": "quarantined",
+     "why": "1 of the PDF's streams do not decode: it is damaged",
+     "killed": false
+    },
+    {
+     "name": "notes-pymupdf.flip-6.pdf",
+     "kind": "flip-6",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "notes-pymupdf.flip-7.pdf",
+     "kind": "flip-7",
+     "declared": "pdf",
+     "outcome": "admitted"
+    },
+    {
+     "name": "notes-pymupdf.zeroed.pdf",
+     "kind": "zeroed",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "notes-pymupdf.oversized.pdf",
+     "kind": "oversized",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a pdf file is 1 byte to 50 MB"
+    },
+    {
+     "name": "notes-pymupdf.polyglot.pdf",
+     "kind": "polyglot",
+     "declared": "pdf",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "bytes after the PDF's %%EOF"
+    },
+    {
+     "name": "notes-pymupdf.mislabelled.docx",
+     "kind": "mislabelled",
+     "declared": "docx",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says docx but the bytes are pdf"
+    },
+    {
+     "name": "orders-libreoffice.cut-50.csv",
+     "kind": "cut-50",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.cut-90.csv",
+     "kind": "cut-90",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-0.csv",
+     "kind": "flip-0",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-1.csv",
+     "kind": "flip-1",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-2.csv",
+     "kind": "flip-2",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-3.csv",
+     "kind": "flip-3",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-libreoffice.flip-4.csv",
+     "kind": "flip-4",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-5.csv",
+     "kind": "flip-5",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-6.csv",
+     "kind": "flip-6",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-7.csv",
+     "kind": "flip-7",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-libreoffice.zeroed.csv",
+     "kind": "zeroed",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-libreoffice.oversized.csv",
+     "kind": "oversized",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a csv file is 1 byte to 20 MB"
+    },
+    {
+     "name": "orders-libreoffice.polyglot.csv",
+     "kind": "polyglot",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-libreoffice.mislabelled.eml",
+     "kind": "mislabelled",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a message begins with a header field"
+    },
+    {
+     "name": "orders-libreoffice.cut-50.xlsx",
+     "kind": "cut-50",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "orders-libreoffice.cut-90.xlsx",
+     "kind": "cut-90",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "orders-libreoffice.flip-0.xlsx",
+     "kind": "flip-0",
+     "declared": "xlsx",
+     "outcome": "quarantined",
+     "why": "xl/workbook.xml does not read: entry xl/workbook.xml does not inflate to its declared size",
+     "killed": false
+    },
+    {
+     "name": "orders-libreoffice.flip-1.xlsx",
+     "kind": "flip-1",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-2.xlsx",
+     "kind": "flip-2",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-3.xlsx",
+     "kind": "flip-3",
+     "declared": "xlsx",
+     "outcome": "quarantined",
+     "why": "sheet Orders does not read",
+     "killed": false
+    },
+    {
+     "name": "orders-libreoffice.flip-4.xlsx",
+     "kind": "flip-4",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-5.xlsx",
+     "kind": "flip-5",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-6.xlsx",
+     "kind": "flip-6",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.flip-7.xlsx",
+     "kind": "flip-7",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-libreoffice.zeroed.xlsx",
+     "kind": "zeroed",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-libreoffice.oversized.xlsx",
+     "kind": "oversized",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a xlsx file is 1 byte to 25 MB"
+    },
+    {
+     "name": "orders-libreoffice.polyglot.xlsx",
+     "kind": "polyglot",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "orders-libreoffice.macro.xlsx",
+     "kind": "macro",
+     "declared": "xlsx",
+     "outcome": "quarantined",
+     "why": "the file carries an Office macro (vbaProject.bin): macros are refused as a rule",
+     "killed": false
+    },
+    {
+     "name": "orders-libreoffice.mislabelled.csv",
+     "kind": "mislabelled",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says csv but the bytes are zip"
+    },
+    {
+     "name": "orders-openpyxl.cut-50.xlsx",
+     "kind": "cut-50",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "orders-openpyxl.cut-90.xlsx",
+     "kind": "cut-90",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "orders-openpyxl.flip-0.xlsx",
+     "kind": "flip-0",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-openpyxl.flip-1.xlsx",
+     "kind": "flip-1",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-openpyxl.flip-2.xlsx",
+     "kind": "flip-2",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-openpyxl.flip-3.xlsx",
+     "kind": "flip-3",
+     "declared": "xlsx",
+     "outcome": "quarantined",
+     "why": "sheet Orders does not read",
+     "killed": false
+    },
+    {
+     "name": "orders-openpyxl.flip-4.xlsx",
+     "kind": "flip-4",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-openpyxl.flip-5.xlsx",
+     "kind": "flip-5",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-openpyxl.flip-6.xlsx",
+     "kind": "flip-6",
+     "declared": "xlsx",
+     "outcome": "quarantined",
+     "why": "the workbook names no sheet it holds",
+     "killed": false
+    },
+    {
+     "name": "orders-openpyxl.flip-7.xlsx",
+     "kind": "flip-7",
+     "declared": "xlsx",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-openpyxl.zeroed.xlsx",
+     "kind": "zeroed",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-openpyxl.oversized.xlsx",
+     "kind": "oversized",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a xlsx file is 1 byte to 25 MB"
+    },
+    {
+     "name": "orders-openpyxl.polyglot.xlsx",
+     "kind": "polyglot",
+     "declared": "xlsx",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a zip archive ends with its end record (this one does not: cut short, or something glued after it)"
+    },
+    {
+     "name": "orders-openpyxl.macro.xlsx",
+     "kind": "macro",
+     "declared": "xlsx",
+     "outcome": "quarantined",
+     "why": "the file carries an Office macro (vbaProject.bin): macros are refused as a rule",
+     "killed": false
+    },
+    {
+     "name": "orders-openpyxl.mislabelled.csv",
+     "kind": "mislabelled",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says csv but the bytes are zip"
+    },
+    {
+     "name": "orders-python.cut-50.csv",
+     "kind": "cut-50",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.cut-90.csv",
+     "kind": "cut-90",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.flip-0.csv",
+     "kind": "flip-0",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.flip-1.csv",
+     "kind": "flip-1",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.flip-2.csv",
+     "kind": "flip-2",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.flip-3.csv",
+     "kind": "flip-3",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.flip-4.csv",
+     "kind": "flip-4",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-python.flip-5.csv",
+     "kind": "flip-5",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.flip-6.csv",
+     "kind": "flip-6",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.flip-7.csv",
+     "kind": "flip-7",
+     "declared": "csv",
+     "outcome": "admitted"
+    },
+    {
+     "name": "orders-python.zeroed.csv",
+     "kind": "zeroed",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-python.oversized.csv",
+     "kind": "oversized",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a csv file is 1 byte to 20 MB"
+    },
+    {
+     "name": "orders-python.polyglot.csv",
+     "kind": "polyglot",
+     "declared": "csv",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "orders-python.mislabelled.eml",
+     "kind": "mislabelled",
+     "declared": "eml",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a message begins with a header field"
+    },
+    {
+     "name": "photo.cut-50.jpg",
+     "kind": "cut-50",
+     "declared": "jpeg",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a JPEG ends with its end-of-image marker"
+    },
+    {
+     "name": "photo.cut-90.jpg",
+     "kind": "cut-90",
+     "declared": "jpeg",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a JPEG ends with its end-of-image marker"
+    },
+    {
+     "name": "photo.flip-0.jpg",
+     "kind": "flip-0",
+     "declared": "jpeg",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-1.jpg",
+     "kind": "flip-1",
+     "declared": "jpeg",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-2.jpg",
+     "kind": "flip-2",
+     "declared": "jpeg",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-3.jpg",
+     "kind": "flip-3",
+     "declared": "jpeg",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-4.jpg",
+     "kind": "flip-4",
+     "declared": "jpeg",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-5.jpg",
+     "kind": "flip-5",
+     "declared": "jpeg",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-6.jpg",
+     "kind": "flip-6",
+     "declared": "jpeg",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-7.jpg",
+     "kind": "flip-7",
+     "declared": "jpeg",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.zeroed.jpg",
+     "kind": "zeroed",
+     "declared": "jpeg",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "photo.oversized.jpg",
+     "kind": "oversized",
+     "declared": "jpeg",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a jpeg file is 1 byte to 25 MB"
+    },
+    {
+     "name": "photo.polyglot.jpg",
+     "kind": "polyglot",
+     "declared": "jpeg",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a JPEG ends with its end-of-image marker"
+    },
+    {
+     "name": "photo.mislabelled.gif",
+     "kind": "mislabelled",
+     "declared": "gif",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says gif but the bytes are jpeg"
+    },
+    {
+     "name": "photo.cut-50.webp",
+     "kind": "cut-50",
+     "declared": "webp",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a WebP is exactly as long as its RIFF header says"
+    },
+    {
+     "name": "photo.cut-90.webp",
+     "kind": "cut-90",
+     "declared": "webp",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a WebP is exactly as long as its RIFF header says"
+    },
+    {
+     "name": "photo.flip-0.webp",
+     "kind": "flip-0",
+     "declared": "webp",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-1.webp",
+     "kind": "flip-1",
+     "declared": "webp",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-2.webp",
+     "kind": "flip-2",
+     "declared": "webp",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-3.webp",
+     "kind": "flip-3",
+     "declared": "webp",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-4.webp",
+     "kind": "flip-4",
+     "declared": "webp",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-5.webp",
+     "kind": "flip-5",
+     "declared": "webp",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-6.webp",
+     "kind": "flip-6",
+     "declared": "webp",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.flip-7.webp",
+     "kind": "flip-7",
+     "declared": "webp",
+     "outcome": "admitted"
+    },
+    {
+     "name": "photo.zeroed.webp",
+     "kind": "zeroed",
+     "declared": "webp",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the bytes are not any kind of file the office reads"
+    },
+    {
+     "name": "photo.oversized.webp",
+     "kind": "oversized",
+     "declared": "webp",
+     "outcome": "refused",
+     "stage": "size",
+     "why": "a webp file is 1 byte to 25 MB"
+    },
+    {
+     "name": "photo.polyglot.webp",
+     "kind": "polyglot",
+     "declared": "webp",
+     "outcome": "refused",
+     "stage": "shape",
+     "why": "a WebP is exactly as long as its RIFF header says"
+    },
+    {
+     "name": "photo.mislabelled.png",
+     "kind": "mislabelled",
+     "declared": "png",
+     "outcome": "refused",
+     "stage": "magic",
+     "why": "the name says png but the bytes are webp"
+    }
+   ],
+   "parses": 188,
+   "coreParses": 0,
+   "coreParsers": []
+  },
+  "L2c": {
+   "flags": "--permission --allow-fs-read=C:\\Users\\sjgan\\seed-laptop\\src\\parse\\* --max-old-space-size=64 --max-semi-space-size=4",
+   "tries": {
+    "network": "ERR_ACCESS_DENIED",
+    "write": "ERR_ACCESS_DENIED",
+    "readOutside": "ERR_ACCESS_DENIED",
+    "childProcess": "ERR_ACCESS_DENIED",
+    "worker": "ERR_ACCESS_DENIED"
+   },
+   "spinKilled": true,
+   "hogDied": true,
+   "heapMb": 64,
+   "ms": 5000,
+   "kept": 20,
+   "readOnly": 20
+  }
+ },
+ "verdicts": [
+  {
+   "id": "L2a",
+   "verdict": "HELD",
+   "says": "20 of 20 real files passed verify-before-parse; fidelity csv 100.0%, docx 100.0%, eml 100.0%, ics 100.0%, image 100.0%, pdf 99.1%, vcf 100.0%, xlsx 100.0%, zip 100.0% (the worst PDF 95.5%)."
+  },
+  {
+   "id": "L2b",
+   "verdict": "FAILED",
+   "says": "284 hostile files: 116 refused at verify-before-parse, 52 quarantined by the sandbox, 116 admitted; the core process loaded 0 reader modules; 188 parses, every one in a sandbox."
+  },
+  {
+   "id": "L2c",
+   "verdict": "HELD",
+   "says": "In the sandbox: network refused, write refused, readOutside refused, childProcess refused, worker refused; an endless loop was killed at the time cap; a memory hog died at the 64 MB cap; 20 of 20 originals kept read-only."
+  }
+ ]
+}

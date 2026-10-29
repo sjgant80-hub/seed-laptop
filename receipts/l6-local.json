@@ -1,0 +1,37 @@
+{
+ "kind": "seed-laptop.l6-part",
+ "v": 1,
+ "commit": "7f03325588d124c35c3cb11663a8ada4d655695a",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "node": "v25.7.0"
+ },
+ "part": "b",
+ "facts": {
+  "actions": 303,
+  "receipts": 303,
+  "plan": 303,
+  "attempts": [
+   {
+    "kind": "tcp",
+    "host": "127.0.0.1",
+    "port": 50736,
+    "at": 1793305251102,
+    "allowed": true
+   },
+   {
+    "kind": "tcp",
+    "host": "127.0.0.1",
+    "port": 50736,
+    "at": 1793305251191,
+    "allowed": true
+   }
+  ],
+  "allowed": 2,
+  "stopped": 0,
+  "allowedInWindows": 2,
+  "sends": 2,
+  "sentOk": 2,
+  "messages": 2
+ }
+}

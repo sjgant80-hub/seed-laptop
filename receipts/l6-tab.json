@@ -1,0 +1,23 @@
+{
+ "kind": "seed-laptop.l6-part",
+ "v": 1,
+ "commit": "22be1436e2e84512429a4d26c2d8456e611d8d04",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "node": "v25.7.0"
+ },
+ "part": "c",
+ "facts": {
+  "actions": 303,
+  "plan": 303,
+  "receipts": 128,
+  "left": 0,
+  "refused": 10,
+  "hosts": [
+   "fonts.googleapis.com",
+   "sjgant80-hub.github.io"
+  ],
+  "ms": 242722,
+  "chrome": "Chrome/155.0.8059.85"
+ }
+}

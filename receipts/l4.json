@@ -1,0 +1,77 @@
+{
+ "kind": "seed-laptop.receipt",
+ "v": 1,
+ "claims": "L4",
+ "commit": "e140bcc63221c6b58aa791a3c8080f829a1b4570",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "node": "v25.7.0"
+ },
+ "facts": {
+  "L4": {
+   "runs": [
+    {
+     "ok": true,
+     "ms": 1853,
+     "identical": true,
+     "owner": true,
+     "newDevice": true,
+     "observing": true
+    },
+    {
+     "ok": true,
+     "ms": 1881,
+     "identical": true,
+     "owner": true,
+     "newDevice": true,
+     "observing": true
+    },
+    {
+     "ok": true,
+     "ms": 1859,
+     "identical": true,
+     "owner": true,
+     "newDevice": true,
+     "observing": true
+    },
+    {
+     "ok": true,
+     "ms": 1854,
+     "identical": true,
+     "owner": true,
+     "newDevice": true,
+     "observing": true
+    },
+    {
+     "ok": true,
+     "ms": 1776,
+     "identical": true,
+     "owner": true,
+     "newDevice": true,
+     "observing": true
+    }
+   ],
+   "keys": 348,
+   "vaultBytes": 50718,
+   "wrongRefused": true,
+   "wrongRestored": false,
+   "headerFlips": 296,
+   "headerRefused": 296,
+   "bodyFlips": 4096,
+   "bodyRefused": 4096,
+   "otherState": 0,
+   "actions": 302,
+   "observed": 302,
+   "enforced": 0,
+   "flags": "--permission (no --allow-net); reads: the repo, the vault; writes: the new home only"
+  }
+ },
+ "verdicts": [
+  {
+   "id": "L4",
+   "verdict": "HELD",
+   "says": "5 of 5 regrowths on a wiped folder restored all 348 entries byte for byte (median 1.85 s, each with a new device key, the watch observe-only); the wrong phrase restored nothing; 4392 of 4392 one-bit changes refused, 0 gave another state; the fresh watch refused 0 of 302 owner actions."
+  }
+ ]
+}

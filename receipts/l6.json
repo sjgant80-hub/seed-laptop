@@ -1,0 +1,71 @@
+{
+ "kind": "seed-laptop.receipt",
+ "v": 1,
+ "claims": "L6",
+ "commit": "22be1436e2e84512429a4d26c2d8456e611d8d04",
+ "facts": {
+  "L6": {
+   "ci": {
+    "packets": 52,
+    "egress": 22,
+    "egressTo": [
+     "10.9.9.2"
+    ],
+    "toSink": 20,
+    "outsideWindows": 0,
+    "sends": 2,
+    "sentOk": 2,
+    "actions": 303,
+    "receipts": 303,
+    "attempts": 2
+   },
+   "local": {
+    "actions": 303,
+    "receipts": 303,
+    "plan": 303,
+    "attempts": [
+     {
+      "kind": "tcp",
+      "host": "127.0.0.1",
+      "port": 50736,
+      "at": 1793305251102,
+      "allowed": true
+     },
+     {
+      "kind": "tcp",
+      "host": "127.0.0.1",
+      "port": 50736,
+      "at": 1793305251191,
+      "allowed": true
+     }
+    ],
+    "allowed": 2,
+    "stopped": 0,
+    "allowedInWindows": 2,
+    "sends": 2,
+    "sentOk": 2,
+    "messages": 2
+   },
+   "tab": {
+    "actions": 303,
+    "plan": 303,
+    "receipts": 128,
+    "left": 0,
+    "refused": 10,
+    "hosts": [
+     "fonts.googleapis.com",
+     "sjgant80-hub.github.io"
+    ],
+    "ms": 242722,
+    "chrome": "Chrome/155.0.8059.85"
+   }
+  }
+ },
+ "verdicts": [
+  {
+   "id": "L6",
+   "verdict": "FAILED",
+   "says": "From below, on GitHub's runner: 22 packets to any undeclared destination, 20 to the mail stand-in (0 outside the 2 send windows); on this laptop: 2 network calls, every one a send the user started, 0 stopped; in a tab: 0 requests left (10 refused inside the browser); receipts for every action: 303/303, 303/303, 128/303."
+  }
+ ]
+}
