@@ -1,0 +1,29 @@
+{
+ "kind": "seed-laptop.vendor.bes",
+ "v": 1,
+ "repo": "sjgant80-hub/bes-inward",
+ "commit": "eca438d63f1fec3add416f3a0cc0c0b90c760262",
+ "note": "Copied verbatim from git objects at the commit named. Never edit; re-vendor. BES after Gary W. Floyd (Lumiea Systems Research Division — ThunderStruck Service, LLC).",
+ "files": [
+  {
+   "path": "watch.mjs",
+   "src": "src/watch.mjs",
+   "sha256": "2a67764e21940e6e7b1ab830eac000720ced71deebcc36b35f954b4e7d69e902"
+  },
+  {
+   "path": "entropy.mjs",
+   "src": "src/entropy.mjs",
+   "sha256": "69f1ab3e6a2e726ed68069587483dfcd70191e7590b094bb66b109bdaca8e90b"
+  },
+  {
+   "path": "gep.mjs",
+   "src": "src/gep.mjs",
+   "sha256": "9bbecaac714c64b3585b52a476f9449b862b256ac0107a9ecfd33534e27baf4c"
+  },
+  {
+   "path": "trust.mjs",
+   "src": "src/trust.mjs",
+   "sha256": "bf193c9fdfc5317c2805dc44b663d0e1e5f419f40911dcfc0877d6dd149dff7d"
+  }
+ ]
+}
