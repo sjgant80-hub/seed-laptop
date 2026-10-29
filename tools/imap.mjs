@@ -1,6 +1,6 @@
 // tools/imap.mjs — mail in, from the OWNER'S OWN mail account (IMAP over TLS), as message files for the inbound edge.
 //
-//   fetchMail({ host, port, tls, user, pass, mailbox, since, max }) → Promise<{ ok, messages: [{ uid, bytes }], why?, transcript }>
+//   fetchMail({ host, port, tls, user, pass, mailbox, since, max, timeoutMs }) → Promise<{ ok, messages: [{ uid, bytes }], why?, transcript }>
 //       TLS on port 993 unless told otherwise; a LOGIN is only ever sent inside TLS (in the clear only to this machine,
 //       for the tests' local stand-in). The password is never stored or logged: the transcript masks it. Read-only by
 //       construction (src/imap.mjs): EXAMINE, never SELECT; BODY.PEEK[], so nothing is marked read. At most `max`
@@ -30,8 +30,9 @@ export function fetchMail(o) {
     let buf = new Uint8Array(0), waiting = null, finished = false;
     const queue = [];
     const finish = (r) => { if (finished) return; finished = true; try { sock.end(); } catch { /* closing */ } done({ ...r, transcript }); };
-    sock.setTimeout(30000, () => finish({ ok: false, why: 'the mail server went quiet' }));
+    sock.setTimeout(Number.isSafeInteger(o.timeoutMs) && o.timeoutMs > 0 ? o.timeoutMs : 30000, () => finish({ ok: false, why: 'the mail server went quiet' }));
     sock.on('error', (e) => finish({ ok: false, why: 'could not talk to the mail server: ' + e.code }));
+    sock.on('close', () => finish({ ok: false, why: 'the mail server closed the connection' }));   // after LOGOUT, finish has already run
     sock.on('data', (d) => {
       const nb = new Uint8Array(buf.length + d.length); nb.set(buf); nb.set(d, buf.length);
       const p = parse(nb);

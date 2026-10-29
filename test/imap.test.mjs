@@ -64,15 +64,15 @@ test('status, uids, masked', () => {
 test('fetchMail against a local stand-in: read-only, the password never in the transcript, the newest at most max', async () => {
   const msgs = ['Subject: one' + CRLF + CRLF + 'first', 'Subject: two' + CRLF + CRLF + 'second', 'Subject: three' + CRLF + CRLF + 'third'];
   const sink = await startImapSink(msgs, { user: 'me@example.com', pass: 'a test password' });
-  const r = await fetchMail({ host: '127.0.0.1', port: sink.port, tls: false, user: 'me@example.com', pass: 'a test password', max: 2 });
+  const r = await fetchMail({ host: '127.0.0.1', port: sink.port, tls: false, timeoutMs: 3000, user: 'me@example.com', pass: 'a test password', max: 2 });
   assert.equal(r.ok, true, r.why);
   assert.deepEqual(r.messages.map((m) => [m.uid, dec.decode(m.bytes)]), [[2, msgs[1]], [3, msgs[2]]]);
   assert.ok(sink.seen.some((l) => /EXAMINE/.test(l)) && !sink.seen.some((l) => /SELECT|STORE|EXPUNGE/.test(l)), 'never SELECT, STORE or EXPUNGE');
   assert.ok(sink.seen.filter((l) => /FETCH/.test(l)).every((l) => /BODY\.PEEK\[\]/.test(l)));
   assert.equal(r.transcript.join(' ').includes('a test password'), false, 'the password is never in the transcript');
-  const wrong = await fetchMail({ host: '127.0.0.1', port: sink.port, tls: false, user: 'me@example.com', pass: 'not it' });
+  const wrong = await fetchMail({ host: '127.0.0.1', port: sink.port, tls: false, timeoutMs: 3000, user: 'me@example.com', pass: 'not it' });
   assert.match(wrong.why, /refused the login/);
-  const box = await fetchMail({ host: '127.0.0.1', port: sink.port, tls: false, user: 'me@example.com', pass: 'a test password', mailbox: 'Nope' });
+  const box = await fetchMail({ host: '127.0.0.1', port: sink.port, tls: false, timeoutMs: 3000, user: 'me@example.com', pass: 'a test password', mailbox: 'Nope' });
   assert.match(box.why, /no such mailbox/);
   await sink.close();
   assert.match((await fetchMail({ host: 'imap.example.com', tls: false, user: 'u', pass: 'p' })).why, /only ever sent inside TLS/);

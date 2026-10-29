@@ -3,6 +3,7 @@ vendor/** -text
 blocks/** -text
 corpus/** -text
 seeds/** -text
+test/fixtures/** -text
 *.light binary
 *.vault binary
 *.png binary
