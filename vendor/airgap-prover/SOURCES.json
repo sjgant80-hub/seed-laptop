@@ -1,0 +1,17 @@
+{
+ "kind": "seed-laptop.vendor.airgap-prover",
+ "v": 1,
+ "repo": "sjgant80-hub/airgap-prover",
+ "commit": "828383bf454f778fc9c0edd34e813c6760f85425",
+ "note": "Copied verbatim at the commit named: the egress kernel that reads a capture taken from below and classes every destination. Never edit; re-vendor.",
+ "files": [
+  {
+   "path": "egress.mjs",
+   "sha256": "8aa872398f4736eace90e7366250017176c9896c3c69f906e5bcfb6dc10f0591"
+  },
+  {
+   "path": "LICENSE",
+   "sha256": "0ddf3b67a14a71d98ab43797099d94f92b53d3fc4f4ca5127703e6c47ced4e52"
+  }
+ ]
+}
