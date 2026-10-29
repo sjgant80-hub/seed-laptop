@@ -4,7 +4,10 @@ import assert from 'node:assert/strict';
 import { throwsOn, PER_FUNCTION } from './hostile.mjs';
 import { KERNELS } from './kernels.mjs';
 
-for (const path of KERNELS) {
+// witness-all.mjs sets SEED_FUZZ_ONLY to the kernel it is mutating, so each mutant is fuzzed on its own kernel;
+// a plain run fuzzes every kernel.
+const only = process.env.SEED_FUZZ_ONLY;
+for (const path of KERNELS.filter((k) => !only || k === only)) {
   test('fuzz ' + path, async () => {
     const mod = await import('../' + path);
     const fns = Object.entries(mod).filter(([, v]) => typeof v === 'function');
