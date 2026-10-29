@@ -1,0 +1,14 @@
+* text=auto eol=lf
+vendor/** -text
+blocks/** -text
+corpus/** -text
+seeds/** -text
+*.light binary
+*.vault binary
+*.png binary
+*.jpg binary
+*.pdf binary
+*.docx binary
+*.xlsx binary
+*.zip binary
+*.pcap binary

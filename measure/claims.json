@@ -1,0 +1,114 @@
+{
+ "kind": "seed-laptop.claims",
+ "v": 1,
+ "seal": 1,
+ "sealed": "2026-10-29",
+ "sealed_before": "any code of this repo: no kernel, no measuring tool, no corpus and no stock seed exists when this file is committed",
+ "what": "THE SEED LAPTOP, Stage 1: a raw machine with a minimal base, a seed planted on it, and a full working office that grows from the estate's own gear, owned and local. Old-world files cross only at the edges. Each claim below is measured once, by code written after this seal; a claim that fails is kept failed.",
+ "rules": [
+  "Seal 2, committed before each claim's first measured run, fixes the exact instruments, the stock seed's block list and every corpus file by SHA-256. Any change of wording between seal 1 and seal 2 is listed, with its reason, in measure/seal2.md. A bound in this file is never loosened.",
+  "A run is measured once. A tool fixed after a run keeps the first receipt beside the new one, marked superseded, with the reason.",
+  "Timings are wall clock on the machine named in the receipt; a receipt names its runtime (Node version, Chrome version, OS) and its commit.",
+  "No claim is measured on invented data. If real data a claim needs is missing, the claim is UNMEASURED, said so on the page, never filled in."
+ ],
+ "claims": [
+  {
+   "id": "L1a",
+   "organ": "seed",
+   "says": "The full seed grows the office with no network at all, every block hash-verified, within 10 seconds.",
+   "held_if": "Node runs the planting under its permission model with no network permission (no --allow-net, no child processes, no workers; reads limited to the repo and the seed, writes limited to one fresh empty home folder). For each of 5 runs, each into a new empty folder: the genome's Ed25519 signature verifies against the pinned publisher key; every block the genome names is present, and the SHA-256 of its bytes equals its pin (verified count = named count, at least 5 blocks); the composed office lists exactly those blocks; the first run makes the owner's identity from the owner's phrase and writes Kar's first receipt. HELD if all 5 runs do all of this and the median time from process start to Kar's first receipt is at most 10 s.",
+   "bound": { "median_seconds": 10, "runs": 5, "min_blocks": 5 }
+  },
+  {
+   "id": "L1b",
+   "organ": "office",
+   "says": "The same seed grows the same office in a browser tab with the network switched off, and every block starts and runs its own code.",
+   "held_if": "Chrome (headless, its own throwaway profile) opens the office page from the owner's own origin with the network emulated offline before the seed is read, and plants the full seed. HELD if: the verified block hashes equal L1a's; every block loads in its sandboxed frame and its own startup code runs with no uncaught exception; no request leaves the page's own origin; Kar opens; all within 20 s of the seed being chosen.",
+   "bound": { "seconds": 20 }
+  },
+  {
+   "id": "L1c",
+   "organ": "seed",
+   "says": "A tampered seed grows nothing.",
+   "held_if": "Every one-bit change of the signed genome's bytes (every bit) is refused before any block is read. For every block, 64 one-bit changes spread evenly over its bytes are each refused, and planting stops with no office composed (no partial office). A light seed whose mirror serves one changed byte of one block is refused. HELD if every case is refused and 0 offices are composed from a changed seed.",
+   "bound": { "flips_per_block": 64, "genome": "every bit" }
+  },
+  {
+   "id": "L1d",
+   "organ": "seed",
+   "says": "A light seed (the genome alone) pulls its blocks from the owner's own mirror and grows the identical office.",
+   "held_if": "The genome alone, with blocks fetched by content address from a static mirror the owner controls (in the measurement: a static folder served on loopback), plants an office whose manifest digest equals the full seed's, every block hash-checked on arrival. HELD if the digests are equal.",
+   "bound": {}
+  },
+  {
+   "id": "L2a",
+   "organ": "edges",
+   "says": "Real PDF, DOCX, XLSX, email, calendar, contact, CSV, image and zip files come in with sealed fidelity.",
+   "held_if": "The benign corpus is real files written by mainstream writers on GitHub's ubuntu runner from fixed, fictional content (example.com addresses only), committed with SHA-256 pins in seal 2 together with the content each writer was given. Every file passes verify-before-parse on its raw bytes, is parsed only in the sandbox, and its result is compared with that content. Fidelity per format = the share of the content's fields recovered exactly (fields per format named in seal 2). HELD if DOCX, XLSX, EML, ICS, VCF, CSV, ZIP and image fidelity are each at least 0.99, and PDF word recall is at least 0.95 overall and at least 0.90 for every PDF. The page's compatibility table (lossless or best-effort, per format) is written from these numbers.",
+   "bound": { "structured_min": 0.99, "pdf_overall_min": 0.95, "pdf_each_min": 0.90 }
+  },
+  {
+   "id": "L2b",
+   "organ": "edges",
+   "says": "A hostile corpus is refused or quarantined, and the core never parses one byte of any file.",
+   "held_if": "The hostile corpus is made only by mechanical changes to the committed benign files, with no exploit payload: malformed (cut short, bits flipped, header zeroed), oversized (a valid file padded past its type's size cap), polyglot (one benign file appended to another of a different type), macro-laden (an OOXML file re-zipped with an empty, inert macro part and the macro-enabled content type), and mislabelled (declared type differs from the bytes). HELD if every hostile file is refused at verify-before-parse (naming the stage) or quarantined after the sandbox fails it (naming why), and over the whole run (benign and hostile) the core process loads no parser module and calls no parser: core parses = 0, and every parse ran in a sandbox process. Office macros are refused as a rule, whatever the macro holds.",
+   "bound": { "core_parses": 0, "hostile_admitted_to_core": 0 }
+  },
+  {
+   "id": "L2c",
+   "organ": "edges",
+   "says": "The sandbox a parser runs in has no network, cannot write, cannot start processes, and is capped in memory and time.",
+   "held_if": "Each parse runs in its own Node process under the permission model with reads limited to the parser's own files, no write, no network, no child process, no worker, a heap cap and a time cap after which it is killed. A probe run in the same sandbox tries each forbidden thing once; HELD if every try is refused, a parse that runs past the time cap is killed and its file quarantined, and every original file is kept read-only with its SHA-256 (a write to an original is refused).",
+   "bound": { "heap_mb": 64, "seconds": 5 }
+  },
+  {
+   "id": "L3",
+   "organ": "edges",
+   "says": "Files the office writes open correctly in mainstream readers, and carry nothing of the office's internals.",
+   "held_if": "The office writes PDF, DOCX, XLSX, EML, ICS and CSV from fixed content. The tested readers, sealed by name in seal 2, are run on GitHub's ubuntu runner (LibreOffice headless, poppler pdftotext, PyMuPDF, pypdf, python-docx, openpyxl, Python's email package, icalendar, Python csv) and on this laptop (PyMuPDF, pypdf, Python's email and csv). HELD if every file opens in every reader listed for its format without error and the content each reader gives back equals the content written (PDF text compared after whitespace is normalised), and a scan of every written file's bytes, and of every entry inside every zip-based file, finds 0 internal markers (the list, sealed in seal 2, includes the owner's public key, the vault reference, block ids and hashes, the product's and the foundation's names, the home folder and the OS user name).",
+   "bound": { "leaks": 0 }
+  },
+  {
+   "id": "L4",
+   "organ": "vault",
+   "says": "Wipe the machine, reinstall, plant the seed, open the vault: everything comes back byte-identical, within 15 seconds.",
+   "held_if": "After a sealed scripted session the office state is backed up to an encrypted vault (LIGHT-packed, then AES-256-GCM with a key from the owner's phrase by PBKDF2-SHA256, 600,000 iterations). The home folder is deleted; a fresh empty folder and a fresh process stand in for the reinstall. HELD if, for each of 5 runs: the state after regrow equals the state before, entry for entry and byte for byte; the regrown identity is the same key; the behavioural layer (BES, from bes-inward) starts the regrown device in observe-only and refuses none of the session's owner actions while its baseline forms; the phrase alone regrows it (no other key, no estate service), so the owner cannot be locked out; a wrong phrase restores nothing; and the median time from start to restored is at most 15 s. Every bit of the vault's header and 4,096 bits spread evenly over its body, each changed alone, give a refusal (never a different state).",
+   "bound": { "median_seconds": 15, "runs": 5, "body_flips": 4096 }
+  },
+  {
+   "id": "L5",
+   "organ": "devices",
+   "says": "Two devices stay consistent under offline edits, and losing one loses nothing it had shared.",
+   "held_if": "Two devices (two processes, two home folders, one owner) are driven by a sealed random script: in each round both are offline and each makes edits across the office, at least 10% of them to the same keys as the other device, then they sync through a relay that reads no body (every change a signed packet checked at the receiving door before it is read). HELD if: after every sync both state digests are equal; every write either device made before that sync is in both (as the current value, or kept as a conflict copy when two writes were concurrent; none silently dropped); then device A is destroyed after a sync and later edits, device C is regrown from seed, vault and phrase and synced from B, and C's digest equals B's with every write A made before its last sync in it. The writes A made after its last sync are reported as lost with A, and must be exactly those (nothing else is lost). The same script over a real WebRTC data channel in a Chrome tab ends with equal digests.",
+   "bound": { "same_key_share_min": 0.10 }
+  },
+  {
+   "id": "L6",
+   "organ": "devices",
+   "says": "Nothing leaves the device during a sealed day of normal use, except the sends the user starts.",
+   "held_if": "A sealed day script (at least 300 actions across every block, the edges, Kar, the vault, and exactly 2 emails the user chooses to send to their own mail provider, which the measurement stands in for with a declared local sink) runs (a) on GitHub's runner inside a locked network namespace, captured from below by tcpdump on the host side and read by airgap-prover's egress kernel: egress to any undeclared destination = 0, and packets to the declared sink only inside the 2 send windows; (b) on this laptop with every network call trapped: the only attempts are the 2 sends, each after the user's send action; (c) in a Chrome tab: 0 requests to any origin other than the office's own. Every action in the day leaves a human-readable receipt. HELD if (a), (b) and (c) all hold and receipts = actions.",
+   "bound": { "actions_min": 300, "user_sends": 2, "egress_undeclared": 0 }
+  },
+  {
+   "id": "L7",
+   "organ": "demo",
+   "says": "The cost case, from a real user's own subscription list.",
+   "held_if": "The cost kernel takes a real user's own list (what they pay now, as they state it) and the block coverage map sealed in seal 2, and gives their yearly spend, the part the grown office covers, and what it does not cover, item by item, in whole pence. HELD if the list is the user's own (supplied by them, never invented), every item is classed covered, partly covered or not covered with the reason, every covered item names a block that held L1b, and the arithmetic re-derives exactly. With no real list supplied, L7 is UNMEASURED.",
+   "bound": {}
+  },
+  {
+   "id": "G1",
+   "organ": "all",
+   "says": "Every kernel is mutation-gated clean and never throws on garbage.",
+   "held_if": "Every pure kernel in src/ passes the witness mutation gate (no unreviewed survivor, not capped, more than 0 mutants) and a hostile-input battery (2,000 inputs per exported function: none throws), locally and on GitHub's runner.",
+   "bound": { "fuzz_per_function": 2000 }
+  }
+ ],
+ "honest_scope": [
+  "'No OS' is not literal in Stage 1. The minimal base is a container image definition (pinned by digest, its contents listed exactly), built and run on GitHub's runner; this laptop runs the host-OS mode (Windows 11, Chrome, Node), and nothing is installed on its operating system. Bare metal is a research path, never a Stage 1 claim.",
+  "The parser sandbox is a Node process under the permission model (and, in a tab, a worker inside a frame with no network). The spec asks for a WASM parser; this machine has no WASM compiler, and the property the claims measure is the isolation, not the instruction set.",
+  "Real mail accounts are the owner's to connect. The measurements use a declared local sink, and no credential is handled.",
+  "Two devices are measured as two processes and as two WebRTC peers in one tab, on one machine; two physical machines are not measured in Stage 1.",
+  "Stage 2 and Stage 3 start only after Stage 1 is proven, each as its own gated organ."
+ ]
+}
