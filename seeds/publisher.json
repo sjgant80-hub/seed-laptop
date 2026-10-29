@@ -1,0 +1,8 @@
+{
+ "kind": "seed-laptop.publisher",
+ "v": 1,
+ "says": "The office runtime grows a stock seed only if this key signed it.",
+ "pinned": [
+  "c2aae94c4abd27bc47a67024d0680a6b53c0f76927aeb71ba4538961b8833985"
+ ]
+}

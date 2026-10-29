@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>◊ FallPDF · sovereign PDF writer · markdown · HTML · images · Ω autopilot</title>
+<meta name="description" content="Sovereign Acrobat wedge. Generate real PDFs from markdown, HTML, or text. Multi-page · headers / footers · page numbers · images · A4 / Letter / Legal / custom. Single HTML, no server, not subscription-based.">
+<meta name="prime" content="1427">
+<meta name="theme-color" content="#0b0a0f">
+<link rel="manifest" href='data:application/manifest+json,{"name":"FallPDF","short_name":"pdf","start_url":"./","display":"standalone","background_color":"%230b0a0f","theme_color":"%23ff8c00","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27><rect width=%27192%27 height=%27192%27 fill=%27%230b0a0f%27 rx=%2828%27/><text x=%2796%27 y=%27130%27 font-family=%27Georgia, serif%27 font-size=%27108%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23ff8c00%27>◊</text></svg>","sizes":"192x192","type":"image/svg+xml"}]}'>
+<style>
+:root{
+  --void:#0b0a0f;--void-2:#13121a;--ink:#1a1922;--ink-2:#22212c;
+  --line:#2a2934;--line-soft:#1f1e28;
+  --cream:#e6e1d6;--cream-dim:#a8a395;--cream-muted:#6e6a5e;
+  --brass:#b8974a;--amber:#ff8c00;--ox:#8b1a1a;
+  --green:#4ade80;--red:#ef4444;--blue:#60a5fa;--yellow:#fbbf24;
+  --paper:#fafaf6;--paper-edge:#dad6c8;
+  --serif:Georgia,'Libre Baskerville',ui-serif,serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:'IBM Plex Mono','SF Mono',ui-monospace,Menlo,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--void);color:var(--cream);font:13px/1.55 var(--sans);min-height:100dvh;-webkit-font-smoothing:antialiased;overflow:hidden;height:100dvh}
+button{font-family:inherit;cursor:pointer;background:transparent;border:none;color:inherit}
+input,textarea,select{font-family:inherit;background:var(--ink);border:1px solid var(--line);color:var(--cream);border-radius:3px;padding:7px 10px;outline:none;font-size:12px}
+input:focus,textarea:focus,select:focus{border-color:var(--brass)}
+input[type=range]{padding:0;background:transparent;border:none;width:100%}
+input[type=color]{width:40px;height:24px;padding:0;border:1px solid var(--line);cursor:pointer;background:var(--ink)}
+a{color:var(--amber);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.app{display:grid;grid-template-rows:42px 1fr;height:100dvh}
+header{display:flex;align-items:center;border-bottom:1px solid var(--line);background:var(--void-2);user-select:none}
+.brand{display:flex;align-items:center;gap:10px;padding:0 14px;height:100%;border-right:1px solid var(--line)}
+.brand .mark{width:22px;height:22px;background:linear-gradient(135deg,var(--brass),var(--amber));border-radius:4px;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:13px;color:var(--void)}
+.brand .name{font-family:var(--serif);font-weight:600;font-size:13px;letter-spacing:0.02em}
+.brand .seal{font-family:var(--mono);font-size:9px;color:var(--cream-muted);letter-spacing:0.16em;text-transform:uppercase}
+
+.menu{display:flex;flex:1;height:100%;align-items:stretch}
+.menu button{padding:0 12px;font-size:12px;color:var(--cream-dim);height:100%;display:flex;align-items:center;gap:6px;letter-spacing:0.02em}
+.menu button:hover{background:var(--ink);color:var(--cream)}
+.menu button.divider{border-right:1px solid var(--line-soft);padding:0;width:1px;cursor:default}
+.menu button:hover.divider{background:transparent}
+
+.tools-r{display:flex;align-items:center;gap:5px;padding:0 12px;height:100%;border-left:1px solid var(--line)}
+.tool-btn{padding:5px 10px;border-radius:3px;font-size:11px;color:var(--cream-dim);letter-spacing:0.06em;text-transform:uppercase;font-family:var(--mono);border:1px solid var(--line)}
+.tool-btn:hover{background:var(--ink);color:var(--cream);border-color:var(--brass)}
+.tool-btn.primary{background:var(--amber);color:var(--void);border-color:var(--amber);font-weight:600}
+.tool-btn.primary:hover{background:var(--brass);border-color:var(--brass)}
+.tool-btn.t3{border-color:var(--blue);color:var(--blue)}
+
+.workspace{display:grid;grid-template-columns:1fr 1fr 280px;height:calc(100dvh - 42px);min-height:0}
+@media(max-width:980px){.workspace{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr auto}.panels{grid-column:1/-1;max-height:240px}}
+@media(max-width:680px){.workspace{grid-template-columns:1fr;grid-template-rows:auto auto auto}}
+
+.editor-pane,.preview-pane,.panels{overflow:auto;display:flex;flex-direction:column;min-height:0}
+.editor-pane{border-right:1px solid var(--line)}
+.preview-pane{background:#1c1c24;border-right:1px solid var(--line)}
+.panels{background:var(--void-2);border-left:1px solid var(--line)}
+
+.pane-hd{padding:9px 14px;font-family:var(--mono);font-size:10px;color:var(--brass);letter-spacing:0.16em;text-transform:uppercase;background:var(--ink);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;border-bottom:1px solid var(--line)}
+.pane-hd .tabs{display:flex;gap:0}
+.pane-hd .tabs button{padding:3px 9px;font-size:10px;color:var(--cream-muted);letter-spacing:0.06em;border-radius:2px;font-family:var(--mono);text-transform:uppercase}
+.pane-hd .tabs button.active{color:var(--amber);background:var(--void)}
+.pane-hd .info{color:var(--cream-muted);font-size:10px}
+
+#editor{flex:1;width:100%;background:var(--void);color:var(--cream);border:none;outline:none;padding:18px 22px;font-family:var(--mono);font-size:13px;line-height:1.62;resize:none}
+.preview-bd{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.page{background:var(--paper);color:#222;box-shadow:0 6px 24px rgba(0,0,0,0.5),0 0 0 1px var(--paper-edge);position:relative;overflow:hidden}
+.page-inner{position:absolute;left:0;top:0;width:100%;height:100%}
+.page-num{position:absolute;bottom:6mm;left:0;right:0;text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:9pt;color:#888}
+.page-header{position:absolute;top:6mm;left:0;right:0;text-align:center;font-family:Helvetica,Arial,sans-serif;font-size:9pt;color:#888}
+.preview-doc{padding:0}
+.preview-doc h1{font-size:22pt;margin:0 0 10pt;font-weight:600}
+.preview-doc h2{font-size:16pt;margin:14pt 0 8pt;font-weight:600}
+.preview-doc h3{font-size:13pt;margin:12pt 0 6pt;font-weight:600;color:#5a4a2a}
+.preview-doc p{margin:0 0 8pt;line-height:1.55}
+.preview-doc ul,.preview-doc ol{margin:0 0 10pt 18pt}
+.preview-doc li{margin-bottom:3pt}
+.preview-doc blockquote{border-left:3px solid #b8974a;padding-left:10pt;margin:10pt 0;color:#555;font-style:italic}
+.preview-doc code{background:#f0ecdf;padding:1pt 4pt;border-radius:2px;font-family:Courier,monospace;font-size:11pt}
+.preview-doc pre{background:#f4f1e6;padding:10pt 12pt;border-left:3px solid #b8974a;font-family:Courier,monospace;font-size:10pt;overflow-x:auto;margin:8pt 0}
+.preview-doc img{max-width:100%;display:block;margin:10pt auto}
+.preview-doc hr{border:none;border-top:1px solid #d0c8b0;margin:14pt 0}
+.preview-doc a{color:#b8974a}
+.preview-doc table{border-collapse:collapse;margin:8pt 0;font-size:10pt}
+.preview-doc th,.preview-doc td{border:1px solid #ccc;padding:4pt 8pt;text-align:left}
+.preview-doc th{background:#ede7d5;font-weight:600}
+
+.panel{border-bottom:1px solid var(--line)}
+.panel-bd{padding:12px 14px}
+.field{margin-bottom:10px}
+.field label{display:block;font-family:var(--mono);font-size:10px;color:var(--cream-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px;display:flex;justify-content:space-between;align-items:baseline}
+.field label .v{color:var(--brass)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+
+.btn{padding:6px 11px;border:1px solid var(--brass);border-radius:3px;font-size:11px;color:var(--cream);background:transparent;letter-spacing:0.04em}
+.btn:hover{border-color:var(--amber);color:var(--amber)}
+.btn.primary{background:var(--amber);color:var(--void);border-color:var(--amber);font-weight:600}
+.btn.primary:hover{background:var(--brass);border-color:var(--brass)}
+.btn.full{width:100%}
+.btn.sm{padding:4px 8px;font-size:10px}
+
+/* PALETTE + MODAL */
+.palette-bg,.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:flex-start;justify-content:center;padding-top:14vh;z-index:1000;backdrop-filter:blur(4px)}
+.palette-bg.open,.modal-bg.open{display:flex}
+.modal-bg{align-items:center;padding:18px}
+.palette{background:var(--void-2);border:1px solid var(--brass);border-radius:6px;width:min(640px,90%);box-shadow:0 18px 50px rgba(0,0,0,0.7);overflow:hidden}
+.palette-hd{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.palette-hd .glyph{font-family:var(--serif);font-size:20px;color:var(--amber)}
+.palette-hd input{flex:1;border:none;background:transparent;font-size:15px;padding:4px}
+.palette-hd .badge{font-family:var(--mono);font-size:10px;color:var(--cream-muted);letter-spacing:0.1em;text-transform:uppercase}
+.palette-bd{max-height:50vh;overflow:auto;padding:8px}
+.palette-row{padding:9px 12px;border-radius:3px;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:13px}
+.palette-row:hover,.palette-row.sel{background:var(--ink)}
+.palette-row .ico{font-family:var(--serif);font-size:16px;color:var(--amber);width:22px;text-align:center}
+.palette-row .desc{color:var(--cream-muted);font-size:11px;margin-top:2px}
+.palette-row .key{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--cream-muted);background:var(--void);padding:2px 6px;border-radius:2px;letter-spacing:0.06em}
+.modal{background:var(--void-2);border:1px solid var(--brass);border-radius:5px;padding:22px;max-width:540px;width:100%;max-height:90vh;overflow:auto}
+.modal h2{font-family:var(--serif);font-size:17px;margin-bottom:14px}
+.modal .actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--amber);color:var(--void);padding:9px 18px;border-radius:3px;font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;opacity:0;transition:all 0.22s;z-index:1100;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<!-- FALL_KIT_BEGIN v1 · DO NOT EDIT THIS BLOCK MANUALLY -->
+<script>
+/*!
+ * Fall Kit · v1.0.0 · the shared cascade for every estate seed
+ * MIT · Simon Gant · ai-nativesolutions.com · ◊·κ=1
+ *
+ * Inlineable JS module. Drop into any seed via <script> or copy-paste inline.
+ * Preserves single-HTML sovereignty (no external deps until user opts in to T2 WebLLM).
+ *
+ * What it gives every seed:
+ *  - AI tier picker: T0 (off · default) · T2 (WebLLM in-browser, 5 models 1B-70B) · T3 (BYOK Anthropic/OpenAI/Google)
+ *  - Universal entry: FallKit.aiComplete(systemPrompt, userMsg, maxTokens) → string|null
+ *  - AI chip UI in header
+ *  - WebRTC P2P mesh (ported from canonical fallnet · fall-signal channel · Google STUN)
+ *  - Help section partial: FallKit.helpSection()
+ *  - Settings panel: FallKit.openSettings()
+ *
+ * Doctrine (per botler CLAUDE.md):
+ *  - T0 fallback ALWAYS works · aiComplete returns null · caller MUST degrade gracefully
+ *  - NEVER hide a feature behind AI · NEVER proxy API keys · NEVER log keys
+ *  - WebLLM is lazy-loaded · model weights download ONLY on user opt-in
+ *
+ * Estate-first canonical references:
+ *  - WebLLM pattern: Downloads/botler/index.html (T0/T2/T3 cascade)
+ *  - WebRTC pattern: Downloads/fallnet/fallnet-shim.js (raw RTCPeerConnection)
+ *  - Konomi seal:    ◊·κ=1  (consistent across all estate seeds)
+ *  - Mesh channel:   'fall-signal'
+ */
+(function (root) {
+  'use strict';
+
+  const FALL_KIT_VERSION = '1.2.0';
+  const KCC_MINT_URL = 'https://sjgant80-hub.github.io/kcc-mint/';
+
+  // ─── Model registry ──────────────────────────────────────────────
+  const WEBLLM_MODELS = {
+    'llama-1b':  { id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',   size: '~700MB', label: '1B · fast · any laptop / phone' },
+    'llama-3b':  { id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',   size: '~2GB',   label: '3B · balanced · default · most laptops' },
+    'qwen-7b':   { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC',     size: '~5GB',   label: '7B · capable · needs decent GPU (M-series Mac / 8GB+ VRAM)' },
+    'llama-8b':  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',   size: '~5GB',   label: '8B · common · needs decent GPU' },
+    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' }};
+  const DEFAULT_MODEL = 'llama-3b';
+
+  const T3_PROVIDERS = {
+    anthropic: { label: 'Anthropic Claude', models: ['claude-sonnet-4-5','claude-opus-4-7','claude-haiku-4-5'], default: 'claude-sonnet-4-5', url: 'https://api.anthropic.com/v1/messages' },
+    openai:    { label: 'OpenAI',           models: ['gpt-4o','gpt-4o-mini','o1-mini'],                          default: 'gpt-4o-mini',      url: 'https://api.openai.com/v1/chat/completions' },
+    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' }};
+
+  // ─── State ───────────────────────────────────────────────────────
+  const STATE = {
+    config: loadConfig(),
+    ai: { ready: false, loading: false, progress: 0, engine: null, model: null },
+    mesh: { active: false, peers: new Map(), bc: null, signal: null }};
+
+  function loadConfig() {
+    try { return JSON.parse(localStorage.getItem('fall-kit.config') || '{}'); }
+    catch (e) { return {}; }
+  }
+  function saveConfig() {
+    try { localStorage.setItem('fall-kit.config', JSON.stringify(STATE.config)); } catch (e) {}
+  }
+
+  // ─── DOM helpers ─────────────────────────────────────────────────
+  function $(s, root) { return (root || document).querySelector(s); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+  // ─── AI tier ─────────────────────────────────────────────────────
+  function aiTier() { return STATE.config.ai_tier || 'T0'; }
+
+  function renderAiChip() {
+    const chip = $('#fk-ai-chip');
+    if (!chip) return;
+    const txt = $('#fk-ai-chip-text');
+    chip.classList.remove('fk-chip-live', 'fk-chip-loading', 'fk-chip-warn');
+    const tier = aiTier();
+    if (tier === 'T0') { txt.textContent = 'T0 · off'; }
+    else if (tier === 'T2') {
+      if (STATE.ai.ready) { txt.textContent = 'T2 ' + (WEBLLM_MODELS[STATE.config.webllm_model || DEFAULT_MODEL]?.label.split(' · ')[0] || '') + ' · ready'; chip.classList.add('fk-chip-live'); }
+      else if (STATE.ai.loading) { txt.textContent = 'T2 loading ' + Math.round(STATE.ai.progress) + '%'; chip.classList.add('fk-chip-loading'); }
+      else { txt.textContent = 'T2 · click to load'; chip.classList.add('fk-chip-warn'); }
+    } else if (tier === 'T3') {
+      if (STATE.config.api_key) { txt.textContent = 'T3 ' + (T3_PROVIDERS[STATE.config.api_provider]?.label || 'BYOK') + ' · active'; chip.classList.add('fk-chip-live'); }
+      else { txt.textContent = 'T3 · no key set'; chip.classList.add('fk-chip-warn'); }
+    }
+  }
+
+  async function loadWebLLM(modelKey) {
+    if (STATE.ai.loading) return;
+    const key = modelKey || STATE.config.webllm_model || DEFAULT_MODEL;
+    const model = WEBLLM_MODELS[key];
+    if (!model) { console.error('fall-kit: unknown model', key); return; }
+    if (STATE.ai.ready && STATE.ai.model === model.id) return;
+    STATE.ai.loading = true; STATE.ai.progress = 0; renderAiChip();
+    notify('Loading WebLLM · ' + model.label + ' · ' + model.size + ' first time', 'info');
+    try {
+      const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm@0.2.79');
+      const engine = await CreateMLCEngine(model.id, {
+        initProgressCallback: p => { STATE.ai.progress = (p.progress || 0) * 100; renderAiChip(); }
+      });
+      STATE.ai.engine = engine;
+      STATE.ai.model = model.id;
+      STATE.ai.ready = true;
+      STATE.ai.loading = false;
+      STATE.config.webllm_model = key; saveConfig();
+      renderAiChip();
+      notify('WebLLM ready · sovereign mode · ' + model.label.split(' · ')[0], 'ok');
+    } catch (e) {
+      console.error('fall-kit: WebLLM load failed', e);
+      STATE.ai.loading = false; renderAiChip();
+      notify('WebLLM load failed · ' + e.message, 'err');
+    }
+  }
+
+  async function aiComplete(systemPrompt, userMsg, maxTokens) {
+    maxTokens = maxTokens || 600;
+    const tier = aiTier();
+    if (tier === 'T2' && STATE.ai.ready && STATE.ai.engine) {
+      const r = await STATE.ai.engine.chat.completions.create({
+        messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMsg }],
+        max_tokens: maxTokens});
+      return r.choices[0].message.content;
+    }
+    if (tier === 'T3' && STATE.config.api_key && STATE.config.api_provider) {
+      return await aiCloudCall(systemPrompt, userMsg, maxTokens);
+    }
+    return null;
+  }
+
+  async function aiCloudCall(sys, msg, maxTokens) {
+    const provider = STATE.config.api_provider;
+    const key = STATE.config.api_key;
+    const model = STATE.config.api_model || T3_PROVIDERS[provider]?.default;
+    if (provider === 'anthropic') {
+      const r = await fetch(T3_PROVIDERS.anthropic.url, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] })});
+      if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200));
+      const j = await r.json();
+      return j.content[0].text;
+    }
+    if (provider === 'openai') {
+      const r = await fetch(T3_PROVIDERS.openai.url, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] })});
+      if (!r.ok) throw new Error('OpenAI ' + r.status);
+      const j = await r.json();
+      return j.choices[0].message.content;
+    }
+    if (provider === 'google') {
+      const r = await fetch(T3_PROVIDERS.google.url + model + ':generateContent?key=' + encodeURIComponent(key), {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } })});
+      if (!r.ok) throw new Error('Google ' + r.status);
+      const j = await r.json();
+      return j.candidates[0].content.parts[0].text;
+    }
+    throw new Error('unknown provider: ' + provider);
+  }
+
+  // ─── WebRTC P2P mesh (ported from canonical fallnet · fall-signal channel · Google STUN) ───
+  const MESH_CHANNEL = 'fall-signal';
+  const STUN_SERVERS = [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }];
+  function meshStart(opts) {
+    if (STATE.mesh.active) return;
+    opts = opts || {};
+    const seedId = opts.seedId || (location.pathname + '#' + Math.random().toString(36).slice(2, 8));
+    STATE.mesh.seedId = seedId;
+    try { STATE.mesh.bc = new BroadcastChannel(MESH_CHANNEL); }
+    catch (e) { console.warn('fall-kit: BroadcastChannel unavailable'); return; }
+    STATE.mesh.bc.onmessage = e => {
+      const m = e.data;
+      if (!m || !m.kind || m.peerId === seedId) return;
+      if (opts.onMessage) opts.onMessage(m);
+    };
+    STATE.mesh.bc.postMessage({ kind: 'fall-kit:hello', peerId: seedId, ts: Date.now(), seedName: opts.seedName || 'unknown' });
+    STATE.mesh.active = true;
+    notify('Mesh active · channel ' + MESH_CHANNEL, 'ok');
+  }
+  function meshPost(kind, payload) {
+    if (!STATE.mesh.active || !STATE.mesh.bc) return false;
+    STATE.mesh.bc.postMessage({ kind: kind, peerId: STATE.mesh.seedId, ts: Date.now(), payload: payload });
+    return true;
+  }
+
+  // ─── Toast ───────────────────────────────────────────────────────
+  function notify(msg, kind) {
+    let t = $('#fk-toast');
+    if (!t) {
+      t = document.createElement('div'); t.id = 'fk-toast';
+      t.style.cssText = 'position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:#c08a3a;color:#0a0a0a;padding:9px 18px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;opacity:0;transition:all .22s;z-index:10000;pointer-events:none';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.background = kind === 'err' ? '#a14a2a' : kind === 'ok' ? '#6b8d4a' : '#c08a3a';
+    t.style.color = kind === 'err' ? '#fff' : '#0a0a0a';
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(t._to);
+    t._to = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2400);
+  }
+
+  // ─── Settings modal ──────────────────────────────────────────────
+  function openSettings() {
+    let bg = $('#fk-modal-bg');
+    if (!bg) {
+      bg = document.createElement('div'); bg.id = 'fk-modal-bg';
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;overflow-y:auto;z-index:9999';
+      bg.onclick = e => { if (e.target.id === 'fk-modal-bg') closeSettings(); };
+      document.body.appendChild(bg);
+    }
+    const tier = aiTier();
+    const provider = STATE.config.api_provider || 'anthropic';
+    const providerCfg = T3_PROVIDERS[provider];
+    bg.innerHTML = `
+      <div style="background:#13121a;border:1px solid #c08a3a;border-radius:5px;max-width:600px;width:100%;padding:22px 24px;color:#ebe3d2;font-family:system-ui,-apple-system,sans-serif;font-size:13.5px;line-height:1.55">
+        <h3 style="font-family:Georgia,serif;font-size:18px;color:#c08a3a;margin-bottom:14px">◊ Fall Kit · AI cascade settings</h3>
+        <div style="margin-bottom:14px"><label style="display:block;font-size:11px;color:#a89e88;letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase">Tier</label>
+          <select id="fk-tier" style="width:100%;padding:8px 11px;background:#1a1922;border:1px solid #3a342c;color:#ebe3d2;border-radius:3px;font-size:13.5px;font-family:inherit">
+            <option value="T0"${tier==='T0'?' selected':''}>T0 · off (default · the seed works fully without AI)</option>
+            <option value="T2"${tier==='T2'?' selected':''}>T2 · WebLLM in-browser · sovereign · pick a model below</option>
+            <option value="T3"${tier==='T3'?' selected':''}>T3 · BYOK · Anthropic / OpenAI / Google · stored in your browser only</option>
+          </select>
+        </div>
+        <div id="fk-t2-block" style="display:${tier==='T2'?'block':'none'};margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label style="display:block;font-size:11px;color:#a89e88;letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase">WebLLM model · 1B → 70B cascade</label>
+          <select id="fk-model" style="width:100%;padding:8px 11px;background:#22212c;border:1px solid #3a342c;color:#ebe3d2;border-radius:3px;font-size:13px;font-family:inherit">
+            ${Object.entries(WEBLLM_MODELS).map(([k,m]) => `<option value="${k}"${(STATE.config.webllm_model||DEFAULT_MODEL)===k?' selected':''}>${esc(m.label)} · ${esc(m.size)}</option>`).join('')}
+          </select>
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <button id="fk-load-llm" style="padding:7px 14px;background:#c08a3a;color:#0a0a0a;border:none;border-radius:3px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">${STATE.ai.ready?'✓ Loaded · switch':'Load model (one-time download)'}</button>
+            <span id="fk-llm-status" style="font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.04em">${STATE.ai.ready?'ready':STATE.ai.loading?Math.round(STATE.ai.progress)+'%':'not loaded'}</span>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:#6e6a5e;line-height:1.55">First load downloads the model from @mlc-ai/web-llm CDN. Cached forever after. Inference is 100% local — open DevTools → Network during use, nothing leaves.</div>
+        </div>
+        <div id="fk-t3-block" style="display:${tier==='T3'?'block':'none'};margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label style="display:block;font-size:11px;color:#a89e88;letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase">BYOK provider</label>
+          <select id="fk-provider" style="width:100%;padding:8px 11px;background:#22212c;border:1px solid #3a342c;color:#ebe3d2;border-radius:3px;font-size:13px;font-family:inherit;margin-bottom:10px">
+            ${Object.entries(T3_PROVIDERS).map(([k,p]) => `<option value="${k}"${provider===k?' selected':''}>${esc(p.label)}</option>`).join('')}
+          </select>
+          <label style="display:block;font-size:11px;color:#a89e88;letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase">Model</label>
+          <select id="fk-api-model" style="width:100%;padding:8px 11px;background:#22212c;border:1px solid #3a342c;color:#ebe3d2;border-radius:3px;font-size:13px;font-family:inherit;margin-bottom:10px">
+            ${providerCfg.models.map(m => `<option value="${m}"${(STATE.config.api_model||providerCfg.default)===m?' selected':''}>${esc(m)}</option>`).join('')}
+          </select>
+          <label style="display:block;font-size:11px;color:#a89e88;letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase">API key</label>
+          <input type="password" id="fk-key" value="${esc(STATE.config.api_key || '')}" placeholder="${STATE.config.api_key ? '(set · leave empty to keep)' : 'sk-ant-... or sk-... or AIza...'}" autocomplete="off" style="width:100%;padding:8px 11px;background:#22212c;border:1px solid #3a342c;color:#ebe3d2;border-radius:3px;font-size:13px;font-family:ui-monospace,Menlo,monospace">
+          <div style="margin-top:8px;font-size:11px;color:#6e6a5e;line-height:1.55">Key lives in this browser only (localStorage). Sent direct to the provider — never to us. Wipe with Reset.</div>
+        </div>
+        <div style="margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label style="display:block;font-size:11px;color:#a89e88;letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase">Cross-seed mesh</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="fk-mesh-toggle" style="padding:6px 12px;background:${STATE.mesh.active?'#6b8d4a':'#1a1922'};color:${STATE.mesh.active?'#fff':'#a89e88'};border:1px solid ${STATE.mesh.active?'#6b8d4a':'#3a342c'};border-radius:3px;font-size:11px;cursor:pointer;font-family:inherit">${STATE.mesh.active?'✓ Active · disconnect':'Activate mesh'}</button>
+            <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#6e6a5e;letter-spacing:.04em">channel · <code style="background:#22212c;padding:1px 5px;border-radius:2px">${MESH_CHANNEL}</code></span>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:#6e6a5e;line-height:1.55">BroadcastChannel for same-device · WebRTC for cross-device (planned). Other estate seeds on the same channel discover each other automatically.</div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+          <button onclick="FallKit.closeSettings()" style="padding:7px 14px;background:transparent;color:#a89e88;border:1px solid #3a342c;border-radius:3px;font-size:12px;cursor:pointer;font-family:inherit">Close</button>
+          <button id="fk-save" style="padding:7px 14px;background:#c08a3a;color:#0a0a0a;border:none;border-radius:3px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">Save</button>
+        </div>
+        <div style="margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:9px;color:#6e6a5e;letter-spacing:.08em;text-align:center">◊ Fall Kit v${FALL_KIT_VERSION} · MIT · ai-nativesolutions.com · ◊·κ=1</div>
+      </div>`;
+    // Wire interactions
+    $('#fk-tier').onchange = () => {
+      const t = $('#fk-tier').value;
+      $('#fk-t2-block').style.display = t === 'T2' ? 'block' : 'none';
+      $('#fk-t3-block').style.display = t === 'T3' ? 'block' : 'none';
+    };
+    $('#fk-provider') && ($('#fk-provider').onchange = () => {
+      const p = $('#fk-provider').value;
+      const sel = $('#fk-api-model');
+      sel.innerHTML = T3_PROVIDERS[p].models.map(m => `<option value="${m}">${esc(m)}</option>`).join('');
+    });
+    $('#fk-load-llm') && ($('#fk-load-llm').onclick = () => {
+      const m = $('#fk-model').value;
+      loadWebLLM(m);
+    });
+    $('#fk-mesh-toggle').onclick = () => {
+      if (STATE.mesh.active) { STATE.mesh.bc?.close(); STATE.mesh.active = false; STATE.mesh.bc = null; notify('Mesh disconnected'); }
+      else meshStart({ seedName: STATE.config.seedName || 'seed' });
+      openSettings();  // refresh modal
+    };
+    $('#fk-save').onclick = () => {
+      STATE.config.ai_tier = $('#fk-tier').value;
+      if ($('#fk-model')) STATE.config.webllm_model = $('#fk-model').value;
+      if ($('#fk-provider')) STATE.config.api_provider = $('#fk-provider').value;
+      if ($('#fk-api-model')) STATE.config.api_model = $('#fk-api-model').value;
+      const newKey = $('#fk-key')?.value;
+      if (newKey) STATE.config.api_key = newKey;
+      saveConfig(); renderAiChip(); notify('Saved', 'ok'); closeSettings();
+    };
+  }
+  function closeSettings() { const bg = $('#fk-modal-bg'); if (bg) bg.remove(); }
+
+  // ─── Help section (returns HTML string for inclusion in seed Help tabs) ───
+  function helpSection() {
+    return `<div style="background:rgba(192,138,58,.05);border:1px solid #3a342c;border-radius:4px;padding:18px 22px;margin:14px 0">
+      <h4 style="font-family:Georgia,serif;font-size:15px;color:#c08a3a;margin-bottom:12px">◊ AI cascade · the 3 tiers</h4>
+      <p style="font-size:13px;color:#a89e88;line-height:1.7;margin-bottom:10px">This seed runs fully without AI (<strong style="color:#c08a3a">T0</strong>, default). Enable a tier in settings if you want AI-assist features:</p>
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+        <thead><tr><th style="padding:6px 10px;text-align:left;background:rgba(0,0,0,.2);font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.08em;text-transform:uppercase">Tier</th><th style="padding:6px 10px;text-align:left;background:rgba(0,0,0,.2);font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.08em;text-transform:uppercase">What it is</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T0</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">Off. The seed works fully. No AI · no downloads · no API calls.</td></tr>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T2</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">WebLLM in-browser. Pick a model: 1B (700MB, fast) → 3B (2GB, balanced) → 7B (5GB, capable) → 70B (40GB, frontier). One-time download, runs offline forever after. Zero data leaves your device.</td></tr>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T3</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">BYOK · Anthropic Claude · OpenAI GPT · Google Gemini. You bring the API key, you pay the provider direct. Key stays in your browser, sent direct to the provider, never proxied.</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:#6e6a5e;line-height:1.6;margin-top:10px">Open the AI chip in the header to switch tier or check status. Cross-seed mesh activates a BroadcastChannel on <code style="background:#1a1922;padding:1px 5px;border-radius:2px">${MESH_CHANNEL}</code> so other estate seeds on the same device discover this one.</p>
+    </div>`;
+  }
+
+  // ─── CSS for AI chip ─────────────────────────────────────────────
+  function injectCss() {
+    if (document.getElementById('fk-css')) return;
+    const s = document.createElement('style');
+    s.id = 'fk-css';
+    s.textContent = `
+      #fk-ai-chip { display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:3px; font-family:ui-monospace,Menlo,monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; cursor:pointer; border:1px solid #3a342c; background:#1a1922; color:#a89e88; user-select:none; vertical-align:middle }
+      #fk-ai-chip:hover { border-color:#c08a3a; color:#ebe3d2 }
+      #fk-ai-chip.fk-chip-live { border-color:#6b8d4a; color:#6b8d4a; background:rgba(107,141,74,.10) }
+      #fk-ai-chip.fk-chip-loading { border-color:#e8a83a; color:#e8a83a; background:rgba(232,168,58,.10) }
+      #fk-ai-chip.fk-chip-warn { border-color:#a14a2a; color:#a14a2a; background:rgba(161,74,42,.08) }
+      #fk-ai-chip .fk-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0 }
+      #fk-ai-chip.fk-chip-loading .fk-dot { animation:fk-pulse 1s infinite }
+      @keyframes fk-pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+      .fk-ai-assist { display:inline-flex; align-items:center; gap:5px; padding:4px 9px; font-size:11px; border:1px solid #c08a3a; color:#c08a3a; background:transparent; border-radius:3px; cursor:pointer; font-family:inherit }
+      .fk-ai-assist:hover { background:#c08a3a; color:#0a0a0a }
+      .fk-ai-assist::before { content:'✦'; font-size:12px }
+    `;
+    document.head.appendChild(s);
+  }
+
+  // ─── KCC Mint launcher (v1.2 · fork-this-seed shortcut) ──────────
+  function openMint() {
+    const slug = (STATE.config.seedName || location.hostname.split('.')[0] || 'seed').replace(/[^a-z0-9-]/gi, '-').toLowerCase();
+    const name = document.title.replace(/^[◊·\s]+/, '').split('·')[0].trim() || slug;
+    const url = location.href.split('?')[0].split('#')[0];
+    const desc = document.querySelector('meta[name="description"]')?.content?.slice(0, 200) || '';
+    const params = new URLSearchParams({ fork: '1', parent_slug: slug, parent_name: name, parent_url: url, parent_desc: desc });
+    window.open(KCC_MINT_URL + '?' + params.toString(), '_blank', 'noopener');
+  }
+
+  // ─── Init ────────────────────────────────────────────────────────
+  function init(opts) {
+    opts = opts || {};
+    injectCss();
+    if (opts.seedName) STATE.config.seedName = opts.seedName;
+    if ($('#fk-ai-chip')) { renderAiChip(); return { version: FALL_KIT_VERSION, mounted: false }; }
+    const chip = document.createElement('button');
+    chip.id = 'fk-ai-chip';
+    chip.title = 'AI cascade · click to configure tier and model';
+    chip.innerHTML = '<span class="fk-dot"></span><span id="fk-ai-chip-text">T0 · off</span>';
+    chip.onclick = openSettings;
+    // Try anchor first, fall back to floating bottom-right
+    const anchor = opts.chipAnchor ? $(opts.chipAnchor) : null;
+    if (anchor) { anchor.appendChild(chip); }
+    else {
+      chip.style.cssText += ';position:fixed;bottom:14px;left:14px;z-index:9998;box-shadow:0 4px 14px rgba(0,0,0,.4)';
+      document.body.appendChild(chip);
+    }
+    // v1.2 · floating mint button next to chip
+    if (!$('#fk-mint-btn') && !opts.hideMint) {
+      const mintBtn = document.createElement('button');
+      mintBtn.id = 'fk-mint-btn';
+      mintBtn.title = 'Mint a fork of this seed as a KCC bundle · provenance economy';
+      mintBtn.innerHTML = '<span style="font-size:13px">✦</span> mint fork';
+      mintBtn.style.cssText = 'position:fixed;bottom:14px;left:130px;z-index:9998;display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;cursor:pointer;border:1px solid #c08a3a;color:#c08a3a;background:rgba(10,10,15,.7);box-shadow:0 4px 14px rgba(0,0,0,.4)';
+      mintBtn.onmouseover = () => { mintBtn.style.background = '#c08a3a'; mintBtn.style.color = '#0a0a0a'; };
+      mintBtn.onmouseout  = () => { mintBtn.style.background = 'rgba(10,10,15,.7)'; mintBtn.style.color = '#c08a3a'; };
+      mintBtn.onclick = openMint;
+      document.body.appendChild(mintBtn);
+    }
+    renderAiChip();
+    return { version: FALL_KIT_VERSION, mounted: true };
+  }
+
+  // ─── Public API ──────────────────────────────────────────────────
+  root.FallKit = {
+    version: FALL_KIT_VERSION,
+    init: init,
+    aiTier: aiTier,
+    aiComplete: aiComplete,
+    loadWebLLM: loadWebLLM,
+    openSettings: openSettings,
+    closeSettings: closeSettings,
+    renderAiChip: renderAiChip,
+    helpSection: helpSection,
+    meshStart: meshStart,
+    meshPost: meshPost,
+    notify: notify,
+    openMint: openMint,  // v1.2 · launch kcc-mint with this seed prefilled as parent
+    MODELS: WEBLLM_MODELS,
+    PROVIDERS: T3_PROVIDERS,
+    state: STATE};
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+  // fall-kit init · auto-mounts a floating AI chip bottom-left
+  (function () {
+    function go() { if (typeof FallKit !== 'undefined') FallKit.init({ seedName: "fallpdf" }); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go);
+    else go();
+  })();
+</script>
+<!-- FALL_KIT_END v1 -->
+</head>
+<body>
+
+<div class="app">
+<header>
+  <div class="brand">
+    <div class="mark">◊</div>
+    <div><div class="name">FallPDF</div></div>
+    <div class="seal">v1 · prime 1427</div>
+  </div>
+  <nav class="menu">
+    <button onclick="newDoc()" title="new">+ new</button>
+    <button onclick="loadFile()" title="load .md / .txt / .html">⇪ load</button>
+    <button onclick="insertImage()" title="insert image">⊞ image</button>
+    <button class="divider"></button>
+    <button onclick="exportPDF()" class="" style="color:var(--amber);font-weight:600" title="export PDF · ⌘E">↓ PDF</button>
+    <button onclick="window.print()" title="print preview">⎙ print</button>
+    <button onclick="exportMarkdown()" title="save source as .md">↓ .md</button>
+    <button class="divider"></button>
+    <button onclick="loadSample()" title="sample doc">≣ sample</button>
+  </nav>
+  <div class="tools-r">
+    <button class="tool-btn primary" onclick="openPalette()" title="autopilot · Ctrl+K">◊ autopilot</button>
+    <button class="tool-btn" id="tierBadge" onclick="openModal('settings')">T0</button>
+    <button class="tool-btn" onclick="openModal('settings')">⚙</button>
+  </div>
+</header>
+
+<div class="workspace">
+
+<div class="editor-pane">
+  <div class="pane-hd">
+    <div class="tabs"><button class="active" data-mode="md" onclick="setMode('md')">markdown</button><button data-mode="html" onclick="setMode('html')">html</button><button data-mode="text" onclick="setMode('text')">text</button></div>
+    <div class="info" id="editInfo">0 chars · 0 words</div>
+  </div>
+  <textarea id="editor" placeholder="Write here. Markdown supported.
+
+# Heading 1
+## Heading 2
+### Heading 3
+- bullet
+1. numbered
+> blockquote
+**bold** *italic* `code`
+
+![alt](data:image/png;base64,…)
+
+Hit ↓ PDF to export."></textarea>
+</div>
+
+<div class="preview-pane">
+  <div class="pane-hd"><span>preview</span><div class="info" id="prevInfo">·</div></div>
+  <div class="preview-bd" id="preview"></div>
+</div>
+
+<aside class="panels" id="panels">
+  <section class="panel">
+    <div class="pane-hd"><span>page setup</span></div>
+    <div class="panel-bd">
+      <div class="field"><label>size</label><select id="pgSize" onchange="onPgChange()"><option value="A4" selected>A4 · 210×297mm</option><option value="Letter">US Letter · 216×279mm</option><option value="Legal">US Legal · 216×356mm</option><option value="A3">A3 · 297×420mm</option><option value="A5">A5 · 148×210mm</option><option value="card">business card · 90×55mm</option><option value="custom">custom</option></select></div>
+      <div class="row2" id="customDim" style="display:none">
+        <div class="field"><label>w (mm)</label><input id="pgW" type="number" value="210" oninput="onPgChange()"></div>
+        <div class="field"><label>h (mm)</label><input id="pgH" type="number" value="297" oninput="onPgChange()"></div>
+      </div>
+      <div class="field"><label>orientation</label><select id="pgOri" onchange="onPgChange()"><option value="P" selected>portrait</option><option value="L">landscape</option></select></div>
+      <div class="row2">
+        <div class="field"><label>margin top (mm)</label><input id="pgMT" type="number" value="20" oninput="onPgChange()"></div>
+        <div class="field"><label>margin bot (mm)</label><input id="pgMB" type="number" value="20" oninput="onPgChange()"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>margin left</label><input id="pgML" type="number" value="20" oninput="onPgChange()"></div>
+        <div class="field"><label>margin right</label><input id="pgMR" type="number" value="20" oninput="onPgChange()"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="pane-hd"><span>type</span></div>
+    <div class="panel-bd">
+      <div class="field"><label>font</label><select id="font" onchange="onPgChange()"><option value="Helvetica" selected>Helvetica · sans</option><option value="Times-Roman">Times · serif</option><option value="Courier">Courier · mono</option></select></div>
+      <div class="row2">
+        <div class="field"><label>body size<span class="v" id="fsLbl">11pt</span></label><input id="fs" type="range" min="8" max="18" step="0.5" value="11" oninput="$('#fsLbl').textContent=this.value+'pt';onPgChange()"></div>
+        <div class="field"><label>line height<span class="v" id="lhLbl">1.50</span></label><input id="lh" type="range" min="1" max="2.2" step="0.05" value="1.5" oninput="$('#lhLbl').textContent=(+this.value).toFixed(2);onPgChange()"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="pane-hd"><span>header / footer</span></div>
+    <div class="panel-bd">
+      <div class="field"><label>header text</label><input id="hdr" placeholder="(none)" oninput="onPgChange()"></div>
+      <div class="field"><label><input id="pgNum" type="checkbox" checked onchange="onPgChange()" style="width:auto;margin-right:6px"> page numbers (footer)</label></div>
+      <div class="field"><label>title (PDF metadata)</label><input id="docTitle" placeholder="untitled" oninput="onPgChange()"></div>
+      <div class="field"><label>author (PDF metadata)</label><input id="docAuthor" oninput="onPgChange()"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="pane-hd"><span>actions</span></div>
+    <div class="panel-bd">
+      <button class="btn primary full" onclick="exportPDF()" style="margin-bottom:8px">↓ Export PDF</button>
+      <button class="btn full" onclick="window.print()">⎙ Print preview</button>
+    </div>
+  </section>
+</aside>
+
+</div>
+</div>
+
+<div class="palette-bg" id="palette">
+  <div class="palette">
+    <div class="palette-hd"><span class="glyph">Ω</span><input type="text" id="pInput" placeholder='Ω · "1-page brief on X" · "format as memo" · "summarise this and add a TL;DR"'><span class="badge" id="pTier">T0</span></div>
+    <div class="palette-bd" id="pBody"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal"><div class="modal"><h2 id="modalTitle">·</h2><div id="modalBody"></div></div></div>
+
+<div class="toast" id="toast">·</div>
+
+<input type="file" id="fileInput" accept=".md,.txt,.html" style="display:none">
+<input type="file" id="imgInput" accept="image/*" style="display:none">
+
+<script>
+'use strict';
+// ════════════════════════════════════════════════════════════════
+// FallPDF v1 · sovereign PDF writer · prime 1427 · MIT
+// ════════════════════════════════════════════════════════════════
+const VERSION='1.0.0';const PRIME=1427;const STORE='fallpdf-v1';
+const MM_TO_PT=2.83464567;const PT_TO_MM=1/MM_TO_PT;
+
+let state={
+  mode:'md',
+  source:'',
+  settings:{anthropicKey:'',geminiKey:'',openaiKey:'',openrouterKey:''}
+};
+
+const $=(s,p=document)=>p.querySelector(s);
+const $$=(s,p=document)=>Array.from(p.querySelectorAll(s));
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),1700)}
+
+// ── IDB ──
+let db;
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(STORE,1);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains('s'))d.createObjectStore('s')};r.onsuccess=e=>{db=e.target.result;res(db)};r.onerror=rej})}
+async function saveAll(){if(!db)await openDB();const tx=db.transaction('s','readwrite');tx.objectStore('s').put({mode:state.mode,source:state.source,settings:state.settings},'doc')}
+async function loadAll(){if(!db)await openDB();return new Promise(r=>{const tx=db.transaction('s','readonly');const q=tx.objectStore('s').get('doc');q.onsuccess=()=>{if(q.result){state.mode=q.result.mode||'md';state.source=q.result.source||'';state.settings=Object.assign(state.settings,q.result.settings||{})}r()}})}
+
+// ── CASCADE ──
+const Cascade={
+  async detectTier(){const s=state.settings;if(s.anthropicKey||s.openaiKey||s.geminiKey||s.openrouterKey)return'T3';return'T0'},
+  async generate(sys,user,maxTok){const s=state.settings,max=maxTok||1400;
+    if(s.anthropicKey)try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':s.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:max,system:sys,messages:[{role:'user',content:user}]})});const d=await r.json();return{tier:'T3·Claude',text:d?.content?.[0]?.text||''}}catch(e){}
+    if(s.geminiKey)try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${s.geminiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:[{parts:[{text:user}]}]})});const d=await r.json();return{tier:'T3·Gemini',text:d?.candidates?.[0]?.content?.parts?.[0]?.text||''}}catch(e){}
+    if(s.openaiKey)try{const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.openaiKey},body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'system',content:sys},{role:'user',content:user}]})});const d=await r.json();return{tier:'T3·GPT',text:d?.choices?.[0]?.message?.content||''}}catch(e){}
+    if(s.openrouterKey)try{const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.openrouterKey,'HTTP-Referer':location.origin},body:JSON.stringify({model:'anthropic/claude-haiku-4-5',messages:[{role:'system',content:sys},{role:'user',content:user}]})});const d=await r.json();return{tier:'T3·OpenRouter',text:d?.choices?.[0]?.message?.content||''}}catch(e){}
+    return{tier:'T0',text:null}
+  }
+};
+async function updateTierBadge(){const t=await Cascade.detectTier();const el=$('#tierBadge');el.textContent=t==='T0'?'offline':t;el.classList.toggle('t3',t!=='T0');$('#pTier').textContent=t==='T0'?'T0':t}
+
+// ════════════════════════════════════════════════════════════════
+// MARKDOWN PARSER · returns a stream of typed blocks
+// ════════════════════════════════════════════════════════════════
+function parseMd(src){
+  const lines=src.replace(/\r\n?/g,'\n').split('\n');
+  const blocks=[];let i=0;
+  while(i<lines.length){
+    const ln=lines[i];
+    if(/^\s*$/.test(ln)){i++;continue}
+    if(/^---+$/.test(ln)){blocks.push({t:'hr'});i++;continue}
+    if(/^#{1,3}\s/.test(ln)){const m=ln.match(/^(#{1,3})\s+(.+)$/);blocks.push({t:'h',n:m[1].length,text:m[2].trim()});i++;continue}
+    if(/^>\s/.test(ln)){const buf=[];while(i<lines.length&&/^>\s/.test(lines[i])){buf.push(lines[i].replace(/^>\s/,''));i++}blocks.push({t:'quote',text:buf.join(' ')});continue}
+    if(/^```/.test(ln)){i++;const buf=[];while(i<lines.length&&!/^```/.test(lines[i])){buf.push(lines[i]);i++}i++;blocks.push({t:'code',text:buf.join('\n')});continue}
+    if(/^[-*]\s/.test(ln)){const items=[];while(i<lines.length&&/^[-*]\s/.test(lines[i])){items.push(lines[i].replace(/^[-*]\s+/,''));i++}blocks.push({t:'ul',items});continue}
+    if(/^\d+\.\s/.test(ln)){const items=[];while(i<lines.length&&/^\d+\.\s/.test(lines[i])){items.push(lines[i].replace(/^\d+\.\s+/,''));i++}blocks.push({t:'ol',items});continue}
+    if(/^!\[/.test(ln)){const m=ln.match(/^!\[([^\]]*)\]\(([^)]+)\)/);if(m){blocks.push({t:'img',alt:m[1],src:m[2]});i++;continue}}
+    // paragraph: gather contiguous non-blank lines
+    const buf=[];while(i<lines.length&&lines[i].trim()&&!/^(#{1,3}\s|>\s|```|[-*]\s|\d+\.\s|!\[|---+$)/.test(lines[i])){buf.push(lines[i]);i++}blocks.push({t:'p',text:buf.join(' ')});
+  }
+  return blocks;
+}
+// inline transform → preview HTML
+function inlineHtml(s){return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>TBA</strong>').replace(/\*(.+?)\*/g,'<em>TBA</em>').replace(/`([^`]+)`/g,'<code>TBA</code>').replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="TBA">TBA</a>')}
+function inlinePlain(s){return s.replace(/\*\*(.+?)\*\*/g,'TBA').replace(/\*(.+?)\*/g,'TBA').replace(/`([^`]+)`/g,'TBA').replace(/\[([^\]]+)\]\([^)]+\)/g,'TBA')}
+function mdToHtml(src){return parseMd(src).map(b=>{switch(b.t){case'h':return`<h${b.n}>${inlineHtml(b.text)}</h${b.n}>`;case'p':return`<p>${inlineHtml(b.text)}</p>`;case'quote':return`<blockquote>${inlineHtml(b.text)}</blockquote>`;case'code':return`<pre>${esc(b.text)}</pre>`;case'ul':return'<ul>'+b.items.map(i=>`<li>${inlineHtml(i)}</li>`).join('')+'</ul>';case'ol':return'<ol>'+b.items.map(i=>`<li>${inlineHtml(i)}</li>`).join('')+'</ol>';case'hr':return'<hr>';case'img':return`<img src="${esc(b.src)}" alt="${esc(b.alt)}">`}return''}).join('\n')}
+
+// ════════════════════════════════════════════════════════════════
+// PDF WRITER — minimal inline PDF generator
+// produces PDF/1.4 with text + images + multi-page
+// ════════════════════════════════════════════════════════════════
+function getPageDims(){
+  const sz=$('#pgSize').value;
+  const sizes={A4:[210,297],Letter:[216,279],Legal:[216,356],A3:[297,420],A5:[148,210],card:[90,55]};
+  let [w,h]=sz==='custom'?[+$('#pgW').value||210,+$('#pgH').value||297]:sizes[sz];
+  if($('#pgOri').value==='L'){[w,h]=[h,w]}
+  return{w:w*MM_TO_PT,h:h*MM_TO_PT,wMm:w,hMm:h}
+}
+function getStyle(){
+  return{
+    font:$('#font').value,
+    fs:+$('#fs').value,
+    lh:+$('#lh').value,
+    mt:+$('#pgMT').value*MM_TO_PT,
+    mb:+$('#pgMB').value*MM_TO_PT,
+    ml:+$('#pgML').value*MM_TO_PT,
+    mr:+$('#pgMR').value*MM_TO_PT,
+    hdr:$('#hdr').value,
+    pgNum:$('#pgNum').checked,
+    title:$('#docTitle').value||'untitled',
+    author:$('#docAuthor').value||''
+  }
+}
+// approximate Helvetica/Times/Courier glyph widths (avg) in em
+const FONT_WIDTH={Helvetica:0.5,'Times-Roman':0.5,Courier:0.6};
+function strWidth(s,fontKey,fs){return s.length*fs*(FONT_WIDTH[fontKey]||0.5)}
+// PDF text escape
+function pdfStr(s){return '('+String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)').replace(/[\r\n]/g,' ')+')'}
+// word-wrap a paragraph into lines fitting maxWidth (pt)
+function wrap(text,fontKey,fs,maxW){const words=text.split(/\s+/),out=[];let cur='';for(const w of words){const t=cur?cur+' '+w:w;if(strWidth(t,fontKey,fs)<=maxW){cur=t}else{if(cur)out.push(cur);cur=w}}if(cur)out.push(cur);return out}
+
+// extract images from blocks · return {key→{w,h,jpegBytes,dataLen}}
+async function gatherImages(blocks){
+  const map={};let n=0;
+  for(const b of blocks){
+    if(b.t==='img'&&b.src){
+      const key='Im'+(++n);b.imgKey=key;
+      try{
+        const data=await loadImg(b.src);
+        map[key]=data;
+      }catch(e){console.warn('img failed',e)}
+    }
+  }
+  return map;
+}
+function loadImg(src){return new Promise((res,rej)=>{const img=new Image();img.crossOrigin='anonymous';img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0);// JPEG bytes (smaller than PNG for big images)
+const url=c.toDataURL('image/jpeg',0.85);const b64=url.split(',')[1];const bin=atob(b64);const bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);res({w:c.width,h:c.height,bytes})};img.onerror=rej;img.src=src})}
+
+async function buildPdf(){
+  const pg=getPageDims();
+  const st=getStyle();
+  const blocks=state.mode==='md'?parseMd(state.source):state.mode==='html'?htmlToBlocks(state.source):textToBlocks(state.source);
+  const images=await gatherImages(blocks);
+
+  // layout into pages: walk blocks, position from top-left, page-break when needed
+  const contentW=pg.w-st.ml-st.mr;
+  const topY=pg.h-st.mt;     // pdf y is bottom-origin
+  const bottomY=st.mb+(st.pgNum?14:0);
+  const fontKey=st.font;
+  const lineH=st.fs*st.lh;
+
+  const pages=[];let ops=[];let y=topY;let pageN=1;
+  function newPage(){pages.push(ops);ops=[];pageN++;y=topY}
+  function ensureRoom(h){if(y-h<bottomY)newPage()}
+  function drawTextLine(s,size,x,yy,bold){
+    const f=fontKey==='Helvetica'?(bold?'F2':'F1'):fontKey==='Times-Roman'?(bold?'F4':'F3'):(bold?'F6':'F5');
+    ops.push(`q BT /${f} ${size} Tf ${x.toFixed(2)} ${yy.toFixed(2)} Td ${pdfStr(s)} Tj ET Q`);
+  }
+  function drawRect(x,yy,w,h,fill){ops.push(`q ${fill} rg ${x.toFixed(2)} ${yy.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re f Q`)}
+  function drawHr(){ensureRoom(8);ops.push(`q 0.7 0.6 0.4 RG 1 w ${st.ml} ${(y-2).toFixed(2)} m ${(st.ml+contentW).toFixed(2)} ${(y-2).toFixed(2)} l S Q`);y-=8}
+
+  for(const b of blocks){
+    if(b.t==='h'){
+      const size=b.n===1?20:b.n===2?15:13;
+      const text=inlinePlain(b.text);
+      const lines=wrap(text,fontKey,size,contentW);
+      const totH=lines.length*size*1.2+8;
+      ensureRoom(totH);
+      y-=(b.n===1?14:10);
+      for(const ln of lines){y-=size;drawTextLine(ln,size,st.ml,y,true)}
+      y-=6;
+    }else if(b.t==='p'){
+      const text=inlinePlain(b.text);
+      const lines=wrap(text,fontKey,st.fs,contentW);
+      for(const ln of lines){ensureRoom(lineH);y-=lineH;drawTextLine(ln,st.fs,st.ml,y,false)}
+      y-=lineH*0.4;
+    }else if(b.t==='quote'){
+      const text=inlinePlain(b.text);
+      const lines=wrap(text,fontKey,st.fs,contentW-14);
+      const startY=y;
+      for(const ln of lines){ensureRoom(lineH);y-=lineH;drawTextLine(ln,st.fs,st.ml+14,y,false)}
+      // bar
+      ops.push(`q 0.72 0.59 0.29 RG 2 w ${(st.ml+2).toFixed(2)} ${y.toFixed(2)} m ${(st.ml+2).toFixed(2)} ${startY.toFixed(2)} l S Q`);
+      y-=lineH*0.4;
+    }else if(b.t==='code'){
+      const lines=b.text.split('\n');
+      const startY=y;
+      const totH=lines.length*lineH+8;
+      ensureRoom(totH);
+      drawRect(st.ml,y-totH+4,contentW,totH,'0.96 0.94 0.86');
+      for(const ln of lines){y-=lineH;drawTextLine(ln,st.fs-1,st.ml+8,y,false)}
+      y-=lineH*0.6;
+    }else if(b.t==='ul'||b.t==='ol'){
+      let n=1;
+      for(const it of b.items){
+        const bullet=b.t==='ul'?'• ':(n+++'. ');
+        const text=inlinePlain(it);
+        const lines=wrap(text,fontKey,st.fs,contentW-16);
+        for(let i=0;i<lines.length;i++){ensureRoom(lineH);y-=lineH;drawTextLine((i===0?bullet:'  ')+lines[i],st.fs,st.ml+8,y,false)}
+      }
+      y-=lineH*0.4;
+    }else if(b.t==='hr'){drawHr()}
+    else if(b.t==='img'&&b.imgKey&&images[b.imgKey]){
+      const im=images[b.imgKey];
+      const maxW=contentW;const scale=Math.min(1,maxW/im.w);
+      const w=im.w*scale,h=im.h*scale;
+      ensureRoom(h+10);
+      y-=h;
+      ops.push(`q ${w.toFixed(2)} 0 0 ${h.toFixed(2)} ${st.ml.toFixed(2)} ${y.toFixed(2)} cm /${b.imgKey} Do Q`);
+      y-=10;
+    }
+  }
+  pages.push(ops);
+  return assemblePdf(pages,pg,st,images);
+}
+
+function assemblePdf(pages,pg,st,images){
+  // page chrome (header/footer) inserted into each page content
+  const decorate=(ops,i,total)=>{
+    const opsOut=ops.slice();
+    if(st.hdr){const w=strWidth(st.hdr,st.font,9);const f='F1';opsOut.unshift(`q BT /${f} 9 Tf ${((pg.w-w)/2).toFixed(2)} ${(pg.h-st.mt+8).toFixed(2)} Td 0.5 0.5 0.5 rg ${pdfStr(st.hdr)} Tj ET Q`)}
+    if(st.pgNum){const lbl=`${i}/${total}`;const w=strWidth(lbl,'Helvetica',9);opsOut.push(`q BT /F1 9 Tf ${((pg.w-w)/2).toFixed(2)} ${(st.mb-10).toFixed(2)} Td 0.5 0.5 0.5 rg ${pdfStr(lbl)} Tj ET Q`)}
+    return opsOut.join(' ');
+  };
+
+  // build object table
+  const objs=[];const add=s=>{objs.push(s);return objs.length};
+  // pre-allocate slot for catalog and info; we'll fill below
+  // 1=Catalog 2=Pages 3=Info
+  const obj1='<< /Type /Catalog /Pages 2 0 R >>';
+  // build page objs first to know IDs, then patch Pages
+  // font objects (6 fonts: F1 Helv, F2 Helv-Bold, F3 Times-Roman, F4 Times-Bold, F5 Courier, F6 Courier-Bold)
+  // image objects · variable
+  // contents per page · variable
+
+  // We'll structure in order:
+  // 1 catalog, 2 pages, 3 info, 4..9 fonts (6), 10..(10+nImg-1) images, then per-page contents alternating with page objs
+  const fontObjs=[
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman /Encoding /WinAnsiEncoding >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold /Encoding /WinAnsiEncoding >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>'
+  ];
+  const imgKeys=Object.keys(images);
+  const imgObjs=imgKeys.map(k=>{const im=images[k];return{header:`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerSample 8 /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.bytes.length} >>`,stream:im.bytes}});
+  // assign object numbers
+  const N={catalog:1,pages:2,info:3};
+  let next=4;
+  const fontIds={};fontObjs.forEach((_,i)=>{fontIds['F'+(i+1)]=next++});
+  const imgIds={};imgKeys.forEach((k,i)=>{imgIds[k]=next++});
+  const pageIds=[],contentIds=[];
+  pages.forEach(()=>{pageIds.push(next++);contentIds.push(next++)});
+
+  // build serialization with binary stream support
+  const enc=new TextEncoder();
+  let bytes=[];const xref=[];
+  function append(s){const b=enc.encode(s);bytes.push(b);return b.length}
+  function appendBin(arr){bytes.push(arr);return arr.length}
+  function position(){return bytes.reduce((s,b)=>s+b.length,0)}
+
+  append('%PDF-1.4\n');append('%\xC2\xA5\xC2\xB1\xC3\xAB\n');
+
+  function writeObj(id,body,stream){xref[id]=position();append(`${id} 0 obj\n${body}\n`);if(stream){append('stream\n');appendBin(stream);append('\nendstream\n')}append('endobj\n')}
+
+  // catalog, pages, info
+  writeObj(N.catalog,obj1);
+  // pages kids ref string built after we know page ids
+  const kidsStr=pageIds.map(id=>id+' 0 R').join(' ');
+  writeObj(N.pages,`<< /Type /Pages /Count ${pages.length} /Kids [${kidsStr}] /MediaBox [0 0 ${pg.w.toFixed(2)} ${pg.h.toFixed(2)}] >>`);
+  writeObj(N.info,`<< /Title ${pdfStr(st.title)} /Author ${pdfStr(st.author)} /Producer (FallPDF v${VERSION}) /CreationDate (D:${new Date().toISOString().replace(/[-:T.Z]/g,'').slice(0,14)}Z) >>`);
+
+  fontObjs.forEach((body,i)=>writeObj(fontIds['F'+(i+1)],body));
+  imgKeys.forEach((k,i)=>{const o=imgObjs[i];writeObj(imgIds[k],o.header,o.stream)});
+
+  // resource dict (fonts + images) shared per-page
+  const fontResource='<< '+Object.keys(fontIds).map(k=>`/${k} ${fontIds[k]} 0 R`).join(' ')+' >>';
+  const imgResource=imgKeys.length?'<< '+imgKeys.map(k=>`/${k} ${imgIds[k]} 0 R`).join(' ')+' >>':'';
+
+  pages.forEach((opsArr,i)=>{
+    const stream=enc.encode(decorate(opsArr,i+1,pages.length));
+    const contentBody=`<< /Length ${stream.length} >>`;
+    writeObj(contentIds[i],contentBody,stream);
+    const resources=`<< /Font ${fontResource}${imgResource?' /XObject '+imgResource:''} >>`;
+    writeObj(pageIds[i],`<< /Type /Page /Parent ${N.pages} 0 R /Resources ${resources} /Contents ${contentIds[i]} 0 R >>`);
+  });
+
+  // xref
+  const xrefPos=position();
+  const total=next;
+  let xrefStr='xref\n0 '+total+'\n0000000000 65535 f \n';
+  for(let i=1;i<total;i++){xrefStr+=String(xref[i]||0).padStart(10,'0')+' 00000 n \n'}
+  append(xrefStr);
+  append(`trailer\n<< /Size ${total} /Root ${N.catalog} 0 R /Info ${N.info} 0 R >>\nstartxref\n${xrefPos}\n%%EOF\n`);
+
+  // assemble
+  const totalLen=bytes.reduce((s,b)=>s+b.length,0);
+  const out=new Uint8Array(totalLen);let off=0;
+  for(const b of bytes){out.set(b,off);off+=b.length}
+  return out;
+}
+
+// html/text → blocks adapters
+function htmlToBlocks(html){const div=document.createElement('div');div.innerHTML=html;const blocks=[];function walk(node){for(const c of node.childNodes){if(c.nodeType===1){const tag=c.tagName.toLowerCase();if(tag==='h1'||tag==='h2'||tag==='h3')blocks.push({t:'h',n:+tag[1],text:c.textContent.trim()});else if(tag==='p')blocks.push({t:'p',text:c.textContent.trim()});else if(tag==='blockquote')blocks.push({t:'quote',text:c.textContent.trim()});else if(tag==='pre')blocks.push({t:'code',text:c.textContent});else if(tag==='ul'){const items=Array.from(c.querySelectorAll('li')).map(li=>li.textContent.trim());if(items.length)blocks.push({t:'ul',items})}else if(tag==='ol'){const items=Array.from(c.querySelectorAll('li')).map(li=>li.textContent.trim());if(items.length)blocks.push({t:'ol',items})}else if(tag==='hr')blocks.push({t:'hr'});else if(tag==='img'){blocks.push({t:'img',alt:c.alt||'',src:c.src})}else if(tag==='div'||tag==='section'||tag==='article'||tag==='main'||tag==='body'){walk(c)}}}}walk(div);return blocks}
+function textToBlocks(t){return t.split(/\n\s*\n/).filter(p=>p.trim()).map(p=>({t:'p',text:p.trim()}))}
+
+// ════════════════════════════════════════════════════════════════
+// PREVIEW & UI
+// ════════════════════════════════════════════════════════════════
+function renderPreview(){
+  const pg=getPageDims();
+  const st=getStyle();
+  state.source=$('#editor').value;
+  const html=state.mode==='md'?mdToHtml(state.source):state.mode==='html'?state.source:textToBlocks(state.source).map(b=>`<p>${esc(b.text)}</p>`).join('');
+  const scale=0.45;// preview scale
+  const pageW=pg.wMm*3.78*scale;const pageH=pg.hMm*3.78*scale;
+  const cssFont=st.font==='Times-Roman'?'Georgia,serif':st.font==='Courier'?'Courier,monospace':'Helvetica,Arial,sans-serif';
+  // single-page preview (PDF export does proper pagination)
+  $('#preview').innerHTML=`<div class="page" style="width:${pageW}px;height:${pageH}px"><div class="page-inner preview-doc" style="padding:${st.mt*scale/MM_TO_PT*3.78}px ${st.mr*scale/MM_TO_PT*3.78}px ${st.mb*scale/MM_TO_PT*3.78}px ${st.ml*scale/MM_TO_PT*3.78}px;font-family:${cssFont};font-size:${st.fs*scale*1.5}pt;line-height:${st.lh}">${html||'<p style="color:#aaa;font-style:italic">preview · type to see the page</p>'}</div>${st.hdr?`<div class="page-header" style="top:${st.mt*scale*0.35}px;font-size:${9*scale*1.5}pt">${esc(st.hdr)}</div>`:''}${st.pgNum?`<div class="page-num" style="bottom:${st.mb*scale*0.35}px;font-size:${9*scale*1.5}pt">1</div>`:''}</div><div style="font-family:var(--mono);font-size:10px;color:var(--cream-muted);letter-spacing:0.1em">preview · scaled · PDF export uses full resolution + proper pagination</div>`;
+  const t=state.source;const words=(t.match(/\b[\w'-]+\b/g)||[]).length;$('#editInfo').textContent=`${t.length.toLocaleString()} chars · ${words.toLocaleString()} words`;$('#prevInfo').textContent=`${st.title} · ${pg.wMm}×${pg.hMm}mm`;
+}
+
+function setMode(m){state.mode=m;$$('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));renderPreview();saveAll()}
+function onPgChange(){const c=$('#pgSize').value==='custom';$('#customDim').style.display=c?'grid':'none';renderPreview();saveAll()}
+
+function newDoc(){if(state.source&&!confirm('discard current document?'))return;state.source='';$('#editor').value='';renderPreview();saveAll()}
+function loadFile(){$('#fileInput').click()}
+$('#fileInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;const text=await f.text();$('#editor').value=text;state.source=text;if(f.name.endsWith('.html'))setMode('html');else if(f.name.endsWith('.md'))setMode('md');else setMode('text');renderPreview();saveAll();toast('loaded '+f.name)});
+function insertImage(){$('#imgInput').click()}
+$('#imgInput').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;const url=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)});const tag=`\n\n![${f.name}](${url})\n\n`;const ed=$('#editor');const p=ed.selectionStart;ed.value=ed.value.slice(0,p)+tag+ed.value.slice(p);state.source=ed.value;renderPreview();saveAll();toast('image inserted')});
+
+async function exportPDF(){toast('building…');const bytes=await buildPdf();const blob=new Blob([bytes],{type:'application/pdf'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);const title=($('#docTitle').value||'fallpdf').replace(/[^\w-]/g,'-');a.download=`${title}-${Date.now()}.pdf`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('PDF exported')}
+function exportMarkdown(){const blob=new Blob([state.source],{type:'text/markdown'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=($('#docTitle').value||'fallpdf')+'-source.md';a.click()}
+
+function loadSample(){state.mode='md';$$('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.mode==='md'));$('#editor').value=`# FallPDF · the sovereign PDF writer
+
+A short demo of what this single HTML file does.
+
+## Markdown is the source
+
+Write in markdown. See it laid out as a real PDF page on the right. Export when ready.
+
+- **bold** · *italic* · \`code\`
+- bullet lists
+- numbered lists too
+- block quotes, headings, code blocks
+
+> Trust needs proof — and proof has to be checked.
+> *— The Guild's one rule*
+
+### Code blocks
+
+\`\`\`
+function hello() {
+  return 'sovereign';
+}
+\`\`\`
+
+### Tables and rules (rules supported, tables coming)
+
+---
+
+Set the page size, margins, font, and header/footer in the right panel. Hit **↓ PDF** to download a real \`.pdf\` file generated entirely in this browser. Nothing uploaded. Nothing tracked.
+
+## Why this exists
+
+Adobe Acrobat is TBA. This is TBA. The Guild's audit checklist asks: *"does it actually do what the sales page claims?"* — open the exported PDF in any reader and judge for yourself.
+
+— prime 1427 · ◊·κ=1
+`;state.source=$('#editor').value;$('#docTitle').value='FallPDF demo';renderPreview();saveAll();toast('sample loaded')}
+
+// ════════════════════════════════════════════════════════════════
+// Ω AUTOPILOT
+// ════════════════════════════════════════════════════════════════
+const TEMPLATES={
+  'letter':'**[Your name]**\n[Your address]\n[Date]\n\n**[Recipient name]**\n[Recipient address]\n\nDear [Name],\n\n[Body of letter — replace with the actual content.]\n\nYours sincerely,\n\n[Your name]',
+  'memo':'# Memorandum\n\n**To:** [Recipient]\n**From:** [You]\n**Date:** '+new Date().toLocaleDateString('en-GB')+'\n**Re:** [Subject]\n\n---\n\n## Summary\n[Short summary]\n\n## Detail\n[Detail]\n\n## Action required\n[What you need from the recipient]',
+  'invoice':'# Invoice\n\n**Invoice #:** INV-001\n**Date:** '+new Date().toLocaleDateString('en-GB')+'\n**Due:** [Date]\n\n**Bill to:**\n[Client name]\n[Client address]\n\n**From:**\n[Your name / company]\n[Your address]\n\n## Line items\n\n- Service 1 · TBA\n- Service 2 · TBA\n\n## Total\n\n**TBA**\n\nPayment via bank transfer to [account].',
+  'report':'# [Report title]\n\n**Prepared by:** [Author]\n**Date:** '+new Date().toLocaleDateString('en-GB')+'\n\n## Executive summary\n[One-paragraph summary]\n\n## Findings\n- Finding 1\n- Finding 2\n- Finding 3\n\n## Recommendation\n[Recommendation]\n\n## Appendix\n[Supporting detail]',
+  'cv':'# [Your name]\n[email] · [phone] · [city]\n\n---\n\n## Profile\n[2-3 sentence summary]\n\n## Experience\n### [Most recent role] · [Company]\n*[Dates]*\n- Achievement\n- Achievement\n\n### [Previous role] · [Company]\n*[Dates]*\n- Achievement\n\n## Education\n### [Degree] · [Institution]\n*[Year]*\n\n## Skills\n[Skills, comma-separated]'
+};
+async function omegaRoute(intent){
+  const q=intent.toLowerCase();
+  for(const [k,v] of Object.entries(TEMPLATES)){if(q.includes(k)){$('#editor').value=v;state.source=v;setMode('md');$('#docTitle').value=k[0].toUpperCase()+k.slice(1);renderPreview();saveAll();toast('Ω · loaded '+k+' template');return}}
+  if(/landscape/i.test(q)){$('#pgOri').value='L';onPgChange();toast('Ω · landscape');return}
+  if(/portrait/i.test(q)){$('#pgOri').value='P';onPgChange();toast('Ω · portrait');return}
+  if(/a4|letter|legal|a3|a5/i.test(q)){const m=q.match(/a4|letter|legal|a3|a5/i)[0];$('#pgSize').value=m.charAt(0).toUpperCase()+m.slice(1).toLowerCase();if(m.toLowerCase()==='a4')$('#pgSize').value='A4';if(m.toLowerCase()==='a3')$('#pgSize').value='A3';if(m.toLowerCase()==='a5')$('#pgSize').value='A5';onPgChange();toast('Ω · '+m);return}
+  const tier=await Cascade.detectTier();
+  if(tier!=='T0'){
+    const sys='You are Ω, the orchestrator of FallPDF (a sovereign PDF writer). The user describes a document; you write it in markdown. Use # ## ### for headings, **bold**, *italic*, > for quotes, - for bullets, --- for horizontal rules. Be concise; one page unless the request explicitly asks for more. Return ONLY the markdown, no commentary, no code-fence wrapper.';
+    try{const r=await Cascade.generate(sys,intent,1800);if(r.text){$('#editor').value=r.text.trim();state.source=$('#editor').value;setMode('md');$('#docTitle').value=intent.slice(0,50);renderPreview();saveAll();toast('Ω · drafted ('+r.tier+')');return}}catch(e){}
+  }
+  toast('Ω · try a template name (letter, memo, invoice, report, cv) or a size (A4, Letter, landscape)')
+}
+
+function openPalette(){$('#palette').classList.add('open');setTimeout(()=>$('#pInput').focus(),50);renderPaletteSuggestions('')}
+function closePalette(){$('#palette').classList.remove('open');$('#pInput').value=''}
+function renderPaletteSuggestions(q){
+  const body=$('#pBody');
+  if(!q.trim()){body.innerHTML=Object.keys(TEMPLATES).map(k=>`<div class="palette-row" onclick="omegaRoute('${k}');closePalette()"><div class="ico">▤</div><div><div>${k[0].toUpperCase()+k.slice(1)} template</div><div class="desc">load a starter for ${k}</div></div></div>`).join('')+`<div style="padding:10px 12px;font-family:var(--mono);font-size:10px;color:var(--cream-muted);letter-spacing:0.1em;text-transform:uppercase;border-top:1px dashed var(--line);margin-top:6px">or type · Ω will draft the markdown (T3 needed)</div>`;return}
+  body.innerHTML=`<div class="palette-row sel" onclick="executeIntent()"><div class="ico">Ω</div><div><div>Ω · draft: ${esc(q.slice(0,80))}</div><div class="desc">enter · uses your model if a key is set</div></div><div class="key">↵</div></div>`
+}
+async function executeIntent(){const q=$('#pInput').value.trim();if(!q)return;closePalette();toast('Ω routing…');await omegaRoute(q)}
+
+// ── modal ──
+function openModal(kind){
+  if(kind==='settings'){
+    $('#modalTitle').textContent='Settings · autopilot keys';
+    $('#modalBody').innerHTML=`<p style="color:var(--cream-dim);font-size:12px;margin-bottom:10px"><a href="https://aistudio.google.com/apikey" target="_blank">Gemini is free</a>. Keys stay in this browser, sent direct to provider. Required only for Ω drafting (PDF generation works fully offline).</p>
+      <div class="field"><label>anthropic · claude</label><input id="stAnth" type="password" value="${esc(state.settings.anthropicKey)}" placeholder="sk-ant-…"></div>
+      <div class="field"><label>gemini · free</label><input id="stGem" type="password" value="${esc(state.settings.geminiKey)}"></div>
+      <div class="field"><label>openai · gpt</label><input id="stOAI" type="password" value="${esc(state.settings.openaiKey)}"></div>
+      <div class="field"><label>openrouter</label><input id="stOR" type="password" value="${esc(state.settings.openrouterKey)}"></div>
+      <div style="margin-top:14px;text-align:center;font-family:var(--mono);font-size:10px;color:var(--cream-muted);letter-spacing:0.1em">FallPDF v${VERSION} · prime ${PRIME} · ◊·κ=1 · MIT</div>
+      <div class="actions"><button class="btn" onclick="closeModal()">cancel</button><button class="btn primary" onclick="saveSettingsModal()">save</button></div>`;
+  }
+  $('#modal').classList.add('open')
+}
+function closeModal(){$('#modal').classList.remove('open')}
+function saveSettingsModal(){state.settings.anthropicKey=$('#stAnth').value;state.settings.geminiKey=$('#stGem').value;state.settings.openaiKey=$('#stOAI').value;state.settings.openrouterKey=$('#stOR').value;saveAll();updateTierBadge();closeModal();toast('saved')}
+
+// ── keyboard ──
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openPalette();return}
+  if((e.ctrlKey||e.metaKey)&&e.key==='e'){e.preventDefault();exportPDF();return}
+  if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();exportPDF();return}
+  if(e.key==='Escape'){closePalette();closeModal()}
+  if($('#palette').classList.contains('open')&&e.key==='Enter'){e.preventDefault();executeIntent()}
+});
+document.addEventListener('input',e=>{if(e.target.id==='pInput')renderPaletteSuggestions(e.target.value);if(e.target.id==='editor'){state.source=e.target.value;renderPreview();clearTimeout(window._sv);window._sv=setTimeout(saveAll,400)}});
+document.addEventListener('click',e=>{if(e.target.id==='palette')closePalette();if(e.target.id==='modal')closeModal()});
+
+// ── KONOMI · sovereign tier (inert) ──
+window.KONOMI={active:true,tier:'sovereign',prime:PRIME,check:()=>({ok:true,tier:'sovereign'})};
+// ── FALLMESH ──
+try{const sig=new BroadcastChannel('fall-signal');sig.postMessage({source:'fallpdf',type:'hello',prime:PRIME,version:VERSION,ts:Date.now()});sig.addEventListener('message',e=>{const m=e.data;if(m&&m.type==='ping')sig.postMessage({source:'fallpdf',type:'pong',prime:PRIME})})}catch(e){}
+// ── postMessage API ──
+window.addEventListener('message',async e=>{const m=e.data;if(!m||m.target!=='fallpdf'||!m.action)return;let r=null;if(m.action==='ping')r={ok:true,prime:PRIME,version:VERSION};else if(m.action==='setSource'&&typeof m.source==='string'){$('#editor').value=m.source;state.source=m.source;renderPreview();r={ok:true}}else if(m.action==='exportPdf'){const bytes=await buildPdf();r={ok:true,bytes:Array.from(bytes)}}e.source?.postMessage({target:m.source||'*',responseTo:m.action,data:r},'*')});
+
+// ── boot ──
+(async function(){await openDB();await loadAll();await updateTierBadge();$('#editor').value=state.source;onPgChange();if(!state.source)loadSample();else renderPreview()})();
+</script>
+
+
+<!-- ═══════════════════════ AUTOPILOT · fall-autopilot-kit ═══════════════════════ -->
+<script type="module">
+  try {
+    const { installAutopilot } = await import('https://sjgant80-hub.github.io/fall-autopilot-kit/src/autopilot.js');
+    const manifestRes = await fetch('https://sjgant80-hub.github.io/fall-autopilot-kit/manifests/fallpdf.json');
+    const manifest = await manifestRes.json();
+    manifest.actions = manifest.actions.map(a => ({ ...a, run: async (params) => {
+      const fn = window._app?.[a.id];
+      if (typeof fn === 'function') return fn(params);
+      alert('Autopilot proposes: ' + a.name + ' · params: ' + JSON.stringify(params) + '\n\nThis tool has not yet implemented the ' + a.id + ' handler. Proposal logged to audit.');
+      return { stub: true, action: a.id, params };
+    }}));
+    manifest.state = () => ({ ...(window._app || {}), now: new Date().toISOString() });
+    installAutopilot(manifest);
+  } catch (e) { console.warn('[autopilot] init failed:', e); }
+</script>
+
+<script src="https://sjgant80-hub.github.io/fall-kit/shim.js" defer></script>
+<script src="https://sjgant80-hub.github.io/fall-kit/shim.js" defer></script>
+</body>
+</html>

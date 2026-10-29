@@ -5,6 +5,10 @@
 //
 // Gated here, one row per kernel (added as each organ lands):
 //   runtime   — what this runtime can do, and whether the office can grow on it (layer 2)
+//   genome    — the signed genome: canonical, every field checked, refused if one bit changed (organ 2)
+//   bundle    — the full seed: the genome and every block in one LIGHT vault (organ 2)
+//   receipt   — every action leaves a sentence a person can read (the legibility rule)
+//   germinate — the seed grows the office: verify, check every pin, compose, first run (organ 2)
 // NOT gated, each with its reason: tools/** (local I/O and orchestration, re-derived by each measure's --check);
 // office/** glue (browser I/O; its decisions live in the kernels above); vendor/** and blocks/** (gated in their own
 // repos, pinned byte-identical by their --check tools); .witness/** (the gate itself, pinned to witness v0.6).
@@ -20,6 +24,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const FUZZ = 'test/fuzz.test.mjs';
 export const PAIRS = [
   ['runtime', 'src/runtime.mjs', ['test/runtime.test.mjs', FUZZ]],
+  ['genome', 'src/genome.mjs', ['test/genome.test.mjs', FUZZ]],
+  ['bundle', 'src/bundle.mjs', ['test/bundle.test.mjs', FUZZ]],
+  ['receipt', 'src/receipt.mjs', ['test/receipt.test.mjs', FUZZ]],
+  ['germinate', 'src/germinate.mjs', ['test/germinate.test.mjs', FUZZ]],
 ];
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

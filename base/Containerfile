@@ -15,7 +15,9 @@ RUN rm -rf /usr/local/lib/node_modules /usr/local/bin/npm /usr/local/bin/npx /us
 
 # The planting runtime: the kernels, the foundation they stand on, the tools, and the seeds. Copied read-only.
 COPY --chown=root:root src /plant/src
+COPY --chown=root:root vendor /plant/vendor
 COPY --chown=root:root tools /plant/tools
+COPY --chown=root:root seeds /plant/seeds
 COPY --chown=root:root package.json /plant/package.json
 
 USER node

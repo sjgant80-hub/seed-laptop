@@ -1,0 +1,122 @@
+{
+ "kind": "seed-laptop.blocks",
+ "v": 1,
+ "note": "Copied verbatim from each estate repo at the commit named. Never edit a block; re-vendor.",
+ "blocks": [
+  {
+   "id": "office",
+   "name": "Words, Sheets, Slides, Calendar, Notes, Tasks",
+   "entry": "index.html",
+   "repo": "sjgant80-hub/falloffice",
+   "commit": "17d753c84c8db4ad4ab478a05d6c88d46444e211"
+  },
+  {
+   "id": "crm",
+   "name": "Contacts and deals",
+   "entry": "index.html",
+   "repo": "sjgant80-hub/fallcrm",
+   "commit": "5cee90fcc1d47cfc2c4384b6e36e08d986841d97"
+  },
+  {
+   "id": "ledger",
+   "name": "Accounts",
+   "entry": "index.html",
+   "repo": "sjgant80-hub/fallledger",
+   "commit": "6bc2c912b8e38b3a5df754348030a3f846234d78"
+  },
+  {
+   "id": "pdf",
+   "name": "PDF writer",
+   "entry": "index.html",
+   "repo": "sjgant80-hub/fallpdf",
+   "commit": "afd97f57cd2f366738c161a70b379f88f26d5273"
+  },
+  {
+   "id": "mind",
+   "name": "Knowledge notebook",
+   "entry": "index.html",
+   "repo": "sjgant80-hub/seedmind",
+   "commit": "049ce43b9b3ff3d35f6f73c168320ae0ed57ce6e"
+  },
+  {
+   "id": "image",
+   "name": "Image editor",
+   "entry": "index.html",
+   "repo": "sjgant80-hub/fallmage",
+   "commit": "abfcace14c1400bde455120c78a938e50685f246"
+  },
+  {
+   "id": "layout",
+   "name": "Page layout",
+   "entry": "index.html",
+   "repo": "sjgant80-hub/fallpage",
+   "commit": "65b4baf2765e49bfe9aab09bc8407bf989145c31"
+  }
+ ],
+ "files": [
+  {
+   "id": "office",
+   "path": "index.html",
+   "repo": "sjgant80-hub/falloffice",
+   "commit": "17d753c84c8db4ad4ab478a05d6c88d46444e211",
+   "sha256": "49635a19266b73ad99bd410dc95fb99871db3b7cb7d3d204caa6ab687c68cedf",
+   "bytes": 140215
+  },
+  {
+   "id": "crm",
+   "path": "index.html",
+   "repo": "sjgant80-hub/fallcrm",
+   "commit": "5cee90fcc1d47cfc2c4384b6e36e08d986841d97",
+   "sha256": "96cf61dca1562630a6d6531f333817f21ad3d7f581b47c195b8fcea9cc9f7e09",
+   "bytes": 137732
+  },
+  {
+   "id": "ledger",
+   "path": "index.html",
+   "repo": "sjgant80-hub/fallledger",
+   "commit": "6bc2c912b8e38b3a5df754348030a3f846234d78",
+   "sha256": "fab6d7805aad422957ba133c9a0eb7b4d40c679e2d792f8926cc7d7b5006cc37",
+   "bytes": 156091
+  },
+  {
+   "id": "pdf",
+   "path": "index.html",
+   "repo": "sjgant80-hub/fallpdf",
+   "commit": "afd97f57cd2f366738c161a70b379f88f26d5273",
+   "sha256": "d817612458d4916295a12b4c4b6f6d2077f58cfabbde83f98f3db8c988b7f862",
+   "bytes": 79598
+  },
+  {
+   "id": "mind",
+   "path": "index.html",
+   "repo": "sjgant80-hub/seedmind",
+   "commit": "049ce43b9b3ff3d35f6f73c168320ae0ed57ce6e",
+   "sha256": "10d1de6836300463bd5ff823dfe116ae66a20ba16330a70f6e1b0875647fc00b",
+   "bytes": 16551
+  },
+  {
+   "id": "mind",
+   "path": "seedmind.mjs",
+   "repo": "sjgant80-hub/seedmind",
+   "commit": "049ce43b9b3ff3d35f6f73c168320ae0ed57ce6e",
+   "sha256": "1dd262198d59bf9d304a3d97fd843db596e934aaa1afd89f5dd06aaf5ec7981a",
+   "bytes": 9505
+  },
+  {
+   "id": "image",
+   "path": "index.html",
+   "repo": "sjgant80-hub/fallmage",
+   "commit": "abfcace14c1400bde455120c78a938e50685f246",
+   "sha256": "e28417c8e8170325751fb4132eadc39aefd645f7b1f423bbfe98b3a057b138ce",
+   "bytes": 124469
+  },
+  {
+   "id": "layout",
+   "path": "index.html",
+   "repo": "sjgant80-hub/fallpage",
+   "commit": "65b4baf2765e49bfe9aab09bc8407bf989145c31",
+   "sha256": "a7edec4b4d0164dd7b152564e344bf085a9e8d559f83162b7ef8567945ed7e5d",
+   "bytes": 134020
+  }
+ ]
+}

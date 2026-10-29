@@ -1,0 +1,2282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>fallcrm · sovereign single-file CRM · delete HubSpot</title>
+<meta name="description" content="The delete-HubSpot wedge. Sovereign single-file CRM. Contacts, deals, pipeline, kanban. IndexedDB. Vanilla. Works from file://. Prime 373.">
+<meta name="theme-color" content="#0b0a0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&family=Libre+Baskerville:ital@0;1&display=swap" rel="stylesheet">
+<link rel="manifest" href='data:application/manifest+json,{"name":"fallcrm","short_name":"fallcrm","start_url":"./","display":"standalone","background_color":"%230b0a0f","theme_color":"%230b0a0f","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 fill=%22%230b0a0f%22/><text x=%2232%22 y=%2244%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22%23d4a853%22 font-family=%22serif%22>%E2%97%8A</text></svg>","sizes":"192x192","type":"image/svg+xml"}]}'>
+<style>
+  :root {
+    --ox: #8b1a1a;
+    --brass: #b8974a;
+    --gold: #d4a853;
+    --cream: #c4bfb2;
+    --void: #0b0a0f;
+    --surface: #14131a;
+    --surface2: #1c1a23;
+    --border: #2a2730;
+    --muted: #6f6b78;
+    --lead: #6f6b78;
+    --qualified: #c87e3a;
+    --demo: #b8974a;
+    --proposal: #d4a853;
+    --negotiation: #b8974a;
+    --won: #4a8a4a;
+    --lost: #c8371a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--void); color: var(--cream); font-family: 'DM Sans', system-ui, sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  body { background-image: radial-gradient(at 15% 0%, rgba(139,26,26,0.08) 0%, transparent 40%), radial-gradient(at 85% 100%, rgba(184,151,74,0.05) 0%, transparent 35%); }
+  header { padding: 20px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  header .brand { display: flex; align-items: baseline; gap: 14px; }
+  header h1 { font-family: 'Libre Baskerville', serif; font-size: 22px; margin: 0; letter-spacing: 0.02em; }
+  header h1 em { color: var(--gold); font-style: normal; }
+  header .tag { font-family: 'DM Mono'; font-size: 10.5px; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; }
+  header .nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  header .nav button {
+    background: transparent; border: 1px solid var(--border); color: var(--cream);
+    padding: 8px 14px; font-family: 'Syne'; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+  }
+  header .nav button.active { border-color: var(--gold); color: var(--gold); background: rgba(212,168,83,0.06); }
+  header .nav button:hover { border-color: var(--gold); color: var(--gold); }
+  main { max-width: 1400px; margin: 0 auto; padding: 24px 28px 80px; }
+  .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+  .toolbar input[type=search], .toolbar select {
+    background: var(--surface); border: 1px solid var(--border); color: var(--cream);
+    padding: 9px 12px; font-family: 'DM Mono'; font-size: 12.5px;
+  }
+  .toolbar input[type=search] { width: 280px; max-width: 100%; }
+  .toolbar input:focus, .toolbar select:focus { outline: 1px solid var(--gold); outline-offset: -1px; }
+  .toolbar .grow { flex: 1; }
+  .toolbar .view-toggle { display: inline-flex; border: 1px solid var(--border); }
+  .toolbar .view-toggle button { background: transparent; border: none; color: var(--cream); padding: 8px 14px; font-family: 'DM Mono'; font-size: 11px; cursor: pointer; border-right: 1px solid var(--border); }
+  .toolbar .view-toggle button:last-child { border-right: none; }
+  .toolbar .view-toggle button.active { background: var(--gold); color: var(--void); }
+  .btn {
+    background: var(--ox); color: var(--cream); border: none; padding: 9px 16px;
+    font-family: 'Syne'; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    font-size: 11px; cursor: pointer; transition: background 0.15s;
+  }
+  .btn:hover { background: var(--gold); color: var(--void); }
+  .btn.ghost { background: transparent; border: 1px solid var(--border); color: var(--cream); }
+  .btn.ghost:hover { border-color: var(--gold); color: var(--gold); background: transparent; }
+  .btn.gold { background: var(--gold); color: var(--void); }
+  .btn.gold:hover { background: var(--brass); color: var(--void); }
+  .btn.sm { padding: 6px 10px; font-size: 10px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* CONTACTS */
+  table.contacts { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); }
+  table.contacts th, table.contacts td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  table.contacts th { font-family: 'DM Mono'; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; background: var(--surface2); }
+  table.contacts tr:hover td { background: var(--surface2); cursor: pointer; }
+  table.contacts td.role { color: var(--muted); }
+  .tagchip { display: inline-block; background: var(--surface2); border: 1px solid var(--border); padding: 2px 7px; font-family: 'DM Mono'; font-size: 10px; color: var(--brass); margin-right: 4px; letter-spacing: 0.04em; }
+
+  /* KANBAN */
+  .kanban { display: grid; grid-template-columns: repeat(7, minmax(180px, 1fr)); gap: 12px; overflow-x: auto; }
+  .kcol { background: var(--surface); border: 1px solid var(--border); padding: 12px; min-height: 400px; min-width: 180px; }
+  .kcol h3 { margin: 0 0 12px; font-family: 'Syne'; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding-bottom: 8px; border-bottom: 2px solid; display: flex; justify-content: space-between; align-items: center; }
+  .kcol .count { font-family: 'DM Mono'; font-size: 10px; color: var(--muted); }
+  .kcol[data-stage=Lead] h3        { border-color: var(--lead);        color: var(--lead); }
+  .kcol[data-stage=Qualified] h3   { border-color: var(--qualified);   color: var(--qualified); }
+  .kcol[data-stage=Demo] h3        { border-color: var(--demo);        color: var(--demo); }
+  .kcol[data-stage=Proposal] h3    { border-color: var(--proposal);    color: var(--proposal); }
+  .kcol[data-stage=Negotiation] h3 { border-color: var(--negotiation); color: var(--negotiation); }
+  .kcol[data-stage="Closed-Won"] h3 { border-color: var(--won);        color: var(--won); }
+  .kcol[data-stage="Closed-Lost"] h3 { border-color: var(--lost);      color: var(--lost); }
+  .kcol.drop-target { background: rgba(212,168,83,0.08); }
+  .dcard { background: var(--surface2); border: 1px solid var(--border); padding: 10px; margin-bottom: 8px; cursor: grab; }
+  .dcard:active { cursor: grabbing; }
+  .dcard.dragging { opacity: 0.4; }
+  .dcard h4 { margin: 0 0 4px; font-family: 'Libre Baskerville', serif; font-size: 13px; color: var(--cream); }
+  .dcard .val { font-family: 'DM Mono'; font-size: 13px; color: var(--gold); font-weight: 500; }
+  .dcard .who { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .dcard .close { font-family: 'DM Mono'; font-size: 10px; color: var(--brass); margin-top: 4px; }
+
+  /* DEAL LIST */
+  table.deals { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); }
+  table.deals th, table.deals td { padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: 12.5px; text-align: left; }
+  table.deals th { font-family: 'DM Mono'; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); background: var(--surface2); font-weight: 500; }
+  table.deals tr:hover td { background: var(--surface2); cursor: pointer; }
+  .stagebadge { display: inline-block; padding: 2px 8px; font-family: 'DM Mono'; font-size: 10px; letter-spacing: 0.04em; color: var(--void); font-weight: 500; }
+  .stagebadge[data-stage=Lead]        { background: var(--lead); color: var(--cream); }
+  .stagebadge[data-stage=Qualified]   { background: var(--qualified); }
+  .stagebadge[data-stage=Demo]        { background: var(--demo); }
+  .stagebadge[data-stage=Proposal]    { background: var(--proposal); }
+  .stagebadge[data-stage=Negotiation] { background: var(--negotiation); }
+  .stagebadge[data-stage="Closed-Won"]  { background: var(--won); color: white; }
+  .stagebadge[data-stage="Closed-Lost"] { background: var(--lost); color: white; }
+
+  /* ANALYTICS */
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .metric { background: var(--surface); border: 1px solid var(--border); padding: 18px; }
+  .metric .label { font-family: 'DM Mono'; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .metric .val { font-family: 'Libre Baskerville', serif; font-size: 26px; color: var(--gold); }
+  .metric .sub { font-family: 'DM Mono'; font-size: 11px; color: var(--cream); margin-top: 6px; }
+  .funnel { background: var(--surface); border: 1px solid var(--border); padding: 18px; }
+  .funnel h3 { font-family: 'Libre Baskerville', serif; font-size: 16px; margin: 0 0 14px; color: var(--cream); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .frow { display: grid; grid-template-columns: 130px 1fr 80px 80px; gap: 12px; align-items: center; padding: 7px 0; font-family: 'DM Mono'; font-size: 12px; border-bottom: 1px solid var(--border); }
+  .frow:last-child { border-bottom: none; }
+  .fbar { background: var(--surface2); height: 14px; position: relative; }
+  .fbar .fill { height: 100%; transition: width 0.3s; }
+  .fbar .fill[data-stage=Lead]        { background: var(--lead); }
+  .fbar .fill[data-stage=Qualified]   { background: var(--qualified); }
+  .fbar .fill[data-stage=Demo]        { background: var(--demo); }
+  .fbar .fill[data-stage=Proposal]    { background: var(--proposal); }
+  .fbar .fill[data-stage=Negotiation] { background: var(--negotiation); }
+  .fbar .fill[data-stage="Closed-Won"]  { background: var(--won); }
+  .fbar .fill[data-stage="Closed-Lost"] { background: var(--lost); }
+  .fcount { text-align: right; color: var(--muted); }
+  .fval { text-align: right; color: var(--gold); }
+
+  /* MODAL */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+  .modal-backdrop.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--gold); width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; }
+  .modal header { border-bottom: 1px solid var(--border); padding: 16px 22px; }
+  .modal header h2 { margin: 0; font-family: 'Libre Baskerville', serif; font-size: 18px; color: var(--gold); }
+  .modal .body { padding: 20px 22px; }
+  .modal .actions { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .field { margin-bottom: 13px; }
+  .field label { font-family: 'DM Mono'; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 5px; }
+  .field input, .field textarea, .field select {
+    width: 100%; background: var(--void); border: 1px solid var(--border); color: var(--cream);
+    padding: 9px 11px; font-family: 'DM Mono'; font-size: 13px;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus { outline: 1px solid var(--gold); outline-offset: -1px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 540px) { .row2 { grid-template-columns: 1fr; } }
+  .activity-log { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .activity-log h3 { font-family: 'Libre Baskerville', serif; font-size: 14px; margin: 0 0 10px; color: var(--cream); }
+  .activity-item { padding: 8px 0; border-bottom: 1px solid var(--border); font-family: 'DM Mono'; font-size: 12px; }
+  .activity-item .ts { color: var(--muted); font-size: 10.5px; }
+  .activity-item .kind { display: inline-block; color: var(--brass); margin-right: 6px; font-weight: 500; }
+  .activity-add { display: grid; grid-template-columns: 120px 1fr auto; gap: 6px; margin-top: 10px; }
+  .activity-add input, .activity-add select { background: var(--void); border: 1px solid var(--border); color: var(--cream); padding: 7px 9px; font-family: 'DM Mono'; font-size: 12px; }
+
+  /* SETTINGS */
+  .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 800px) { .settings-grid { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--border); padding: 20px; }
+  .panel h2 { font-family: 'Libre Baskerville', serif; font-size: 16px; margin: 0 0 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px; color: var(--cream); }
+  .panel p { font-size: 13px; line-height: 1.6; color: var(--cream); }
+  .panel .savings { font-family: 'Libre Baskerville', serif; font-size: 36px; color: var(--gold); margin: 14px 0 4px; }
+  .panel .savings-sub { font-family: 'DM Mono'; font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .comparison { font-family: 'DM Mono'; font-size: 12px; margin-top: 14px; line-height: 2; }
+  .comparison .line { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); }
+  .comparison .ko { color: #ff8a7a; text-decoration: line-through; }
+  .comparison .ok { color: var(--won); }
+  .quotacard { display: flex; gap: 14px; font-family: 'DM Mono'; font-size: 12px; }
+  .quotacard div { flex: 1; background: var(--surface2); padding: 12px; border: 1px solid var(--border); }
+  .quotacard .qnum { font-family: 'Libre Baskerville', serif; font-size: 20px; color: var(--gold); }
+  .quotacard .qlabel { font-size: 10px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
+
+  /* EMPTY */
+  .empty-state { text-align: center; padding: 60px 20px; }
+  .empty-state .glyph { font-family: 'Libre Baskerville', serif; font-size: 48px; color: var(--gold); margin-bottom: 12px; }
+  .empty-state p { color: var(--muted); margin-bottom: 18px; }
+
+  /* WATERMARK */
+  .watermark { position: fixed; bottom: 12px; right: 14px; font-family: 'DM Mono'; font-size: 10px; color: var(--muted); letter-spacing: 0.1em; pointer-events: none; z-index: 5; }
+  .watermark.paid { display: none; }
+
+  footer { padding: 22px 28px; border-top: 1px solid var(--border); font-family: 'DM Mono'; font-size: 11px; color: var(--muted); text-align: center; letter-spacing: 0.08em; }
+  footer a { color: var(--brass); text-decoration: none; }
+  footer a:hover { color: var(--gold); }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--gold); color: var(--gold); padding: 12px 22px; font-family: 'DM Mono'; font-size: 12px; z-index: 100; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+
+  .pill { display: inline-block; padding: 2px 8px; font-family: 'DM Mono'; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; background: var(--ox); color: var(--cream); margin-left: 6px; }
+  .pill.gold { background: var(--gold); color: var(--void); }
+</style>
+<!-- FALL_KIT_BEGIN v1 · DO NOT EDIT THIS BLOCK MANUALLY -->
+<script>
+/*!
+ * Fall Kit · v3.2.0 · the shared cascade for every estate seed (the brain stud of the estate's Lego socket)
+ * MIT · AI-Native Solutions · ai-nativesolutions.com
+ *
+ * Inlineable JS module. Drop into any seed via <script> or copy-paste inline.
+ * Preserves single-HTML sovereignty (no external deps until user opts in to T2 WebLLM or T3 BYOK).
+ *
+ * What it gives every seed:
+ *  - Tier picker: T0 (off · default) · T2 (WebLLM in-browser, 5 models 1B-70B) · T3 (BYOK)
+ *  - Universal text: FallKit.aiComplete(system, user, maxTokens) → string|null
+ *  - NEW · Universal image: FallKit.aiImage(prompt, opts) → { url } | null
+ *  - NEW · Universal video: FallKit.aiVideo(prompt, opts) → { url } | null
+ *  - NEW · Universal TTS:   FallKit.aiTTS(text, opts)     → { url | blob } | null
+ *  - NEW · Universal STT:   FallKit.aiSTT(blob, opts)     → { text } | null
+ *  - NEW in v3 · Conversation: FallKit.aiChat(system, history, user, maxTokens) → { text, assistant } | null
+ *    (the caller appends the user turn and `assistant` to its own history: a conversation only grows, never edited)
+ *  - NEW in v3 · Recycling: the system prompt is sent first and the same each call, marked for Anthropic's cache;
+ *    OpenAI, Google and OpenRouter cache repeated openings themselves. FallKit.lastUsage() says what the last call
+ *    read, how much of it the provider reused, and what it wrote.
+ *  - NEW in v3.1 · Ask about this page: the chip's panel answers questions from the page's own words through the brain
+ *    the person picked, so the chip is useful in any build: FallKit.askPage(question) → { text, why }
+ *  - AI chip UI in header · settings modal with tabs for each modality
+ *  - Same-device mesh (BroadcastChannel: estate seeds open on this device find each other; not cross-device)
+ *  - NEW in v3.2 · The mesh speaks LIGHT: every message is a LIGHT packet signed by this device's own key and checked
+ *    before it is read (the estate going live, Phase 2). The LIGHT part is one gated module on this origin
+ *    (/fall-kit/core/mesh.mjs), loaded only when the mesh is switched on; an old JSON message still arrives, marked
+ *    legacy; on a page served anywhere else the mesh speaks JSON as before. FallKit.meshStats() counts what it heard.
+ *  - Help section partial: FallKit.helpSection()
+ *  - Settings panel:       FallKit.openSettings()
+ *
+ * Doctrine:
+ *  - T0 fallback ALWAYS works · aiComplete returns null · caller MUST degrade gracefully
+ *  - NEVER hide a feature behind AI · NEVER proxy API keys · NEVER log keys
+ *  - Keys are held in this tab only, unless the owner ticks "remember my keys on this device" (v3: every estate
+ *    page at this address shares one browser storage, so a key kept there can be read by any of them) · sent direct
+ *    to the provider · never proxied through us
+ *  - WebLLM is lazy-loaded · model weights download ONLY on user opt-in
+ */
+(function (root) {
+  'use strict';
+
+  const FALL_KIT_VERSION = '3.2.0';
+
+  // ─── WebLLM (T2) model registry ─────────────────────────────────────
+  const WEBLLM_MODELS = {
+    'llama-1b':  { id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',   size: '~700MB', label: '1B · fast · any laptop / phone' },
+    'llama-3b':  { id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',   size: '~2GB',   label: '3B · balanced · default · most laptops' },
+    'qwen-7b':   { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC',     size: '~5GB',   label: '7B · capable · needs decent GPU (M-series Mac / 8GB+ VRAM)' },
+    'llama-8b':  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',   size: '~5GB',   label: '8B · common · needs decent GPU' },
+    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' },
+  };
+  const DEFAULT_MODEL = 'llama-3b';
+
+  // ─── T3 · BYOK · TEXT providers ─────────────────────────────────────
+  const TEXT_PROVIDERS = {
+    anthropic:  { label: 'Anthropic Claude',   models: ['claude-opus-5-5','claude-sonnet-5-5','claude-haiku-5-5'],                default: 'claude-opus-5-5',     type: 'anthropic' },
+    openai:     { label: 'OpenAI',             models: ['gpt-4o','gpt-4o-mini','o1-mini','gpt-4.1'],                              default: 'gpt-4o-mini',         type: 'openai' },
+    google:     { label: 'Google Gemini',      models: ['gemini-2.5-pro','gemini-2.5-flash','gemini-2.0-flash'],                  default: 'gemini-2.5-flash',    type: 'google' },
+    groq:       { label: 'Groq (fast)',        models: ['llama-3.3-70b-versatile','llama-3.1-70b-versatile','mixtral-8x7b-32768'], default: 'llama-3.3-70b-versatile', type: 'openai_compat', url: 'https://api.groq.com/openai/v1/chat/completions' },
+    cerebras:   { label: 'Cerebras (fastest)', models: ['llama-3.3-70b','llama-3.1-70b','llama3.1-8b'],                            default: 'llama-3.3-70b',       type: 'openai_compat', url: 'https://api.cerebras.ai/v1/chat/completions' },
+    openrouter: { label: 'OpenRouter (any)',   models: ['anthropic/claude-3.5-sonnet','openai/gpt-4o','google/gemini-pro-1.5','meta-llama/llama-3.3-70b-instruct'], default: 'meta-llama/llama-3.3-70b-instruct', type: 'openai_compat', url: 'https://openrouter.ai/api/v1/chat/completions' },
+    deepseek:   { label: 'DeepSeek',           models: ['deepseek-chat','deepseek-reasoner'],                                     default: 'deepseek-chat',       type: 'openai_compat', url: 'https://api.deepseek.com/v1/chat/completions' },
+    mistral:    { label: 'Mistral',            models: ['mistral-large-latest','mistral-small-latest','open-mistral-nemo'],       default: 'mistral-small-latest',type: 'openai_compat', url: 'https://api.mistral.ai/v1/chat/completions' },
+    cohere:     { label: 'Cohere',             models: ['command-r-plus-08-2024','command-r-08-2024'],                            default: 'command-r-08-2024',   type: 'cohere' },
+    together:   { label: 'Together AI',        models: ['meta-llama/Llama-3.3-70B-Instruct-Turbo','Qwen/Qwen2.5-72B-Instruct-Turbo'], default: 'meta-llama/Llama-3.3-70B-Instruct-Turbo', type: 'openai_compat', url: 'https://api.together.xyz/v1/chat/completions' },
+    huggingface:{ label: 'HuggingFace Inf.',   models: ['meta-llama/Llama-3.3-70B-Instruct','Qwen/Qwen2.5-72B-Instruct'],          default: 'meta-llama/Llama-3.3-70B-Instruct', type: 'hf_inference' },
+    xai:        { label: 'xAI Grok',           models: ['grok-2-latest','grok-2-1212','grok-vision-beta'],                        default: 'grok-2-latest',       type: 'openai_compat', url: 'https://api.x.ai/v1/chat/completions' },
+  };
+
+  // ─── T3 · BYOK · IMAGE providers ────────────────────────────────────
+  const IMAGE_PROVIDERS = {
+    fal:         { label: 'fal.ai (Flux + more)', models: ['fal-ai/flux/schnell','fal-ai/flux-pro/v1.1-ultra','fal-ai/flux/dev','fal-ai/recraft-v3'], default: 'fal-ai/flux/schnell',    type: 'fal' },
+    huggingface: { label: 'HuggingFace Inf.',     models: ['black-forest-labs/FLUX.1-schnell','black-forest-labs/FLUX.1-dev','stabilityai/stable-diffusion-3.5-large'], default: 'black-forest-labs/FLUX.1-schnell', type: 'hf_image' },
+    replicate:   { label: 'Replicate',            models: ['black-forest-labs/flux-schnell','black-forest-labs/flux-1.1-pro-ultra','stability-ai/stable-diffusion-3.5-large'], default: 'black-forest-labs/flux-schnell', type: 'replicate' },
+    openai:      { label: 'OpenAI DALL-E',        models: ['dall-e-3','dall-e-2'],                                                                   default: 'dall-e-3',              type: 'openai_image' },
+    google:      { label: 'Google Imagen',        models: ['imagen-3.0-generate-002','imagen-3.0-fast-generate-001'],                                default: 'imagen-3.0-generate-002',type: 'google_image' },
+    ideogram:    { label: 'Ideogram',             models: ['V_2','V_2_TURBO','V_1'],                                                                 default: 'V_2',                   type: 'ideogram' },
+    leonardo:    { label: 'Leonardo AI',          models: ['b24e16ff-06e3-43eb-8d33-4416c2d75876','1e60896f-3c26-4296-8ecc-53e2afecc132'],           default: 'b24e16ff-06e3-43eb-8d33-4416c2d75876', type: 'leonardo' },
+    xai:         { label: 'xAI Aurora',           models: ['grok-2-image-1212'],                                                                    default: 'grok-2-image-1212',     type: 'openai_image_compat', url: 'https://api.x.ai/v1/images/generations' },
+  };
+
+  // ─── T3 · BYOK · VIDEO providers ────────────────────────────────────
+  const VIDEO_PROVIDERS = {
+    fal:      { label: 'fal.ai (Kling/LTX/Veo)', models: ['fal-ai/kling-video/v2/master/text-to-video','fal-ai/ltx-video','fal-ai/veo3'], default: 'fal-ai/ltx-video', type: 'fal' },
+    luma:     { label: 'Luma Dream Machine',      models: ['luma-1.5','ray-2'],                                          default: 'luma-1.5',       type: 'luma' },
+    runway:   { label: 'Runway Gen-3',            models: ['gen3a_turbo','gen3a'],                                       default: 'gen3a_turbo',    type: 'runway' },
+    pika:     { label: 'Pika 2',                  models: ['pika-2.0'],                                                  default: 'pika-2.0',       type: 'pika' },
+    kling:    { label: 'Kling (direct)',          models: ['kling-v2-master','kling-v1.6-pro'],                          default: 'kling-v2-master',type: 'kling' },
+  };
+
+  // ─── T3 · BYOK · TTS providers ──────────────────────────────────────
+  const TTS_PROVIDERS = {
+    elevenlabs: { label: 'ElevenLabs',    models: ['eleven_turbo_v2_5','eleven_multilingual_v2'], default: 'eleven_turbo_v2_5', type: 'elevenlabs' },
+    openai:     { label: 'OpenAI TTS',    models: ['tts-1','tts-1-hd'],                            default: 'tts-1',            type: 'openai_tts' },
+    playht:     { label: 'PlayHT',        models: ['PlayHT2.0-turbo','PlayHT2.0'],                 default: 'PlayHT2.0-turbo',  type: 'playht' },
+    cartesia:   { label: 'Cartesia Sonic',models: ['sonic-english','sonic-multilingual'],           default: 'sonic-english',    type: 'cartesia' },
+  };
+
+  // ─── T3 · BYOK · STT providers ──────────────────────────────────────
+  const STT_PROVIDERS = {
+    deepgram:   { label: 'Deepgram Nova',     models: ['nova-2','nova-3'],                default: 'nova-2',     type: 'deepgram' },
+    assemblyai: { label: 'AssemblyAI',        models: ['universal-1','best'],             default: 'universal-1',type: 'assemblyai' },
+    openai:     { label: 'OpenAI Whisper',    models: ['whisper-1'],                      default: 'whisper-1',  type: 'openai_stt' },
+  };
+
+  // ─── State ──────────────────────────────────────────────────────────
+  const MODALITIES = ['text', 'image', 'video', 'tts', 'stt'];
+  const emptyKeys = () => ({ text: {}, image: {}, video: {}, tts: {}, stt: {} });
+  /**
+   * What a stored config holds, split into what may be stored (the tier, providers, models) and what is held in this
+   * tab only (the keys). Keys stay stored only when the owner chose "remember my keys on this device"; a config written
+   * the old way (keys stored, no choice made) has its keys moved into the tab and stored no longer. Pure.
+   * → { config, secrets, moved } (moved: how many keys were taken out of storage)
+   */
+  function configFrom(c) {
+    c = c && typeof c === 'object' && !Array.isArray(c) ? Object.assign({}, c) : {};
+    if (c.api_key && !c.keys) {   // v1 → v2: one text key at the top level
+      c.keys = emptyKeys();
+      c.keys.text[c.api_provider || 'anthropic'] = { key: c.api_key, model: c.api_model };
+    }
+    delete c.api_key;
+    const secrets = emptyKeys(), models = emptyKeys();
+    let moved = 0;
+    for (const m of MODALITIES) {
+      const held = c.keys && c.keys[m] && typeof c.keys[m] === 'object' ? c.keys[m] : {};
+      for (const pk of Object.keys(held)) {
+        const e = held[pk] || {};
+        if (typeof e.key === 'string' && e.key) { secrets[m][pk] = e.key; moved++; }
+        if (typeof e.model === 'string' && e.model) models[m][pk] = e.model;
+      }
+      const kept = c.models && c.models[m] && typeof c.models[m] === 'object' ? c.models[m] : {};
+      for (const pk of Object.keys(kept)) if (typeof kept[pk] === 'string' && kept[pk]) models[m][pk] = models[m][pk] || kept[pk];
+    }
+    c.models = models;
+    const remember = c.remember_keys === true;
+    if (!remember) delete c.keys;
+    return { config: c, secrets: secrets, moved: remember ? 0 : moved };
+  }
+  /** what is written to storage: the config, with the keys only if the owner chose to remember them. Pure. */
+  function storedForm(config, secrets) {
+    const out = Object.assign({}, config);
+    delete out.keys;
+    if (config.remember_keys === true) {
+      out.keys = emptyKeys();
+      for (const m of MODALITIES) for (const pk of Object.keys(secrets[m] || {})) out.keys[m][pk] = { key: secrets[m][pk], model: (config.models && config.models[m] && config.models[m][pk]) || undefined };
+    }
+    return out;
+  }
+  const BOOT = (function () {
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem('fall-kit.config') || '{}'); } catch (e) { stored = {}; }
+    return configFrom(stored);
+  })();
+  const STATE = {
+    config: BOOT.config,
+    secrets: BOOT.secrets,   // the keys: this tab only, unless remember_keys
+    ai: { ready: false, loading: false, progress: 0, engine: null, model: null },
+    mesh: { active: false, peers: new Map(), bc: null, signal: null, light: null, stats: { sent: 0, admitted: 0, legacy: 0, refused: {} } },
+    lastUsage: null,
+    ask: { opening: null, talk: [], last: null },   // the talk about this page: its opening, kept identical, and its turns
+  };
+
+  function saveConfig() { try { localStorage.setItem('fall-kit.config', JSON.stringify(storedForm(STATE.config, STATE.secrets))); } catch (e) {} }
+  if (BOOT.moved) saveConfig();   // keys stored the old way leave shared storage now; they stay usable in this tab
+  function getKey(modality, providerKey) { return (STATE.secrets[modality] && STATE.secrets[modality][providerKey]) || ''; }
+  function getModel(modality, providerKey, registry) {
+    return (STATE.config.models && STATE.config.models[modality] && STATE.config.models[modality][providerKey]) || registry[providerKey]?.default;
+  }
+  function setKey(modality, providerKey, key, model) {
+    STATE.secrets[modality] = STATE.secrets[modality] || {};
+    if (key) STATE.secrets[modality][providerKey] = key;
+    STATE.config.models = STATE.config.models || emptyKeys();
+    STATE.config.models[modality] = STATE.config.models[modality] || {};
+    if (model) STATE.config.models[modality][providerKey] = model;
+    saveConfig();
+  }
+  function forgetKeys() { STATE.secrets = emptyKeys(); STATE.config.remember_keys = false; saveConfig(); renderAiChip(); }
+
+  // ─── DOM helpers ────────────────────────────────────────────────────
+  function $(s, root) { return (root || document).querySelector(s); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+  // ─── AI tier ────────────────────────────────────────────────────────
+  function aiTier() { return STATE.config.ai_tier || 'T0'; }
+  function activeTextProvider() { return STATE.config.text_provider || 'anthropic'; }
+
+  function renderAiChip() {
+    const chip = $('#fk-ai-chip');
+    if (!chip) return;
+    const txt = $('#fk-ai-chip-text');
+    chip.classList.remove('fk-chip-live', 'fk-chip-loading', 'fk-chip-warn');
+    const tier = aiTier();
+    if (tier === 'T0') { txt.textContent = 'T0 · off'; }
+    else if (tier === 'T2') {
+      if (STATE.ai.ready) { txt.textContent = 'T2 ' + (WEBLLM_MODELS[STATE.config.webllm_model || DEFAULT_MODEL]?.label.split(' · ')[0] || '') + ' · ready'; chip.classList.add('fk-chip-live'); }
+      else if (STATE.ai.loading) { txt.textContent = 'T2 loading ' + Math.round(STATE.ai.progress) + '%'; chip.classList.add('fk-chip-loading'); }
+      else { txt.textContent = 'T2 · click to load'; chip.classList.add('fk-chip-warn'); }
+    } else if (tier === 'T3') {
+      const p = activeTextProvider();
+      if (getKey('text', p)) { txt.textContent = 'T3 ' + (TEXT_PROVIDERS[p]?.label.split(' ')[0] || 'BYOK') + ' · active'; chip.classList.add('fk-chip-live'); }
+      else { txt.textContent = 'T3 · no key set'; chip.classList.add('fk-chip-warn'); }
+    }
+  }
+
+  async function loadWebLLM(modelKey) {
+    if (STATE.ai.loading) return;
+    const key = modelKey || STATE.config.webllm_model || DEFAULT_MODEL;
+    const model = WEBLLM_MODELS[key];
+    if (!model) { console.error('fall-kit: unknown model', key); return; }
+    if (STATE.ai.ready && STATE.ai.model === model.id) return;
+    STATE.ai.loading = true; STATE.ai.progress = 0; renderAiChip();
+    notify('Loading WebLLM · ' + model.label + ' · ' + model.size + ' first time', 'info');
+    try {
+      const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm@0.2.79');
+      const engine = await CreateMLCEngine(model.id, {
+        initProgressCallback: p => { STATE.ai.progress = (p.progress || 0) * 100; renderAiChip(); }
+      });
+      STATE.ai.engine = engine; STATE.ai.model = model.id; STATE.ai.ready = true; STATE.ai.loading = false;
+      STATE.config.webllm_model = key; saveConfig(); renderAiChip();
+      notify('WebLLM ready · sovereign mode · ' + model.label.split(' · ')[0], 'ok');
+    } catch (e) {
+      console.error('fall-kit: WebLLM load failed', e);
+      STATE.ai.loading = false; renderAiChip();
+      notify('WebLLM load failed · ' + e.message, 'err');
+    }
+  }
+
+  // ═══════════════════════ TEXT · aiComplete · aiChat ═══════════════
+  // One way to ask every text provider: the system prompt first and the same each call (so a provider can reuse its
+  // reading of it), then the conversation, which only ever grows. Pure pieces (requestOf, textOf, usageOf) are exposed
+  // on FallKit for tests; nothing pure here touches the network.
+  const isObj = (x) => x !== null && typeof x === 'object' && !Array.isArray(x);
+  const count = (x) => (Number.isInteger(x) && x >= 0 ? x : 0);
+  /** Claude models from 5.x think before they answer: room for that, and a light effort for an assistant's reply */
+  const THINKS = (model) => /^claude-(?:opus|sonnet|haiku|fable|mythos)-5/.test(model);
+  /** Claude models with a server-side fallback when a request is declined (Haiku has none) */
+  const FALLS_BACK = (model) => /^claude-(?:opus|sonnet|fable)-5/.test(model);
+  /** a message's words, whatever shape a provider keeps it in */
+  function wordsOf(m) {
+    if (!isObj(m)) return '';
+    if (typeof m.content === 'string') return m.content;
+    if (Array.isArray(m.content)) return m.content.filter((b) => isObj(b) && b.type === 'text' && typeof b.text === 'string').map((b) => b.text).join('\n');
+    return '';
+  }
+  /**
+   * The request a text provider is sent: { url, headers, body } for type (anthropic | openai | google | openai_compat |
+   * cohere | hf_inference). messages: [{ role: 'user' | 'assistant', content }]. Pure: the key is placed, never kept.
+   */
+  function requestOf(type, opts) {
+    const { model, key, system, messages, maxTokens, url } = opts;
+    const max = Number.isInteger(maxTokens) && maxTokens > 0 ? maxTokens : 600;
+    const plain = messages.map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: wordsOf(m) }));
+    if (type === 'anthropic') {
+      const headers = { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' };
+      const body = { model, max_tokens: THINKS(model) ? Math.max(max * 4, 4000) : max, system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
+        messages: messages.map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content })) };
+      if (THINKS(model)) body.output_config = { effort: 'low' };
+      if (FALLS_BACK(model)) { headers['anthropic-beta'] = 'server-side-fallback-2026-07-01'; body.fallbacks = 'default'; }
+      return { url: 'https://api.anthropic.com/v1/messages', headers, body };
+    }
+    if (type === 'openai') return { url: 'https://api.openai.com/v1/chat/completions', headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + key }, body: { model, max_completion_tokens: max, messages: [{ role: 'system', content: system }].concat(plain) } };
+    if (type === 'google') return { url: 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+      body: { systemInstruction: { parts: [{ text: system }] }, contents: plain.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: max } } };
+    if (type === 'cohere') return { url: 'https://api.cohere.com/v2/chat', headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + key }, body: { model, max_tokens: max, messages: [{ role: 'system', content: system }].concat(plain) } };
+    if (type === 'hf_inference') return { url: 'https://api-inference.huggingface.co/models/' + model + '/v1/chat/completions', headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + key }, body: { model, max_tokens: max, messages: [{ role: 'system', content: system }].concat(plain) } };
+    if (type === 'openai_compat') return { url: url, headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + key }, body: { model, max_tokens: max, messages: [{ role: 'system', content: system }].concat(plain) } };
+    return null;
+  }
+  /** the answer's words from a provider's reply, or null when it declined or said nothing. Pure. */
+  function textOf(type, j) {
+    if (!isObj(j)) return null;
+    let t = '';
+    if (type === 'anthropic') { if (j.stop_reason === 'refusal' || !Array.isArray(j.content)) return null; t = wordsOf({ content: j.content }); }
+    else if (type === 'google') { const c = Array.isArray(j.candidates) ? j.candidates[0] : null; t = c && isObj(c.content) && Array.isArray(c.content.parts) ? c.content.parts.map((p) => (isObj(p) && typeof p.text === 'string' ? p.text : '')).join('') : ''; }
+    else if (type === 'cohere') { t = isObj(j.message) && Array.isArray(j.message.content) ? wordsOf({ content: j.message.content.map((b) => Object.assign({ type: 'text' }, b)) }) : ''; }
+    else { const c = Array.isArray(j.choices) ? j.choices[0] : null; t = c && isObj(c.message) && typeof c.message.content === 'string' ? c.message.content : ''; }
+    t = t.trim();
+    return t ? t : null;
+  }
+  /** what a call used, read from a provider's own usage record: { read, recycled, written, out }. Pure. */
+  function usageOf(type, j) {
+    const u = isObj(j) ? (type === 'google' ? j.usageMetadata : type === 'cohere' && isObj(j.usage) ? j.usage.tokens : j.usage) : null;
+    if (!isObj(u)) return { read: 0, recycled: 0, written: 0, out: 0 };
+    if (type === 'anthropic') { const recycled = count(u.cache_read_input_tokens), written = count(u.cache_creation_input_tokens); return { read: count(u.input_tokens) + recycled + written, recycled, written, out: count(u.output_tokens) }; }
+    if (type === 'google') { const read = count(u.promptTokenCount); return { read, recycled: Math.min(read, count(u.cachedContentTokenCount)), written: 0, out: count(u.candidatesTokenCount) + count(u.thoughtsTokenCount) }; }
+    if (type === 'cohere') return { read: count(u.input_tokens), recycled: 0, written: 0, out: count(u.output_tokens) };
+    const read = count(u.prompt_tokens), d = isObj(u.prompt_tokens_details) ? u.prompt_tokens_details : {};
+    return { read, recycled: Math.min(read, count(d.cached_tokens)), written: 0, out: count(u.completion_tokens) };
+  }
+
+  async function aiComplete(systemPrompt, userMsg, maxTokens) {
+    const r = await aiChat(systemPrompt, [], userMsg, maxTokens);
+    return r ? r.text : null;
+  }
+  /**
+   * One turn of a conversation: the system prompt, the history so far (unchanged), and the user's words. → { text,
+   * assistant } — the caller appends { role: 'user', content: userMsg } and `assistant` to its history (assistant is the
+   * reply as the provider gave it, so a provider that checks its own earlier turns sees them unchanged) — or null when no
+   * tier can answer.
+   */
+  async function aiChat(systemPrompt, history, userMsg, maxTokens) {
+    maxTokens = maxTokens || 600;
+    const messages = (Array.isArray(history) ? history : []).concat([{ role: 'user', content: String(userMsg == null ? '' : userMsg) }]);
+    const tier = aiTier();
+    if (tier === 'T2' && STATE.ai.ready && STATE.ai.engine) {
+      const r = await STATE.ai.engine.chat.completions.create({
+        messages: [{ role: 'system', content: systemPrompt }].concat(messages.map((m) => ({ role: m.role, content: wordsOf(m) }))), max_tokens: maxTokens,
+      });
+      const text = r.choices[0].message.content;
+      STATE.lastUsage = Object.assign({ provider: 'webllm' }, usageOf('openai', r));
+      return { text: text, assistant: { role: 'assistant', content: text } };
+    }
+    if (tier === 'T3') {
+      const p = activeTextProvider(); const key = getKey('text', p);
+      if (!key) return null;
+      return await textCall(p, systemPrompt, messages, maxTokens);
+    }
+    return null;
+  }
+
+  async function textCall(providerKey, sys, messages, maxTokens) {
+    const p = TEXT_PROVIDERS[providerKey];
+    const model = getModel('text', providerKey, TEXT_PROVIDERS);
+    const req = requestOf(p.type, { model, key: getKey('text', providerKey), system: sys, messages, maxTokens, url: p.url });
+    if (!req) throw new Error('unknown text provider type: ' + p.type);
+    const r = await fetch(req.url, { method: 'POST', headers: req.headers, body: JSON.stringify(req.body) });
+    if (!r.ok) throw new Error(p.label + ' ' + r.status);
+    const j = await r.json();
+    STATE.lastUsage = Object.assign({ provider: providerKey, model: model }, usageOf(p.type, j));
+    const text = textOf(p.type, j);
+    if (text === null) return null;
+    return { text: text, assistant: p.type === 'anthropic' ? { role: 'assistant', content: j.content } : { role: 'assistant', content: text } };
+  }
+
+  // ═══════════════════════ ASK · about this page ═════════════════════
+  // The kit's own use of the brain, so the chip is useful in any build, wired or not: a question about the page, answered
+  // from the page's own words. The opening is read once per talk and sent byte-identical every question, so a provider
+  // that caches recycles it; a talk starts afresh after MAX_ASKS questions or when the person starts again.
+  const PAGE_MAX = 12000, MAX_ASKS = 20;
+  const ASK_OPENING = 'You are the helper inside a web page. Answer questions about this page and how to use it, briefly and in plain words. Use only what the page says below; when it does not say, say so.';
+  /** the opening for questions about a page: who the helper is, then the page's title, description and text. Pure. */
+  function pageOpening(page) {
+    const p = isObj(page) ? page : {};
+    const line = (s, n) => (typeof s === 'string' ? s : '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const text = (typeof p.text === 'string' ? p.text : '').replace(/[ \t\r\f\v]+/g, ' ').replace(/ *\n[\s]*/g, '\n').trim().slice(0, PAGE_MAX);
+    const about = line(p.description, 400);
+    return ASK_OPENING + '\n\nPAGE: ' + (line(p.title, 200) || '(no title)') + '\n' + (about ? 'ABOUT: ' + about + '\n' : '') + 'TEXT:\n' + text;
+  }
+  function readPage() {   // the page as its reader has it, without the kit's own chip, panel and code
+    const d = document.querySelector('meta[name="description"]');
+    const body = document.body ? document.body.cloneNode(true) : null;
+    if (body) {
+      body.querySelectorAll('#fk-modal-bg, #fk-ai-chip, #fk-toast, script, style, noscript, template').forEach((e) => e.remove());
+      body.querySelectorAll('td, th').forEach((e) => e.append(' | '));   // keep cells and blocks apart, as a reader sees them
+      body.querySelectorAll('p, div, li, tr, h1, h2, h3, h4, h5, h6, br, pre, dt, dd, figcaption, blockquote, section, article, header, footer, nav, label, button, option').forEach((e) => e.append('\n'));
+    }
+    return { title: document.title, description: d ? d.getAttribute('content') : '', text: body ? body.textContent : '' };
+  }
+  async function askPage(question) {
+    const q = String(question == null ? '' : question).trim();
+    if (!q) return { text: null, why: 'Type a question first.' };
+    if (aiTier() === 'T0') return { text: null, why: 'AI is off. Pick T2 (a model in your browser) or T3 (your own key) below, press Save, then ask.' };
+    const t = STATE.ask;
+    if (!t.opening || t.talk.length >= MAX_ASKS * 2) { t.opening = pageOpening(readPage()); t.talk = []; }
+    const r = await aiChat(t.opening, t.talk, q, 600);
+    if (!r) return { text: null, why: aiTier() === 'T2' ? 'The in-browser model is not loaded yet: press Load model below.' : 'No key is set for this provider: add one below and press Save.' };
+    t.talk.push({ role: 'user', content: q }, r.assistant);
+    t.last = r.text;
+    return { text: r.text, why: null };
+  }
+
+  // ═══════════════════════ IMAGE · aiImage ═══════════════════════════
+  async function aiImage(prompt, opts) {
+    opts = opts || {};
+    const providerKey = opts.provider || STATE.config.image_provider || 'fal';
+    const p = IMAGE_PROVIDERS[providerKey];
+    const key = getKey('image', providerKey);
+    if (!key) return null;
+    const model = opts.model || getModel('image', providerKey, IMAGE_PROVIDERS);
+
+    if (p.type === 'fal') {
+      const r = await fetch('https://fal.run/' + model, {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Key ' + key },
+        body: JSON.stringify({ prompt, image_size: opts.size || 'landscape_4_3', num_inference_steps: opts.steps || 4 }),
+      });
+      if (!r.ok) throw new Error('fal ' + r.status);
+      const j = await r.json();
+      return { url: j.images?.[0]?.url || j.image?.url, raw: j };
+    }
+    if (p.type === 'hf_image') {
+      const r = await fetch('https://api-inference.huggingface.co/models/' + model, {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ inputs: prompt }),
+      });
+      if (!r.ok) throw new Error('HF ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    if (p.type === 'replicate') {
+      const r = await fetch('https://api.replicate.com/v1/predictions', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Token ' + key, 'Prefer': 'wait' },
+        body: JSON.stringify({ version: model, input: { prompt, num_outputs: 1 } }),
+      });
+      if (!r.ok) throw new Error('Replicate ' + r.status);
+      const j = await r.json();
+      return { url: Array.isArray(j.output) ? j.output[0] : j.output, raw: j };
+    }
+    if (p.type === 'openai_image') {
+      const r = await fetch('https://api.openai.com/v1/images/generations', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, prompt, n: 1, size: opts.size || '1024x1024' }),
+      });
+      if (!r.ok) throw new Error('OpenAI ' + r.status);
+      const j = await r.json();
+      return { url: j.data[0].url, raw: j };
+    }
+    if (p.type === 'openai_image_compat') {
+      const r = await fetch(p.url, {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, prompt, n: 1 }),
+      });
+      if (!r.ok) throw new Error(p.label + ' ' + r.status);
+      const j = await r.json();
+      return { url: j.data[0].url, raw: j };
+    }
+    if (p.type === 'google_image') {
+      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':predict?key=' + encodeURIComponent(key), {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ instances: [{ prompt }], parameters: { sampleCount: 1 } }),
+      });
+      if (!r.ok) throw new Error('Google Imagen ' + r.status);
+      const j = await r.json();
+      return { url: 'data:image/png;base64,' + j.predictions[0].bytesBase64Encoded, raw: j };
+    }
+    if (p.type === 'ideogram') {
+      const r = await fetch('https://api.ideogram.ai/generate', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Api-Key': key },
+        body: JSON.stringify({ image_request: { prompt, model, aspect_ratio: opts.size || 'ASPECT_16_9' } }),
+      });
+      if (!r.ok) throw new Error('Ideogram ' + r.status);
+      const j = await r.json();
+      return { url: j.data[0].url, raw: j };
+    }
+    if (p.type === 'leonardo') {
+      const r = await fetch('https://cloud.leonardo.ai/api/rest/v1/generations', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ prompt, modelId: model, num_images: 1, width: 1024, height: 576 }),
+      });
+      if (!r.ok) throw new Error('Leonardo ' + r.status);
+      const j = await r.json();
+      return { id: j.sdGenerationJob.generationId, raw: j, note: 'poll /generations/:id for URL' };
+    }
+    throw new Error('unknown image provider type: ' + p.type);
+  }
+
+  // ═══════════════════════ VIDEO · aiVideo ═══════════════════════════
+  async function aiVideo(prompt, opts) {
+    opts = opts || {};
+    const providerKey = opts.provider || STATE.config.video_provider || 'fal';
+    const p = VIDEO_PROVIDERS[providerKey];
+    const key = getKey('video', providerKey);
+    if (!key) return null;
+    const model = opts.model || getModel('video', providerKey, VIDEO_PROVIDERS);
+
+    if (p.type === 'fal') {
+      const r = await fetch('https://fal.run/' + model, {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Key ' + key },
+        body: JSON.stringify({ prompt, duration: opts.duration || '5s', aspect_ratio: opts.aspect || '16:9' }),
+      });
+      if (!r.ok) throw new Error('fal ' + r.status);
+      const j = await r.json();
+      return { url: j.video?.url || j.output?.url, raw: j };
+    }
+    if (p.type === 'luma') {
+      const r = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ prompt, model, aspect_ratio: opts.aspect || '16:9' }),
+      });
+      if (!r.ok) throw new Error('Luma ' + r.status);
+      const j = await r.json();
+      return { id: j.id, raw: j, note: 'poll /generations/:id for URL' };
+    }
+    if (p.type === 'runway') {
+      const r = await fetch('https://api.dev.runwayml.com/v1/image_to_video', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key, 'X-Runway-Version': '2024-11-06' },
+        body: JSON.stringify({ model, promptText: prompt, duration: opts.duration || 5, ratio: opts.aspect || '1280:768' }),
+      });
+      if (!r.ok) throw new Error('Runway ' + r.status);
+      const j = await r.json();
+      return { id: j.id, raw: j, note: 'poll for URL' };
+    }
+    if (p.type === 'pika') {
+      const r = await fetch('https://api.pika.art/generate/2.0', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ prompt }),
+      });
+      if (!r.ok) throw new Error('Pika ' + r.status);
+      const j = await r.json();
+      return { id: j.id, raw: j, note: 'poll for URL' };
+    }
+    if (p.type === 'kling') {
+      const r = await fetch('https://api.klingai.com/v1/videos/text2video', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, prompt }),
+      });
+      if (!r.ok) throw new Error('Kling ' + r.status);
+      const j = await r.json();
+      return { id: j.data.task_id, raw: j, note: 'poll for URL' };
+    }
+    throw new Error('unknown video provider type: ' + p.type);
+  }
+
+  // ═══════════════════════ TTS · aiTTS ═══════════════════════════════
+  async function aiTTS(text, opts) {
+    opts = opts || {};
+    const providerKey = opts.provider || STATE.config.tts_provider || 'elevenlabs';
+    const p = TTS_PROVIDERS[providerKey];
+    const key = getKey('tts', providerKey);
+    if (!key) return null;
+    const model = opts.model || getModel('tts', providerKey, TTS_PROVIDERS);
+
+    if (p.type === 'elevenlabs') {
+      const voice = opts.voice || '21m00Tcm4TlvDq8ikWAM';
+      const r = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voice, {
+        method: 'POST', headers: { 'xi-api-key': key, 'content-type': 'application/json' },
+        body: JSON.stringify({ text, model_id: model }),
+      });
+      if (!r.ok) throw new Error('ElevenLabs ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    if (p.type === 'openai_tts') {
+      const r = await fetch('https://api.openai.com/v1/audio/speech', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, input: text, voice: opts.voice || 'alloy' }),
+      });
+      if (!r.ok) throw new Error('OpenAI TTS ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    if (p.type === 'cartesia') {
+      const r = await fetch('https://api.cartesia.ai/tts/bytes', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'X-API-Key': key, 'Cartesia-Version': '2024-11-13' },
+        body: JSON.stringify({ model_id: model, transcript: text, voice: { mode: 'id', id: opts.voice || 'a0e99841-438c-4a64-b679-ae501e7d6091' }, output_format: { container: 'mp3', encoding: 'mp3', sample_rate: 44100 } }),
+      });
+      if (!r.ok) throw new Error('Cartesia ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    if (p.type === 'playht') {
+      const r = await fetch('https://api.play.ht/api/v2/tts/stream', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key, 'X-USER-ID': opts.userId || '' },
+        body: JSON.stringify({ text, voice: opts.voice || 's3://voice-cloning-zero-shot/d9ff78ba-d016-47f6-b0ef-dd630f59414e/female-cs/manifest.json', voice_engine: model }),
+      });
+      if (!r.ok) throw new Error('PlayHT ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    throw new Error('unknown TTS provider type: ' + p.type);
+  }
+
+  // ═══════════════════════ STT · aiSTT ═══════════════════════════════
+  async function aiSTT(blob, opts) {
+    opts = opts || {};
+    const providerKey = opts.provider || STATE.config.stt_provider || 'deepgram';
+    const p = STT_PROVIDERS[providerKey];
+    const key = getKey('stt', providerKey);
+    if (!key) return null;
+    const model = opts.model || getModel('stt', providerKey, STT_PROVIDERS);
+
+    if (p.type === 'deepgram') {
+      const r = await fetch('https://api.deepgram.com/v1/listen?model=' + model + '&smart_format=true', {
+        method: 'POST', headers: { 'Authorization': 'Token ' + key, 'content-type': blob.type || 'audio/wav' },
+        body: blob,
+      });
+      if (!r.ok) throw new Error('Deepgram ' + r.status);
+      const j = await r.json();
+      return { text: j.results?.channels?.[0]?.alternatives?.[0]?.transcript, raw: j };
+    }
+    if (p.type === 'assemblyai') {
+      const up = await fetch('https://api.assemblyai.com/v2/upload', { method: 'POST', headers: { 'Authorization': key }, body: blob });
+      const upJ = await up.json();
+      const r = await fetch('https://api.assemblyai.com/v2/transcript', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': key },
+        body: JSON.stringify({ audio_url: upJ.upload_url, speech_model: model }),
+      });
+      if (!r.ok) throw new Error('AssemblyAI ' + r.status);
+      const j = await r.json();
+      return { id: j.id, raw: j, note: 'poll for text' };
+    }
+    if (p.type === 'openai_stt') {
+      const fd = new FormData();
+      fd.append('file', blob, 'audio.wav');
+      fd.append('model', model);
+      const r = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        method: 'POST', headers: { 'Authorization': 'Bearer ' + key }, body: fd,
+      });
+      if (!r.ok) throw new Error('OpenAI Whisper ' + r.status);
+      const j = await r.json();
+      return { text: j.text, raw: j };
+    }
+    throw new Error('unknown STT provider type: ' + p.type);
+  }
+
+  // ─── WebRTC P2P mesh ────────────────────────────────────────────────
+  const MESH_CHANNEL = 'fall-signal';
+  const MESH_MODULE = '/fall-kit/core/mesh.mjs', MESH_DEVICE = '/fall-kit/core/mesh-device.mjs';
+  // v3.2: the LIGHT mesh, loaded from this origin when the mesh is switched on. null = JSON, as before v3.2.
+  async function lightMesh() {
+    try {
+      const [M, D] = await Promise.all([import(MESH_MODULE), import(MESH_DEVICE)]);
+      const dev = await D.openDevice();
+      const tab = crypto.getRandomValues(new Uint32Array(1))[0];
+      return { M, dev, tab, seq: 0, last: new Map() };
+    } catch (e) { return null; }
+  }
+  function meshSend(value) {
+    const L = STATE.mesh.light, bc = STATE.mesh.bc;
+    if (!L) { bc.postMessage(value); STATE.mesh.stats.sent++; return; }
+    L.seq += 1;
+    L.M.speak(value, { slot: L.dev.slot, tab: L.tab, seq: L.seq, sign: L.dev.sign }).then((r) => { if (r.ok && STATE.mesh.bc) { STATE.mesh.bc.postMessage(r.bytes); STATE.mesh.stats.sent++; } });
+  }
+  async function meshStart(opts) {
+    if (STATE.mesh.active) return;
+    opts = opts || {};
+    const seedId = opts.seedId || (location.pathname + '#' + Math.random().toString(36).slice(2, 8));
+    STATE.mesh.seedId = seedId;
+    try { STATE.mesh.bc = new BroadcastChannel(MESH_CHANNEL); }
+    catch (e) { console.warn('fall-kit: BroadcastChannel unavailable'); return; }
+    STATE.mesh.active = true;
+    STATE.mesh.light = opts.light === false ? null : await lightMesh();
+    const st = STATE.mesh.stats;
+    STATE.mesh.bc.onmessage = async (e) => {
+      const L = STATE.mesh.light;
+      if (!L) {
+        const m = e.data;
+        if (!m || !m.kind || m.peerId === seedId) return;
+        if (opts.onMessage) opts.onMessage(m);
+        return;
+      }
+      const r = await L.M.hearMesh(e.data, { slot: L.dev.slot, id: L.dev.id, raw: L.dev.raw, verifyBytes: L.dev.verifyBytes, last: L.last });
+      if (!r.ok) { st.refused[r.stage] = (st.refused[r.stage] || 0) + 1; return; }
+      if (r.legacy) st.legacy++; else st.admitted++;
+      if (r.value.peerId === seedId) return;
+      if (opts.onMessage) opts.onMessage(Object.assign({}, r.value, r.legacy ? { legacy: true } : { light: true, tab: r.tab }));
+    };
+    meshSend({ kind: 'fall-kit:hello', peerId: seedId, ts: Date.now(), seedName: opts.seedName || 'unknown' });
+    notify('Mesh active · channel ' + MESH_CHANNEL + (STATE.mesh.light ? ' · LIGHT' : ''), 'ok');
+  }
+  function meshPost(kind, payload) {
+    if (!STATE.mesh.active || !STATE.mesh.bc) return false;
+    meshSend({ kind: kind, peerId: STATE.mesh.seedId, ts: Date.now(), payload: payload });
+    return true;
+  }
+  function meshStats() {
+    const s = STATE.mesh.stats;
+    return { active: STATE.mesh.active, light: !!STATE.mesh.light, tab: STATE.mesh.light ? STATE.mesh.light.tab : null, sent: s.sent, admitted: s.admitted, legacy: s.legacy, refused: Object.assign({}, s.refused) };
+  }
+
+  // ─── Toast ──────────────────────────────────────────────────────────
+  function notify(msg, kind) {
+    let t = $('#fk-toast');
+    if (!t) {
+      t = document.createElement('div'); t.id = 'fk-toast';
+      t.style.cssText = 'position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:#c08a3a;color:#0a0a0a;padding:9px 18px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;opacity:0;transition:all .22s;z-index:10000;pointer-events:none';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.background = kind === 'err' ? '#a14a2a' : kind === 'ok' ? '#6b8d4a' : '#c08a3a';
+    t.style.color = kind === 'err' ? '#fff' : '#0a0a0a';
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(t._to);
+    t._to = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2400);
+  }
+
+  // ─── Settings modal · tabs for text/image/video/audio ───────────────
+  function providerOptions(registry, currentKey) {
+    return Object.entries(registry).map(([k, p]) => `<option value="${k}"${currentKey===k?' selected':''}>${esc(p.label)}</option>`).join('');
+  }
+  function modelOptions(registry, providerKey, currentModel) {
+    const p = registry[providerKey]; if (!p) return '';
+    return p.models.map(m => `<option value="${m}"${currentModel===m?' selected':''}>${esc(m)}</option>`).join('');
+  }
+
+  function openSettings(startTab) {
+    let bg = $('#fk-modal-bg');
+    if (!bg) {
+      bg = document.createElement('div'); bg.id = 'fk-modal-bg';
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;overflow-y:auto;z-index:9999';
+      bg.onclick = e => { if (e.target.id === 'fk-modal-bg') closeSettings(); };
+      document.body.appendChild(bg);
+    }
+    const tier = aiTier();
+    const tab = startTab || STATE._lastTab || 'text';
+    STATE._lastTab = tab;
+    const textP = activeTextProvider();
+    const imgP = STATE.config.image_provider || 'fal';
+    const vidP = STATE.config.video_provider || 'fal';
+    const ttsP = STATE.config.tts_provider || 'elevenlabs';
+    const sttP = STATE.config.stt_provider || 'deepgram';
+
+    const styleInput = 'width:100%;padding:8px 11px;background:#22212c;border:1px solid #3a342c;color:#ebe3d2;border-radius:3px;font-size:13px;font-family:inherit;margin-bottom:10px';
+    const styleLabel = 'display:block;font-size:11px;color:#a89e88;letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase';
+
+    function modalityBlock(modality, registry, currentProvider, currentKeyVal, currentModel) {
+      const p = registry[currentProvider];
+      return `
+        <label style="${styleLabel}">Provider</label>
+        <select id="fk-${modality}-provider" style="${styleInput}">${providerOptions(registry, currentProvider)}</select>
+        <label style="${styleLabel}">Model</label>
+        <select id="fk-${modality}-model" style="${styleInput}">${modelOptions(registry, currentProvider, currentModel)}</select>
+        <label style="${styleLabel}">API key</label>
+        <input type="password" id="fk-${modality}-key" value="${esc(currentKeyVal)}" placeholder="${currentKeyVal ? '(set · leave to keep)' : 'paste key here'}" autocomplete="off" style="${styleInput};font-family:ui-monospace,Menlo,monospace">
+        <div style="font-size:11px;color:#6e6a5e;line-height:1.55;margin-top:2px">Key held in this tab only (unless you tick “remember” below). Sent direct to the provider — never proxied through us.</div>
+      `;
+    }
+
+    bg.innerHTML = `
+      <div style="background:#13121a;border:1px solid #c08a3a;border-radius:5px;max-width:640px;width:100%;padding:22px 24px;color:#ebe3d2;font-family:system-ui,-apple-system,sans-serif;font-size:13.5px;line-height:1.55">
+        <h3 style="font-family:Georgia,serif;font-size:18px;color:#c08a3a;margin-bottom:14px">◊ Fall Kit · your AI helper</h3>
+
+        <div style="margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label for="fk-ask" style="${styleLabel}">Ask about this page</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input id="fk-ask" type="text" placeholder="How do I use this?" autocomplete="off" style="${styleInput};flex:1;min-width:180px;margin-bottom:0">
+            <button id="fk-ask-go" style="padding:7px 14px;background:#c08a3a;color:#0a0a0a;border:none;border-radius:3px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">Ask</button>
+            <button id="fk-ask-new" style="padding:7px 12px;background:transparent;color:#a89e88;border:1px solid #3a342c;border-radius:3px;font-size:11px;cursor:pointer;font-family:inherit">Start again</button>
+          </div>
+          <div id="fk-ask-out" aria-live="polite" style="white-space:pre-wrap;margin-top:10px;font-size:13px;color:#ebe3d2;line-height:1.6"></div>
+          <div style="font-size:11px;color:#6e6a5e;line-height:1.55;margin-top:6px">Answered from this page’s own words, by the brain you pick below. The page is read once per talk and sent the same each time, so a provider that caches pays for it once.</div>
+        </div>
+
+        <div style="margin-bottom:14px"><label style="${styleLabel}">Tier</label>
+          <select id="fk-tier" style="${styleInput}">
+            <option value="T0"${tier==='T0'?' selected':''}>T0 · off (default · the seed works fully without AI)</option>
+            <option value="T2"${tier==='T2'?' selected':''}>T2 · WebLLM in-browser · sovereign · pick a model below</option>
+            <option value="T3"${tier==='T3'?' selected':''}>T3 · BYOK · configure providers per modality below</option>
+          </select>
+        </div>
+
+        <div id="fk-t2-block" style="display:${tier==='T2'?'block':'none'};margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label style="${styleLabel}">WebLLM model · 1B → 70B cascade</label>
+          <select id="fk-model" style="${styleInput}">
+            ${Object.entries(WEBLLM_MODELS).map(([k,m]) => `<option value="${k}"${(STATE.config.webllm_model||DEFAULT_MODEL)===k?' selected':''}>${esc(m.label)} · ${esc(m.size)}</option>`).join('')}
+          </select>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <button id="fk-load-llm" style="padding:7px 14px;background:#c08a3a;color:#0a0a0a;border:none;border-radius:3px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">${STATE.ai.ready?'✓ Loaded · switch':'Load model (one-time download)'}</button>
+            <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.04em">${STATE.ai.ready?'ready':STATE.ai.loading?Math.round(STATE.ai.progress)+'%':'not loaded'}</span>
+          </div>
+        </div>
+
+        <div id="fk-t3-block" style="display:${tier==='T3'?'block':'none'};margin-bottom:14px">
+          <div style="display:flex;gap:2px;margin-bottom:10px;border-bottom:1px solid #2a2934">
+            ${['text','image','video','tts','stt'].map(m => `<button data-tab="${m}" class="fk-tab${tab===m?' on':''}" style="padding:8px 14px;background:${tab===m?'#22212c':'transparent'};color:${tab===m?'#c08a3a':'#a89e88'};border:none;border-bottom:2px solid ${tab===m?'#c08a3a':'transparent'};font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;cursor:pointer">${m}</button>`).join('')}
+          </div>
+          <div style="padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+            ${tab==='text'  ? modalityBlock('text',  TEXT_PROVIDERS,  textP, getKey('text',  textP), getModel('text',  textP, TEXT_PROVIDERS))  : ''}
+            ${tab==='image' ? modalityBlock('image', IMAGE_PROVIDERS, imgP,  getKey('image', imgP),  getModel('image', imgP,  IMAGE_PROVIDERS)) : ''}
+            ${tab==='video' ? modalityBlock('video', VIDEO_PROVIDERS, vidP,  getKey('video', vidP),  getModel('video', vidP,  VIDEO_PROVIDERS)) : ''}
+            ${tab==='tts'   ? modalityBlock('tts',   TTS_PROVIDERS,   ttsP,  getKey('tts',   ttsP),  getModel('tts',   ttsP,   TTS_PROVIDERS))   : ''}
+            ${tab==='stt'   ? modalityBlock('stt',   STT_PROVIDERS,   sttP,  getKey('stt',   sttP),  getModel('stt',   sttP,   STT_PROVIDERS))   : ''}
+          </div>
+          <label style="display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:12px;color:#ebe3d2;cursor:pointer"><input type="checkbox" id="fk-remember"${STATE.config.remember_keys===true?' checked':''} style="margin-top:2px"> Remember my keys on this device</label>
+          <div style="font-size:11px;color:#a14a2a;line-height:1.55;margin:4px 0 0 22px">Every estate page at this web address shares this browser’s storage, so a remembered key can be read by any of them. Leave it off and your keys are held in this tab only: close it and they are gone.</div>
+          <button id="fk-forget" style="margin-top:10px;padding:6px 12px;background:transparent;color:#a89e88;border:1px solid #3a342c;border-radius:3px;font-size:11px;cursor:pointer;font-family:inherit">Forget my keys</button>
+        </div>
+
+        <div style="margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label style="${styleLabel}">Cross-seed mesh</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="fk-mesh-toggle" style="padding:6px 12px;background:${STATE.mesh.active?'#6b8d4a':'#1a1922'};color:${STATE.mesh.active?'#fff':'#a89e88'};border:1px solid ${STATE.mesh.active?'#6b8d4a':'#3a342c'};border-radius:3px;font-size:11px;cursor:pointer;font-family:inherit">${STATE.mesh.active?'✓ Active · disconnect':'Activate mesh'}</button>
+            <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#6e6a5e;letter-spacing:.04em">channel · <code style="background:#22212c;padding:1px 5px;border-radius:2px">${MESH_CHANNEL}</code></span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+          <button onclick="FallKit.closeSettings()" style="padding:7px 14px;background:transparent;color:#a89e88;border:1px solid #3a342c;border-radius:3px;font-size:12px;cursor:pointer;font-family:inherit">Close</button>
+          <button id="fk-save" style="padding:7px 14px;background:#c08a3a;color:#0a0a0a;border:none;border-radius:3px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">Save</button>
+        </div>
+        <div style="margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:9px;color:#6e6a5e;letter-spacing:.08em;text-align:center">◊ Fall Kit v${FALL_KIT_VERSION} · MIT · ai-nativesolutions.com</div>
+      </div>`;
+
+    const askOut = $('#fk-ask-out');
+    if (STATE.ask.last) askOut.textContent = STATE.ask.last;
+    const ask = async () => {
+      const go = $('#fk-ask-go'); go.disabled = true; askOut.textContent = '…';
+      try { const r = await askPage($('#fk-ask').value); askOut.textContent = r.text === null ? r.why : r.text; }
+      catch (e) { askOut.textContent = 'The provider said no: ' + e.message; }
+      go.disabled = false;
+    };
+    $('#fk-ask-go').onclick = ask;
+    $('#fk-ask').onkeydown = (e) => { if (e.key === 'Enter') ask(); };
+    $('#fk-ask-new').onclick = () => { STATE.ask = { opening: null, talk: [], last: null }; askOut.textContent = 'A fresh talk: the page is read again at the next question.'; };
+
+    $('#fk-tier').onchange = () => {
+      const t = $('#fk-tier').value;
+      $('#fk-t2-block').style.display = t === 'T2' ? 'block' : 'none';
+      $('#fk-t3-block').style.display = t === 'T3' ? 'block' : 'none';
+    };
+    document.querySelectorAll('.fk-tab').forEach(b => b.onclick = () => { STATE._lastTab = b.dataset.tab; openSettings(b.dataset.tab); });
+
+    ['text','image','video','tts','stt'].forEach(m => {
+      const sel = $('#fk-' + m + '-provider');
+      if (!sel) return;
+      const registry = { text: TEXT_PROVIDERS, image: IMAGE_PROVIDERS, video: VIDEO_PROVIDERS, tts: TTS_PROVIDERS, stt: STT_PROVIDERS }[m];
+      sel.onchange = () => {
+        const pk = sel.value;
+        const modelSel = $('#fk-' + m + '-model');
+        modelSel.innerHTML = modelOptions(registry, pk, registry[pk].default);
+        const keyInput = $('#fk-' + m + '-key');
+        const existing = getKey(m, pk);
+        keyInput.value = existing;
+        keyInput.placeholder = existing ? '(set · leave to keep)' : 'paste key here';
+      };
+    });
+
+    $('#fk-load-llm') && ($('#fk-load-llm').onclick = () => { loadWebLLM($('#fk-model').value); });
+    $('#fk-mesh-toggle').onclick = () => {
+      if (STATE.mesh.active) { STATE.mesh.bc?.close(); STATE.mesh.active = false; STATE.mesh.bc = null; notify('Mesh disconnected'); }
+      else meshStart({ seedName: STATE.config.seedName || 'seed' });
+      openSettings(STATE._lastTab);
+    };
+
+    $('#fk-forget') && ($('#fk-forget').onclick = () => { forgetKeys(); notify('Keys forgotten · this tab and this device', 'ok'); openSettings(STATE._lastTab); });
+    $('#fk-save').onclick = () => {
+      STATE.config.ai_tier = $('#fk-tier').value;
+      if ($('#fk-remember')) STATE.config.remember_keys = $('#fk-remember').checked;
+      if ($('#fk-model')) STATE.config.webllm_model = $('#fk-model').value;
+      ['text','image','video','tts','stt'].forEach(m => {
+        const provSel = $('#fk-' + m + '-provider');
+        if (!provSel) return;
+        const pk = provSel.value;
+        const model = $('#fk-' + m + '-model').value;
+        const newKey = $('#fk-' + m + '-key').value.trim();
+        const existing = getKey(m, pk);
+        STATE.config[m + '_provider'] = pk;
+        if (newKey || existing) setKey(m, pk, newKey || existing, model);
+      });
+      saveConfig(); renderAiChip(); notify('Saved', 'ok'); closeSettings();
+    };
+  }
+  function closeSettings() { const bg = $('#fk-modal-bg'); if (bg) bg.remove(); }
+
+  // ─── Help section ───────────────────────────────────────────────────
+  function helpSection() {
+    return `<div style="background:rgba(192,138,58,.05);border:1px solid #3a342c;border-radius:4px;padding:18px 22px;margin:14px 0">
+      <h4 style="font-family:Georgia,serif;font-size:15px;color:#c08a3a;margin-bottom:12px">◊ Fall Kit · AI cascade · 3 tiers · 5 modalities</h4>
+      <p style="font-size:13px;color:#a89e88;line-height:1.7;margin-bottom:10px">This seed runs fully without AI (<strong style="color:#c08a3a">T0</strong>, default). Enable a tier in settings if you want AI-assist:</p>
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+        <thead><tr><th style="padding:6px 10px;text-align:left;background:rgba(0,0,0,.2);font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.08em;text-transform:uppercase">Tier</th><th style="padding:6px 10px;text-align:left;background:rgba(0,0,0,.2);font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.08em;text-transform:uppercase">What it is</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T0</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">Off. The seed works fully. No AI · no downloads · no API calls.</td></tr>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T2</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">WebLLM in-browser. Pick a model: 1B (700MB) → 3B (2GB, default) → 7B (5GB) → 70B (40GB). One-time download, offline forever. Zero data leaves.</td></tr>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T3</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">BYOK · 12 text providers (Claude, GPT, Gemini, Groq, Cerebras, DeepSeek, OpenRouter, Mistral, Cohere, Together, HuggingFace, Grok) · 7 image (fal, HF, Replicate, DALL-E, Imagen, Ideogram, Leonardo, Aurora) · 5 video (fal, Luma, Runway, Pika, Kling) · 4 TTS (ElevenLabs, OpenAI, PlayHT, Cartesia) · 3 STT (Deepgram, AssemblyAI, Whisper). You bring keys, you pay direct. Keys are held in this tab only, unless you choose to remember them on this device. The same opening is sent first every time, so a provider that caches can reuse its reading of it.</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:#6e6a5e;line-height:1.6;margin-top:10px">Open the AI chip in the header to switch tier or check status. Cross-seed mesh activates a BroadcastChannel on <code style="background:#1a1922;padding:1px 5px;border-radius:2px">${MESH_CHANNEL}</code> so other estate seeds on the same device discover this one.</p>
+    </div>`;
+  }
+
+  // ─── CSS for AI chip ────────────────────────────────────────────────
+  function injectCss() {
+    if (STATE.cssIn) return;   // the kit knows it added its styles; no lookup of an id the build's own page never has
+    STATE.cssIn = true;
+    const s = document.createElement('style');
+    s.id = 'fk-css';
+    s.textContent = `
+      #fk-ai-chip { display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:3px; font-family:ui-monospace,Menlo,monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; cursor:pointer; border:1px solid #3a342c; background:#1a1922; color:#a89e88; user-select:none; vertical-align:middle }
+      #fk-ai-chip:hover { border-color:#c08a3a; color:#ebe3d2 }
+      #fk-ai-chip.fk-chip-live { border-color:#6b8d4a; color:#6b8d4a; background:rgba(107,141,74,.10) }
+      #fk-ai-chip.fk-chip-loading { border-color:#e8a83a; color:#e8a83a; background:rgba(232,168,58,.10) }
+      #fk-ai-chip.fk-chip-warn { border-color:#a14a2a; color:#a14a2a; background:rgba(161,74,42,.08) }
+      #fk-ai-chip .fk-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0 }
+      #fk-ai-chip.fk-chip-loading .fk-dot { animation:fk-pulse 1s infinite }
+      @keyframes fk-pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+      .fk-ai-assist { display:inline-flex; align-items:center; gap:5px; padding:4px 9px; font-size:11px; border:1px solid #c08a3a; color:#c08a3a; background:transparent; border-radius:3px; cursor:pointer; font-family:inherit }
+      .fk-ai-assist:hover { background:#c08a3a; color:#0a0a0a }
+      .fk-ai-assist::before { content:'✦'; font-size:12px }
+    `;
+    document.head.appendChild(s);
+  }
+
+  // ─── The floating chip keeps clear of the build's own fixed bars and controls ─────────
+  // A build's bottom tab bar or floating button stays put while the page scrolls, so a chip over it would hide it. The
+  // chip looks at what is under it and moves up past it; a fixed container as tall as the page counts only by the
+  // control under the chip. Content that scrolls is not in the way.
+  function blockerUnder(el) {
+    let fixed = null;
+    for (let e = el; e && e !== document.body && e !== document.documentElement; e = e.parentElement) {
+      const pos = getComputedStyle(e).position;
+      if (pos === 'fixed' || pos === 'sticky') { fixed = e; break; }
+    }
+    if (!fixed) return null;
+    if (fixed.getBoundingClientRect().height <= innerHeight * 0.4) return fixed;
+    return el.closest('button, a, input, select, textarea, label, [role=button], [tabindex]');
+  }
+  function placeChip(chip) {
+    if (!chip || chip.dataset.anchored) return;
+    chip.style.top = ''; chip.style.bottom = '14px';
+    for (let i = 0; i < 6; i++) {
+      const r = chip.getBoundingClientRect();
+      chip.style.visibility = 'hidden';
+      const hit = [[r.left + 2, r.top + 2], [r.right - 2, r.top + 2], [r.left + 2, r.bottom - 2], [r.right - 2, r.bottom - 2]]
+        .map(([x, y]) => document.elementFromPoint(x, y)).filter(Boolean).map(blockerUnder).find(Boolean);
+      chip.style.visibility = '';
+      if (!hit) return;
+      const bottom = innerHeight - hit.getBoundingClientRect().top + 8;
+      if (bottom > innerHeight * 0.6) { chip.style.bottom = ''; chip.style.top = '14px'; return; }
+      chip.style.bottom = bottom + 'px';
+    }
+  }
+
+  // ─── Init ───────────────────────────────────────────────────────────
+  function init(opts) {
+    opts = opts || {};
+    injectCss();
+    if (opts.seedName) STATE.config.seedName = opts.seedName;
+    if ($('#fk-ai-chip')) { renderAiChip(); return { version: FALL_KIT_VERSION, mounted: false }; }
+    const chip = document.createElement('button');
+    chip.id = 'fk-ai-chip';
+    chip.title = 'AI helper · ask about this page, or pick the brain';
+    chip.innerHTML = '<span class="fk-dot"></span><span id="fk-ai-chip-text">T0 · off</span>';
+    chip.onclick = () => openSettings();
+    const anchor = opts.chipAnchor ? $(opts.chipAnchor) : null;
+    if (anchor) { anchor.appendChild(chip); chip.dataset.anchored = '1'; }
+    else {
+      chip.style.cssText += ';position:fixed;bottom:14px;left:14px;z-index:9998;box-shadow:0 4px 14px rgba(0,0,0,.4)';
+      document.body.appendChild(chip);
+      const place = () => placeChip(chip);
+      setTimeout(place, 0); setTimeout(place, 1200);   // once now, once after the build has laid itself out
+      let t = null; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(place, 200); });
+    }
+    renderAiChip();
+    if (BOOT.moved) notify('AI keys are now held in this tab only · tick “remember” in AI settings to keep them', 'info');
+    return { version: FALL_KIT_VERSION, mounted: true };
+  }
+
+  // ─── Public API ─────────────────────────────────────────────────────
+  root.FallKit = {
+    version: FALL_KIT_VERSION,
+    init: init,
+    aiTier: aiTier,
+    aiComplete: aiComplete,
+    aiChat: aiChat,
+    askPage: askPage,
+    pageOpening: pageOpening,
+    lastUsage: () => STATE.lastUsage,
+    forgetKeys: forgetKeys,
+    requestOf: requestOf,
+    textOf: textOf,
+    usageOf: usageOf,
+    configFrom: configFrom,
+    storedForm: storedForm,
+    aiImage: aiImage,
+    aiVideo: aiVideo,
+    aiTTS: aiTTS,
+    aiSTT: aiSTT,
+    loadWebLLM: loadWebLLM,
+    openSettings: openSettings,
+    closeSettings: closeSettings,
+    renderAiChip: renderAiChip,
+    helpSection: helpSection,
+    meshStart: meshStart,
+    meshPost: meshPost,
+    meshStats: meshStats,
+    notify: notify,
+    MODELS: WEBLLM_MODELS,
+    TEXT_PROVIDERS: TEXT_PROVIDERS,
+    IMAGE_PROVIDERS: IMAGE_PROVIDERS,
+    VIDEO_PROVIDERS: VIDEO_PROVIDERS,
+    TTS_PROVIDERS: TTS_PROVIDERS,
+    STT_PROVIDERS: STT_PROVIDERS,
+    state: STATE,
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+  // fall-kit init · auto-mounts a floating AI chip bottom-left
+  (function () {
+    function go() { if (typeof FallKit !== 'undefined') FallKit.init({ seedName: "fallcrm" }); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go);
+    else go();
+  })();
+</script>
+<!-- FALL_KIT_END v1 -->
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>◊ <em>fallcrm</em></h1>
+    <span class="tag">sovereign · single file · prime 373 · v1.0</span>
+  </div>
+  <nav class="nav">
+    <button data-view="contacts" class="active">Contacts</button>
+    <button data-view="pipeline">Pipeline</button>
+    <button data-view="analytics">Analytics</button>
+    <button data-view="email">Email Helper</button>
+    <button data-view="settings">Settings</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- CONTACTS -->
+<section class="view active" id="view-contacts">
+  <div class="toolbar">
+    <input type="search" id="cSearch" placeholder="Search contacts · name · company · email · tag">
+    <select id="cTagFilter"><option value="">All tags</option></select>
+    <span class="grow"></span>
+    <button class="btn ghost sm" id="importBtn">Import CSV / vCard</button>
+    <button class="btn ghost sm" id="exportContactsBtn">Export</button>
+    <button class="btn gold" id="addContactBtn">+ Contact</button>
+  </div>
+  <table class="contacts">
+    <thead><tr>
+      <th>Name</th><th>Company</th><th>Role</th><th>Email</th><th>Phone</th><th>Tags</th><th>Last contact</th>
+    </tr></thead>
+    <tbody id="contactRows"></tbody>
+  </table>
+  <div id="contactEmpty" class="empty-state" style="display:none">
+    <div class="glyph">◊</div>
+    <p>No contacts. Add one or import from CSV / vCard.</p>
+    <button class="btn gold" onclick="openContactModal()">+ Add first contact</button>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section class="view" id="view-pipeline">
+  <div class="toolbar">
+    <div class="view-toggle">
+      <button class="active" data-pview="kanban">Kanban</button>
+      <button data-pview="list">List</button>
+    </div>
+    <input type="search" id="dSearch" placeholder="Search deals">
+    <span class="grow"></span>
+    <button class="btn ghost sm" id="exportDealsBtn">Export deals</button>
+    <button class="btn gold" id="addDealBtn">+ Deal</button>
+  </div>
+  <div class="kanban" id="kanban"></div>
+  <table class="deals" id="dealTable" style="display:none">
+    <thead><tr><th>Title</th><th>Contact</th><th>Stage</th><th>Value</th><th>Expected close</th><th>Updated</th></tr></thead>
+    <tbody id="dealRows"></tbody>
+  </table>
+</section>
+
+<!-- ANALYTICS -->
+<section class="view" id="view-analytics">
+  <div class="metrics" id="metrics"></div>
+  <div class="funnel">
+    <h3>Pipeline funnel · stage conversion · weighted forecast</h3>
+    <div id="funnelRows"></div>
+  </div>
+</section>
+
+<!-- EMAIL HELPER -->
+<section class="view" id="view-email">
+  <div class="settings-grid">
+    <div class="panel">
+      <h2>Compose · context-aware draft</h2>
+      <div class="field">
+        <label>Template</label>
+        <select id="eTemplate">
+          <option value="intro">Cold intro</option>
+          <option value="followup">Follow-up after demo</option>
+          <option value="proposal">Proposal cover</option>
+          <option value="loss-reason">Ask for loss reason</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Linked deal (optional)</label>
+        <select id="eDeal"><option value="">— none —</option></select>
+      </div>
+      <div class="field">
+        <label>Contact name</label>
+        <input type="text" id="eName" placeholder="e.g. Alex Morgan">
+      </div>
+      <div class="field">
+        <label>Company</label>
+        <input type="text" id="eCompany" placeholder="e.g. Northwind Ltd">
+      </div>
+      <div class="field">
+        <label>Custom context (one line)</label>
+        <input type="text" id="eContext" placeholder="e.g. saw your Q4 hiring post">
+      </div>
+      <button class="btn gold" id="eGenerate">Generate draft ▸</button>
+    </div>
+    <div class="panel">
+      <h2>Output</h2>
+      <div class="field">
+        <label>Subject</label>
+        <input type="text" id="eSubject" readonly>
+      </div>
+      <div class="field">
+        <label>Body</label>
+        <textarea id="eBody" rows="14" readonly style="font-family:'DM Mono';font-size:12px;line-height:1.7"></textarea>
+      </div>
+      <button class="btn" id="eCopy">Copy to clipboard</button>
+      <button class="btn ghost" id="eMailto">Open in mail app</button>
+    </div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section class="view" id="view-settings">
+  <div class="settings-grid">
+    <div class="panel">
+      <h2>The replacement counter</h2>
+      <p>This is what you saved by using fallcrm instead of HubSpot Pro · Salesforce Sales Cloud · Pipedrive Advanced.</p>
+      <div class="savings" id="savings">$0</div>
+      <div class="savings-sub" id="savingsSub">since you started · single seat</div>
+      <div class="comparison">
+        <div class="line"><span class="ko">HubSpot Pro</span><span>$450/mo</span></div>
+        <div class="line"><span class="ko">Salesforce Sales Cloud Pro</span><span>$165/mo</span></div>
+        <div class="line"><span class="ko">Pipedrive Advanced</span><span>$49/mo</span></div>
+        <div class="line"><span class="ok">fallcrm · sovereign tier</span><span class="ok">$0/mo</span></div>
+      </div>
+      <p style="margin-top:18px;font-size:11px;color:var(--muted)">Set your start date to compute properly. Or rely on the first-contact date as anchor.</p>
+      <div class="field" style="margin-top:8px"><label>Anchor date</label><input type="date" id="anchorDate"></div>
+    </div>
+    <div class="panel">
+      <h2>Quota · sovereign tier</h2>
+      <div class="quotacard">
+        <div>
+          <div class="qlabel">Contacts</div>
+          <div class="qnum"><span id="qContacts">0</span> <span style="color:var(--muted);font-size:14px">/ <span id="qContactsMax">50</span></span></div>
+        </div>
+        <div>
+          <div class="qlabel">Deals</div>
+          <div class="qnum"><span id="qDeals">0</span> <span style="color:var(--muted);font-size:14px">/ <span id="qDealsMax">20</span></span></div>
+        </div>
+      </div>
+      <p style="margin-top:14px">Free cap · 50 contacts · 20 deals · single user · subtle watermark. Lift the cap with a Konomi paid licence.</p>
+      <div class="field" style="margin-top:10px"><label>Konomi licence key</label><input type="text" id="kLicence" placeholder="kn-xxxx-xxxx-xxxx (paste to activate)"></div>
+      <button class="btn" id="kActivate">Activate</button>
+      <button class="btn ghost" id="kClear">Clear</button>
+      <p id="kStatus" style="margin-top:10px;font-family:'DM Mono';font-size:11.5px;color:var(--brass)"></p>
+    </div>
+    <div class="panel">
+      <h2>Data · export / import / wipe</h2>
+      <p>All data lives in your browser's IndexedDB. Nothing leaves this device unless you export it.</p>
+      <button class="btn ghost" id="exportAllBtn">Export full JSON</button>
+      <button class="btn ghost" id="importAllBtn">Import JSON</button>
+      <button class="btn ghost" id="wipeBtn" style="border-color:var(--ox);color:#ff8a7a">Wipe all data</button>
+      <p style="margin-top:14px;font-size:11px;color:var(--muted)">Tip · pair fallcrm with <a style="color:var(--brass)" href="https://sjgant80-hub.github.io/fall-vetter/">fall-vetter</a> to dedupe imports before they land.</p>
+    </div>
+    <div class="panel">
+      <h2>fallmesh · prime 373</h2>
+      <p>fallcrm emits to <code style="color:var(--brass)">fall-signal</code> on the BroadcastChannel · other estate tools can listen for <code style="color:var(--brass)">deal_won</code> · <code style="color:var(--brass)">deal_lost</code> · <code style="color:var(--brass)">contact_added</code> events.</p>
+      <p style="font-family:'DM Mono';font-size:11px;color:var(--muted);margin-top:8px">Toggle below to disable broadcast (private mode).</p>
+      <label style="font-family:'DM Mono';font-size:12px;display:flex;align-items:center;gap:8px;margin-top:8px">
+        <input type="checkbox" id="meshToggle" checked> emit fall-signal events
+      </label>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- CONTACT MODAL -->
+<div class="modal-backdrop" id="contactModal">
+  <div class="modal">
+    <header><h2 id="cModalTitle">New contact</h2></header>
+    <div class="body">
+      <div class="row2">
+        <div class="field"><label>Name *</label><input type="text" id="cmName"></div>
+        <div class="field"><label>Company</label><input type="text" id="cmCompany"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Role</label><input type="text" id="cmRole"></div>
+        <div class="field"><label>Email</label><input type="email" id="cmEmail"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Phone</label><input type="tel" id="cmPhone"></div>
+        <div class="field"><label>LinkedIn URL</label><input type="url" id="cmLinkedIn" placeholder="https://linkedin.com/in/..."></div>
+      </div>
+      <div class="field"><label>Tags (comma separated)</label><input type="text" id="cmTags" placeholder="warm, decision-maker, fintech"></div>
+      <div class="field"><label>Last contact date</label><input type="date" id="cmLastContact"></div>
+      <div class="field"><label>Notes</label><textarea id="cmNotes" rows="3"></textarea></div>
+      <div class="activity-log" id="cmActivityLog" style="display:none">
+        <h3>Activity</h3>
+        <div id="cmActivities"></div>
+        <div class="activity-add">
+          <select id="cmActKind">
+            <option value="call">call</option>
+            <option value="meeting">meeting</option>
+            <option value="email">email</option>
+            <option value="note">note</option>
+          </select>
+          <input type="text" id="cmActNote" placeholder="What happened?">
+          <button class="btn sm" id="cmActAdd">+ log</button>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" id="cmDelete" style="border-color:var(--ox);color:#ff8a7a;display:none">Delete</button>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn ghost" id="cmCancel">Cancel</button>
+        <button class="btn gold" id="cmSave">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEAL MODAL -->
+<div class="modal-backdrop" id="dealModal">
+  <div class="modal">
+    <header><h2 id="dModalTitle">New deal</h2></header>
+    <div class="body">
+      <div class="field"><label>Title *</label><input type="text" id="dmTitle"></div>
+      <div class="row2">
+        <div class="field"><label>Contact</label><select id="dmContact"></select></div>
+        <div class="field"><label>Stage</label><select id="dmStage">
+          <option>Lead</option><option>Qualified</option><option>Demo</option>
+          <option>Proposal</option><option>Negotiation</option>
+          <option>Closed-Won</option><option>Closed-Lost</option>
+        </select></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Value (£)</label><input type="number" id="dmValue" min="0" step="100"></div>
+        <div class="field"><label>Expected close</label><input type="date" id="dmClose"></div>
+      </div>
+      <div class="field"><label>Notes</label><textarea id="dmNotes" rows="4"></textarea></div>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" id="dmDelete" style="border-color:var(--ox);color:#ff8a7a;display:none">Delete</button>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn ghost" id="dmCancel">Cancel</button>
+        <button class="btn gold" id="dmSave">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" style="display:none" accept=".csv,.vcf,.json">
+
+<footer>
+  ◊ fallcrm · prime 373 · MIT · sovereign single-file CRM · the delete-HubSpot wedge · part of the AIN estate · <a href="https://github.com/sjgant80-hub/fallcrm">source</a>
+</footer>
+
+<div class="watermark" id="watermark">◊ fallcrm sovereign tier</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+ * fallcrm v1.0 · sovereign single-file CRM
+ * prime 373 · MIT · Simon Gant
+ * IndexedDB primary, localStorage fallback
+ * Vanilla JS · no build step · works from file://
+ * ========================================================= */
+
+const FREE_CAPS = { contacts: 50, deals: 20 };
+const STAGES = ['Lead','Qualified','Demo','Proposal','Negotiation','Closed-Won','Closed-Lost'];
+const STAGE_PROB = { Lead:0.10, Qualified:0.25, Demo:0.40, Proposal:0.60, Negotiation:0.80, 'Closed-Won':1.0, 'Closed-Lost':0.0 };
+const REPLACE_RATE = 450; /* USD per month replaced (HubSpot Pro single seat) */
+
+/* ---------- STORAGE: IndexedDB w/ localStorage fallback ---------- */
+const DB = (function(){
+  const NAME = 'fallcrm', VERSION = 1;
+  let db = null, ready = null;
+  const lsKey = k => 'fallcrm:' + k;
+  const usingLS = () => !window.indexedDB;
+
+  function open() {
+    if (usingLS()) return Promise.resolve(null);
+    if (ready) return ready;
+    ready = new Promise((res, rej) => {
+      const req = indexedDB.open(NAME, VERSION);
+      req.onupgradeneeded = e => {
+        const d = e.target.result;
+        ['contacts','deals','activities','settings'].forEach(s => {
+          if (!d.objectStoreNames.contains(s)) d.createObjectStore(s, { keyPath: 'id' });
+        });
+      };
+      req.onsuccess = e => { db = e.target.result; res(db); };
+      req.onerror = e => rej(e.target.error);
+    });
+    return ready;
+  }
+  async function all(store) {
+    if (usingLS()) return JSON.parse(localStorage.getItem(lsKey(store)) || '[]');
+    await open();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(store, 'readonly');
+      const req = tx.objectStore(store).getAll();
+      req.onsuccess = () => res(req.result || []);
+      req.onerror = () => rej(req.error);
+    });
+  }
+  async function put(store, obj) {
+    if (usingLS()) {
+      const arr = JSON.parse(localStorage.getItem(lsKey(store)) || '[]');
+      const i = arr.findIndex(x => x.id === obj.id);
+      if (i >= 0) arr[i] = obj; else arr.push(obj);
+      localStorage.setItem(lsKey(store), JSON.stringify(arr));
+      return obj;
+    }
+    await open();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(store, 'readwrite');
+      tx.objectStore(store).put(obj);
+      tx.oncomplete = () => res(obj);
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+  async function del(store, id) {
+    if (usingLS()) {
+      const arr = JSON.parse(localStorage.getItem(lsKey(store)) || '[]').filter(x => x.id !== id);
+      localStorage.setItem(lsKey(store), JSON.stringify(arr));
+      return;
+    }
+    await open();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(store, 'readwrite');
+      tx.objectStore(store).delete(id);
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+  async function clearAll() {
+    if (usingLS()) {
+      ['contacts','deals','activities','settings'].forEach(s => localStorage.removeItem(lsKey(s)));
+      return;
+    }
+    await open();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(['contacts','deals','activities','settings'], 'readwrite');
+      ['contacts','deals','activities','settings'].forEach(s => tx.objectStore(s).clear());
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+  return { all, put, del, clearAll, open };
+})();
+
+/* ---------- KONOMI LICENCE SHIM (minimal) ---------- */
+const Konomi = (function(){
+  const KEY = 'fallcrm:konomi';
+  function status() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!s) return { tier: 'sovereign', valid: true, message: 'sovereign tier · single user · free cap active' };
+      const exp = s.exp ? new Date(s.exp) : null;
+      if (exp && exp < new Date()) return { tier: 'sovereign', valid: false, message: 'paid licence expired · reverted to sovereign tier' };
+      return { tier: s.tier || 'paid', valid: true, exp: exp ? exp.toISOString().slice(0,10) : null, message: `${(s.tier||'paid').toUpperCase()} licence active${exp ? ' until ' + exp.toISOString().slice(0,10) : ' · perpetual'}` };
+    } catch(e) { return { tier:'sovereign', valid:true, message: 'sovereign tier' }; }
+  }
+  function activate(key) {
+    /* Format: kn-<tier>-<expYYYYMMDD>-<sig8> · sig is an XOR placeholder.
+       Real validation happens server-side when the user actually buys.
+       Here we accept any key starting with kn- and length >= 14, parse tier+exp. */
+    if (!/^kn-/.test(key) || key.length < 14) return { ok:false, message:'invalid key format · expected kn-...' };
+    const parts = key.split('-');
+    const tier = parts[1] || 'paid';
+    const expRaw = parts[2] || '';
+    let exp = null;
+    if (/^\d{8}$/.test(expRaw)) exp = `${expRaw.slice(0,4)}-${expRaw.slice(4,6)}-${expRaw.slice(6,8)}`;
+    localStorage.setItem(KEY, JSON.stringify({ tier, exp, activatedAt: new Date().toISOString() }));
+    return { ok:true, tier, exp };
+  }
+  function clear() { localStorage.removeItem(KEY); }
+  return { status, activate, clear };
+})();
+
+/* ---------- FALLMESH (BroadcastChannel) ---------- */
+const Mesh = (function(){
+  let chan = null, enabled = true;
+  try { chan = new BroadcastChannel('fall-signal'); } catch(e) {}
+  function emit(kind, payload) {
+    if (!enabled || !chan) return;
+    try {
+      chan.postMessage({ source: 'fallcrm', prime: 373, kind, payload, at: new Date().toISOString() });
+    } catch(e) {}
+  }
+  function setEnabled(b) { enabled = !!b; }
+  return { emit, setEnabled };
+})();
+
+/* ---------- STATE ---------- */
+let state = { contacts: [], deals: [], activities: [], settings: {} };
+let ui = { view: 'contacts', pview: 'kanban', searchC: '', searchD: '', tagFilter: '', editingContact: null, editingDeal: null };
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+
+async function loadAll() {
+  state.contacts   = await DB.all('contacts');
+  state.deals      = await DB.all('deals');
+  state.activities = await DB.all('activities');
+  const s = await DB.all('settings');
+  state.settings = s.length ? s[0] : { id:'main', anchorDate:null, meshEnabled:true };
+  if (state.contacts.length === 0 && state.deals.length === 0) seedExamples();
+}
+
+async function saveContact(c) { await DB.put('contacts', c); }
+async function saveDeal(d)    { await DB.put('deals', d); }
+async function saveActivity(a){ await DB.put('activities', a); }
+async function saveSettings() { await DB.put('settings', state.settings); }
+
+/* ---------- SEED ---------- */
+function seedExamples() {
+  const today = new Date();
+  const iso = (d) => d.toISOString().slice(0,10);
+  const back = (n) => { const d = new Date(today); d.setDate(d.getDate()-n); return iso(d); };
+  const fwd  = (n) => { const d = new Date(today); d.setDate(d.getDate()+n); return iso(d); };
+
+  const contacts = [
+    { id: uid(), name:'Alex Morgan',  company:'Northwind Logistics', role:'Head of Ops',     email:'alex@northwind.example',  linkedin:'https://linkedin.com/in/alexmorgan', phone:'+44 20 7946 0001', tags:['warm','logistics'], lastContact: back(3),  notes:'Saw our case study via LinkedIn. Asked about onboarding time.' },
+    { id: uid(), name:'Priya Shah',    company:'Halcyon Health',     role:'COO',             email:'priya@halcyon.example',   linkedin:'https://linkedin.com/in/priyashah',  phone:'+44 161 555 0188', tags:['decision-maker','health'], lastContact: back(1), notes:'Demo went well. Looping in CFO next.' },
+    { id: uid(), name:'Marcus Osei',  company:'Sable & Steele',     role:'Managing Partner', email:'marcus@sablesteele.example', linkedin:'https://linkedin.com/in/marcusosei', phone:'+44 7700 900123', tags:['legal','warm'], lastContact: back(7),  notes:'Wants quote · 12 seats · GDPR sensitive.' },
+    { id: uid(), name:'Yuki Tanaka',   company:'Kintsugi Studios',   role:'Founder',         email:'yuki@kintsugi.example',   linkedin:'https://linkedin.com/in/yukitanaka',  phone:'+44 7700 900456', tags:['creative','warm'], lastContact: back(14), notes:'Replied to cold intro. Slow inbound. Patient deal.' },
+    { id: uid(), name:'Eleanor Voss',  company:'Voss Capital',       role:'Partner',         email:'eleanor@vosscap.example', linkedin:'https://linkedin.com/in/eleanorvoss', phone:'+44 7700 900789', tags:['vc','referrer'], lastContact: back(2),  notes:'Not a buyer · sends referrals. Treat as a node.' },
+  ];
+  const deals = [
+    { id: uid(), title:'Northwind · pilot 25-seat',  contactId: contacts[0].id, stage:'Demo',        value:18000, expectedClose: fwd(21), notes:'Pilot scoped. Procurement in 2 weeks.', updatedAt: iso(today) },
+    { id: uid(), title:'Halcyon · 80 seats Q3',      contactId: contacts[1].id, stage:'Proposal',    value:54000, expectedClose: fwd(14), notes:'Proposal sent. CFO meeting Tue.',     updatedAt: iso(today) },
+    { id: uid(), title:'Sable & Steele · 12 seats',  contactId: contacts[2].id, stage:'Negotiation', value:14400, expectedClose: fwd(7),  notes:'Pushing back on GDPR clauses. Legal next.', updatedAt: iso(today) },
+  ];
+  const activities = [
+    { id: uid(), contactId: contacts[1].id, kind:'meeting', note:'Discovery call · 45m · pains: legacy Salesforce', at: back(5) },
+    { id: uid(), contactId: contacts[1].id, kind:'email',   note:'Sent recap and pricing matrix',                    at: back(2) },
+    { id: uid(), contactId: contacts[2].id, kind:'call',    note:'15m budget gate confirmed',                        at: back(4) },
+  ];
+  contacts.forEach(c => DB.put('contacts', c));
+  deals.forEach(d => DB.put('deals', d));
+  activities.forEach(a => DB.put('activities', a));
+  state.contacts = contacts;
+  state.deals = deals;
+  state.activities = activities;
+}
+
+/* ---------- ROUTING ---------- */
+function switchView(name) {
+  ui.view = name;
+  document.querySelectorAll('header .nav button').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+  if (name === 'contacts') renderContacts();
+  if (name === 'pipeline') renderPipeline();
+  if (name === 'analytics') renderAnalytics();
+  if (name === 'email') renderEmail();
+  if (name === 'settings') renderSettings();
+}
+document.querySelectorAll('header .nav button').forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
+
+/* ---------- CONTACTS RENDER ---------- */
+function uniqueTags() {
+  const s = new Set();
+  state.contacts.forEach(c => (c.tags || []).forEach(t => s.add(t)));
+  return [...s].sort();
+}
+function renderContacts() {
+  const tbody = document.getElementById('contactRows');
+  const sel = document.getElementById('cTagFilter');
+  const existing = sel.value;
+  sel.innerHTML = '<option value="">All tags</option>' + uniqueTags().map(t => `<option ${t===existing?'selected':''}>${esc(t)}</option>`).join('');
+
+  const q = ui.searchC.toLowerCase().trim();
+  const tag = ui.tagFilter;
+  const rows = state.contacts.filter(c => {
+    if (tag && !(c.tags||[]).includes(tag)) return false;
+    if (!q) return true;
+    return JSON.stringify(c).toLowerCase().includes(q);
+  });
+  rows.sort((a,b) => (b.lastContact || '').localeCompare(a.lastContact || ''));
+
+  tbody.innerHTML = rows.map(c => `
+    <tr data-id="${c.id}">
+      <td><strong>${esc(c.name)}</strong></td>
+      <td>${esc(c.company || '')}</td>
+      <td class="role">${esc(c.role || '')}</td>
+      <td>${c.email ? `<a style="color:var(--brass);text-decoration:none" href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : ''}</td>
+      <td>${esc(c.phone || '')}</td>
+      <td>${(c.tags||[]).map(t => `<span class="tagchip">${esc(t)}</span>`).join('')}</td>
+      <td style="color:var(--muted);font-family:'DM Mono';font-size:11.5px">${esc(c.lastContact || '—')}</td>
+    </tr>`).join('');
+
+  tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', () => openContactModal(tr.dataset.id)));
+  document.getElementById('contactEmpty').style.display = rows.length === 0 ? 'block' : 'none';
+  document.querySelector('table.contacts').style.display = rows.length === 0 ? 'none' : '';
+  updateQuotaDisplay();
+}
+
+/* ---------- PIPELINE RENDER ---------- */
+function renderPipeline() {
+  const useKanban = ui.pview === 'kanban';
+  document.getElementById('kanban').style.display = useKanban ? '' : 'none';
+  document.getElementById('dealTable').style.display = useKanban ? 'none' : '';
+  if (useKanban) renderKanban(); else renderDealList();
+}
+function renderKanban() {
+  const root = document.getElementById('kanban');
+  const q = ui.searchD.toLowerCase().trim();
+  root.innerHTML = STAGES.map(stage => {
+    const deals = state.deals.filter(d => d.stage === stage && (!q || JSON.stringify(d).toLowerCase().includes(q)));
+    const total = deals.reduce((s,d) => s + (Number(d.value)||0), 0);
+    return `<div class="kcol" data-stage="${stage}">
+      <h3>${stage} <span class="count">${deals.length} · £${fmt(total)}</span></h3>
+      <div class="kbody">${deals.map(d => dealCardHTML(d)).join('')}</div>
+    </div>`;
+  }).join('');
+  /* drag & drop */
+  root.querySelectorAll('.dcard').forEach(card => {
+    card.draggable = true;
+    card.addEventListener('dragstart', e => {
+      card.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', card.dataset.id);
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+    card.addEventListener('click', () => openDealModal(card.dataset.id));
+  });
+  root.querySelectorAll('.kcol').forEach(col => {
+    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('drop-target'); });
+    col.addEventListener('dragleave', () => col.classList.remove('drop-target'));
+    col.addEventListener('drop', async e => {
+      e.preventDefault();
+      col.classList.remove('drop-target');
+      const id = e.dataTransfer.getData('text/plain');
+      const stage = col.dataset.stage;
+      const d = state.deals.find(x => x.id === id);
+      if (!d || d.stage === stage) return;
+      const prevStage = d.stage;
+      d.stage = stage;
+      d.updatedAt = new Date().toISOString().slice(0,10);
+      await saveDeal(d);
+      if (stage === 'Closed-Won')  Mesh.emit('deal_won',  { id: d.id, value: d.value, title: d.title });
+      if (stage === 'Closed-Lost') Mesh.emit('deal_lost', { id: d.id, value: d.value, title: d.title, prev: prevStage });
+      renderKanban();
+      toast(`Moved → ${stage}`);
+    });
+  });
+}
+function dealCardHTML(d) {
+  const c = state.contacts.find(x => x.id === d.contactId);
+  return `<div class="dcard" data-id="${d.id}">
+    <h4>${esc(d.title)}</h4>
+    <div class="val">£${fmt(d.value || 0)}</div>
+    <div class="who">${esc(c ? c.name + ' · ' + (c.company||'') : 'unlinked')}</div>
+    ${d.expectedClose ? `<div class="close">close · ${esc(d.expectedClose)}</div>` : ''}
+  </div>`;
+}
+function renderDealList() {
+  const tbody = document.getElementById('dealRows');
+  const q = ui.searchD.toLowerCase().trim();
+  const rows = state.deals.filter(d => !q || JSON.stringify(d).toLowerCase().includes(q));
+  rows.sort((a,b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+  tbody.innerHTML = rows.map(d => {
+    const c = state.contacts.find(x => x.id === d.contactId);
+    return `<tr data-id="${d.id}">
+      <td><strong>${esc(d.title)}</strong></td>
+      <td>${esc(c ? c.name + ' · ' + (c.company||'') : '—')}</td>
+      <td><span class="stagebadge" data-stage="${d.stage}">${d.stage}</span></td>
+      <td style="font-family:'DM Mono';color:var(--gold)">£${fmt(d.value||0)}</td>
+      <td style="font-family:'DM Mono';font-size:11.5px;color:var(--cream)">${esc(d.expectedClose || '—')}</td>
+      <td style="font-family:'DM Mono';font-size:11px;color:var(--muted)">${esc(d.updatedAt || '—')}</td>
+    </tr>`;
+  }).join('');
+  tbody.querySelectorAll('tr').forEach(tr => tr.addEventListener('click', () => openDealModal(tr.dataset.id)));
+}
+
+/* ---------- ANALYTICS ---------- */
+function renderAnalytics() {
+  const open = state.deals.filter(d => d.stage !== 'Closed-Won' && d.stage !== 'Closed-Lost');
+  const won  = state.deals.filter(d => d.stage === 'Closed-Won');
+  const lost = state.deals.filter(d => d.stage === 'Closed-Lost');
+  const pipelineVal = open.reduce((s,d) => s + (Number(d.value)||0), 0);
+  const weighted = open.reduce((s,d) => s + (Number(d.value)||0) * (STAGE_PROB[d.stage]||0), 0);
+  const wonVal = won.reduce((s,d) => s + (Number(d.value)||0), 0);
+  const winRate = (won.length + lost.length) > 0 ? Math.round(won.length / (won.length + lost.length) * 100) : 0;
+  /* velocity = avg days from oldest activity to close for won deals (rough proxy: days from updatedAt - 30) */
+  /* expected this month: weighted value of deals closing within current calendar month */
+  const now = new Date();
+  const monthEnd = new Date(now.getFullYear(), now.getMonth()+1, 0);
+  const expectedMonth = open.reduce((s,d) => {
+    if (!d.expectedClose) return s;
+    const ec = new Date(d.expectedClose);
+    if (ec <= monthEnd) return s + (Number(d.value)||0) * (STAGE_PROB[d.stage]||0);
+    return s;
+  }, 0);
+
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric"><div class="label">Open pipeline</div><div class="val">£${fmt(pipelineVal)}</div><div class="sub">${open.length} open deal${open.length===1?'':'s'}</div></div>
+    <div class="metric"><div class="label">Weighted forecast</div><div class="val">£${fmt(Math.round(weighted))}</div><div class="sub">stage-weighted · all open</div></div>
+    <div class="metric"><div class="label">Expected this month</div><div class="val">£${fmt(Math.round(expectedMonth))}</div><div class="sub">closing ≤ ${monthEnd.toISOString().slice(0,10)}</div></div>
+    <div class="metric"><div class="label">Closed-won (lifetime)</div><div class="val">£${fmt(wonVal)}</div><div class="sub">${won.length} won · ${lost.length} lost</div></div>
+    <div class="metric"><div class="label">Win rate</div><div class="val">${winRate}%</div><div class="sub">of resolved deals</div></div>
+    <div class="metric"><div class="label">Contacts</div><div class="val">${state.contacts.length}</div><div class="sub">${uniqueTags().length} tag${uniqueTags().length===1?'':'s'}</div></div>
+  `;
+
+  const maxCount = Math.max(1, ...STAGES.map(s => state.deals.filter(d => d.stage === s).length));
+  document.getElementById('funnelRows').innerHTML = STAGES.map(s => {
+    const deals = state.deals.filter(d => d.stage === s);
+    const count = deals.length;
+    const val = deals.reduce((a,d) => a + (Number(d.value)||0), 0);
+    const pct = Math.round(count / maxCount * 100);
+    return `<div class="frow">
+      <div>${s}</div>
+      <div class="fbar"><div class="fill" data-stage="${s}" style="width:${pct}%"></div></div>
+      <div class="fcount">${count}</div>
+      <div class="fval">£${fmt(val)}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- EMAIL HELPER ---------- */
+const TEMPLATES = {
+  intro: (ctx) => ({
+    subject: `Quick question · ${ctx.company || 'your team'}`,
+    body: `Hi ${ctx.name || 'there'},
+
+${ctx.context ? ctx.context + '. ' : ''}I'm reaching out because I think there may be a fit between what you're building at ${ctx.company || '[company]'} and what we do.
+
+Worth a 15-minute call next week to see if it's worth either of our time?
+
+Best,
+[your name]`
+  }),
+  followup: (ctx) => ({
+    subject: `Following up · ${ctx.company || 'our chat'}`,
+    body: `Hi ${ctx.name || 'there'},
+
+Thanks for the time on the demo. ${ctx.context ? 'Quick note on what you raised — ' + ctx.context + '. ' : ''}A few next steps from my side:
+
+· I'll send over the proposal by [date]
+· Happy to loop in [stakeholder] when useful
+· If timing is wrong now, I'll circle back in Q[?]
+
+Anything else you need from me to move this forward?
+
+Best,
+[your name]`
+  }),
+  proposal: (ctx) => ({
+    subject: `Proposal · ${ctx.company || '[company]'} · ${new Date().toISOString().slice(0,10)}`,
+    body: `Hi ${ctx.name || 'there'},
+
+Proposal attached for ${ctx.company || '[company]'}.${ctx.context ? ' Built around what you mentioned: ' + ctx.context + '.' : ''}
+
+Highlights:
+· [headline scope]
+· [headline outcome]
+· [headline price]
+
+Happy to walk through it live this week — let me know what works.
+
+Best,
+[your name]`
+  }),
+  'loss-reason': (ctx) => ({
+    subject: `One last ask · ${ctx.company || ''}`,
+    body: `Hi ${ctx.name || 'there'},
+
+Understood on going a different direction. No hard feelings.
+
+One ask if you have 30 seconds — what was the deciding factor? Honest answer helps me know if this was a fit issue, a pricing issue, a timing issue, or something we missed on the pitch.
+
+Either way, I appreciated the conversation and hope to cross paths again.
+
+Best,
+[your name]`
+  }),
+};
+
+function renderEmail() {
+  const sel = document.getElementById('eDeal');
+  sel.innerHTML = '<option value="">— none —</option>' + state.deals.map(d => `<option value="${d.id}">${esc(d.title)}</option>`).join('');
+}
+document.getElementById('eDeal').addEventListener('change', e => {
+  const d = state.deals.find(x => x.id === e.target.value);
+  if (!d) return;
+  const c = state.contacts.find(x => x.id === d.contactId);
+  if (c) {
+    document.getElementById('eName').value = c.name || '';
+    document.getElementById('eCompany').value = c.company || '';
+  }
+  document.getElementById('eContext').value = d.notes ? d.notes.slice(0, 100) : '';
+});
+document.getElementById('eGenerate').addEventListener('click', () => {
+  const t = document.getElementById('eTemplate').value;
+  const ctx = {
+    name: document.getElementById('eName').value.trim().split(' ')[0],
+    company: document.getElementById('eCompany').value.trim(),
+    context: document.getElementById('eContext').value.trim(),
+  };
+  const out = TEMPLATES[t](ctx);
+  document.getElementById('eSubject').value = out.subject;
+  document.getElementById('eBody').value = out.body;
+});
+document.getElementById('eCopy').addEventListener('click', async () => {
+  const subject = document.getElementById('eSubject').value;
+  const body = document.getElementById('eBody').value;
+  if (!body) { toast('Generate a draft first'); return; }
+  try {
+    await navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
+    toast('Copied to clipboard');
+  } catch(e) { toast('Copy failed · select manually'); }
+});
+document.getElementById('eMailto').addEventListener('click', () => {
+  const subject = encodeURIComponent(document.getElementById('eSubject').value);
+  const body = encodeURIComponent(document.getElementById('eBody').value);
+  window.open(`mailto:?subject=${subject}&body=${body}`);
+});
+
+/* ---------- SETTINGS ---------- */
+function renderSettings() {
+  /* savings */
+  const lic = Konomi.status();
+  const anchor = state.settings.anchorDate ? new Date(state.settings.anchorDate) : null;
+  const fallback = state.contacts.reduce((d, c) => {
+    if (!c.lastContact) return d;
+    const t = new Date(c.lastContact);
+    return (!d || t < d) ? t : d;
+  }, null);
+  const start = anchor || fallback || new Date();
+  const months = Math.max(0, ((new Date() - start) / (1000*60*60*24*30)));
+  const saved = Math.round(months * REPLACE_RATE);
+  document.getElementById('savings').textContent = '$' + fmt(saved);
+  document.getElementById('savingsSub').textContent = `since ${start.toISOString().slice(0,10)} · vs HubSpot Pro single seat ($${REPLACE_RATE}/mo)`;
+  document.getElementById('anchorDate').value = state.settings.anchorDate || '';
+
+  document.getElementById('qContacts').textContent = state.contacts.length;
+  document.getElementById('qDeals').textContent = state.deals.length;
+  const caps = lic.tier === 'sovereign' ? FREE_CAPS : { contacts: '∞', deals: '∞' };
+  document.getElementById('qContactsMax').textContent = caps.contacts;
+  document.getElementById('qDealsMax').textContent = caps.deals;
+  document.getElementById('kStatus').textContent = lic.message;
+  document.getElementById('meshToggle').checked = state.settings.meshEnabled !== false;
+}
+document.getElementById('anchorDate').addEventListener('change', async e => {
+  state.settings.anchorDate = e.target.value;
+  await saveSettings();
+  renderSettings();
+});
+document.getElementById('meshToggle').addEventListener('change', async e => {
+  state.settings.meshEnabled = e.target.checked;
+  Mesh.setEnabled(e.target.checked);
+  await saveSettings();
+});
+document.getElementById('kActivate').addEventListener('click', () => {
+  const k = document.getElementById('kLicence').value.trim();
+  const r = Konomi.activate(k);
+  if (!r.ok) { toast(r.message); return; }
+  toast(`Licence activated · tier ${r.tier}`);
+  document.getElementById('kLicence').value = '';
+  updateQuotaDisplay();
+  renderSettings();
+});
+document.getElementById('kClear').addEventListener('click', () => {
+  Konomi.clear();
+  toast('Licence cleared · sovereign tier');
+  updateQuotaDisplay();
+  renderSettings();
+});
+
+function updateQuotaDisplay() {
+  const lic = Konomi.status();
+  const wm = document.getElementById('watermark');
+  if (lic.tier === 'sovereign') wm.classList.remove('paid'); else wm.classList.add('paid');
+}
+
+/* ---------- CONTACT MODAL ---------- */
+function openContactModal(id) {
+  const lic = Konomi.status();
+  if (!id && lic.tier === 'sovereign' && state.contacts.length >= FREE_CAPS.contacts) {
+    toast(`Free cap reached · ${FREE_CAPS.contacts} contacts. Upgrade in Settings.`);
+    return;
+  }
+  ui.editingContact = id || null;
+  const c = id ? state.contacts.find(x => x.id === id) : null;
+  document.getElementById('cModalTitle').textContent = c ? 'Edit contact' : 'New contact';
+  document.getElementById('cmName').value = c ? c.name : '';
+  document.getElementById('cmCompany').value = c ? c.company || '' : '';
+  document.getElementById('cmRole').value = c ? c.role || '' : '';
+  document.getElementById('cmEmail').value = c ? c.email || '' : '';
+  document.getElementById('cmPhone').value = c ? c.phone || '' : '';
+  document.getElementById('cmLinkedIn').value = c ? c.linkedin || '' : '';
+  document.getElementById('cmTags').value = c ? (c.tags || []).join(', ') : '';
+  document.getElementById('cmLastContact').value = c ? c.lastContact || '' : new Date().toISOString().slice(0,10);
+  document.getElementById('cmNotes').value = c ? c.notes || '' : '';
+  document.getElementById('cmDelete').style.display = c ? '' : 'none';
+  document.getElementById('cmActivityLog').style.display = c ? '' : 'none';
+  if (c) renderContactActivities(c.id);
+  document.getElementById('contactModal').classList.add('open');
+}
+function renderContactActivities(contactId) {
+  const acts = state.activities.filter(a => a.contactId === contactId).sort((a,b) => (b.at||'').localeCompare(a.at||''));
+  document.getElementById('cmActivities').innerHTML = acts.length === 0
+    ? `<div style="color:var(--muted);font-family:'DM Mono';font-size:11.5px;padding:6px 0">No activity yet.</div>`
+    : acts.map(a => `<div class="activity-item">
+        <span class="kind">${a.kind}</span> ${esc(a.note)}
+        <div class="ts">${esc(a.at)}</div>
+      </div>`).join('');
+}
+document.getElementById('cmActAdd').addEventListener('click', async () => {
+  if (!ui.editingContact) return;
+  const note = document.getElementById('cmActNote').value.trim();
+  if (!note) return;
+  const a = {
+    id: uid(),
+    contactId: ui.editingContact,
+    kind: document.getElementById('cmActKind').value,
+    note,
+    at: new Date().toISOString().slice(0,10),
+  };
+  await saveActivity(a);
+  state.activities.push(a);
+  document.getElementById('cmActNote').value = '';
+  /* bump lastContact */
+  const c = state.contacts.find(x => x.id === ui.editingContact);
+  if (c) { c.lastContact = a.at; await saveContact(c); }
+  renderContactActivities(ui.editingContact);
+});
+document.getElementById('cmCancel').addEventListener('click', () => document.getElementById('contactModal').classList.remove('open'));
+document.getElementById('cmSave').addEventListener('click', async () => {
+  const name = document.getElementById('cmName').value.trim();
+  if (!name) { toast('Name required'); return; }
+  const obj = {
+    id: ui.editingContact || uid(),
+    name,
+    company: document.getElementById('cmCompany').value.trim(),
+    role: document.getElementById('cmRole').value.trim(),
+    email: document.getElementById('cmEmail').value.trim(),
+    phone: document.getElementById('cmPhone').value.trim(),
+    linkedin: document.getElementById('cmLinkedIn').value.trim(),
+    tags: document.getElementById('cmTags').value.split(',').map(s => s.trim()).filter(Boolean),
+    lastContact: document.getElementById('cmLastContact').value,
+    notes: document.getElementById('cmNotes').value.trim(),
+  };
+  const isNew = !ui.editingContact;
+  await saveContact(obj);
+  if (isNew) state.contacts.push(obj);
+  else state.contacts = state.contacts.map(c => c.id === obj.id ? obj : c);
+  if (isNew) Mesh.emit('contact_added', { id: obj.id, name: obj.name, company: obj.company });
+  document.getElementById('contactModal').classList.remove('open');
+  renderContacts();
+  toast(isNew ? 'Contact added' : 'Contact saved');
+});
+document.getElementById('cmDelete').addEventListener('click', async () => {
+  if (!ui.editingContact) return;
+  if (!confirm('Delete this contact? Activities will be removed too.')) return;
+  await DB.del('contacts', ui.editingContact);
+  for (const a of state.activities.filter(a => a.contactId === ui.editingContact)) await DB.del('activities', a.id);
+  state.contacts = state.contacts.filter(c => c.id !== ui.editingContact);
+  state.activities = state.activities.filter(a => a.contactId !== ui.editingContact);
+  document.getElementById('contactModal').classList.remove('open');
+  renderContacts();
+  toast('Contact deleted');
+});
+document.getElementById('addContactBtn').addEventListener('click', () => openContactModal());
+
+/* ---------- DEAL MODAL ---------- */
+function openDealModal(id) {
+  const lic = Konomi.status();
+  if (!id && lic.tier === 'sovereign' && state.deals.length >= FREE_CAPS.deals) {
+    toast(`Free cap reached · ${FREE_CAPS.deals} deals. Upgrade in Settings.`);
+    return;
+  }
+  ui.editingDeal = id || null;
+  const d = id ? state.deals.find(x => x.id === id) : null;
+  document.getElementById('dModalTitle').textContent = d ? 'Edit deal' : 'New deal';
+  document.getElementById('dmTitle').value = d ? d.title : '';
+  const sel = document.getElementById('dmContact');
+  sel.innerHTML = '<option value="">— none —</option>' + state.contacts.map(c => `<option value="${c.id}" ${d && d.contactId===c.id?'selected':''}>${esc(c.name)} · ${esc(c.company||'')}</option>`).join('');
+  document.getElementById('dmStage').value = d ? d.stage : 'Lead';
+  document.getElementById('dmValue').value = d ? d.value || '' : '';
+  document.getElementById('dmClose').value = d ? d.expectedClose || '' : '';
+  document.getElementById('dmNotes').value = d ? d.notes || '' : '';
+  document.getElementById('dmDelete').style.display = d ? '' : 'none';
+  document.getElementById('dealModal').classList.add('open');
+}
+document.getElementById('dmCancel').addEventListener('click', () => document.getElementById('dealModal').classList.remove('open'));
+document.getElementById('dmSave').addEventListener('click', async () => {
+  const title = document.getElementById('dmTitle').value.trim();
+  if (!title) { toast('Title required'); return; }
+  const prevStage = ui.editingDeal ? (state.deals.find(x => x.id === ui.editingDeal) || {}).stage : null;
+  const obj = {
+    id: ui.editingDeal || uid(),
+    title,
+    contactId: document.getElementById('dmContact').value,
+    stage: document.getElementById('dmStage').value,
+    value: Number(document.getElementById('dmValue').value) || 0,
+    expectedClose: document.getElementById('dmClose').value,
+    notes: document.getElementById('dmNotes').value.trim(),
+    updatedAt: new Date().toISOString().slice(0,10),
+  };
+  const isNew = !ui.editingDeal;
+  await saveDeal(obj);
+  if (isNew) state.deals.push(obj);
+  else state.deals = state.deals.map(d => d.id === obj.id ? obj : d);
+  if (obj.stage === 'Closed-Won' && prevStage !== 'Closed-Won')   Mesh.emit('deal_won',  { id: obj.id, value: obj.value, title: obj.title });
+  if (obj.stage === 'Closed-Lost' && prevStage !== 'Closed-Lost') Mesh.emit('deal_lost', { id: obj.id, value: obj.value, title: obj.title, prev: prevStage });
+  document.getElementById('dealModal').classList.remove('open');
+  renderPipeline();
+  toast(isNew ? 'Deal added' : 'Deal saved');
+});
+document.getElementById('dmDelete').addEventListener('click', async () => {
+  if (!ui.editingDeal) return;
+  if (!confirm('Delete this deal?')) return;
+  await DB.del('deals', ui.editingDeal);
+  state.deals = state.deals.filter(d => d.id !== ui.editingDeal);
+  document.getElementById('dealModal').classList.remove('open');
+  renderPipeline();
+  toast('Deal deleted');
+});
+document.getElementById('addDealBtn').addEventListener('click', () => openDealModal());
+
+/* ---------- TOOLBAR WIRING ---------- */
+document.getElementById('cSearch').addEventListener('input', e => { ui.searchC = e.target.value; renderContacts(); });
+document.getElementById('cTagFilter').addEventListener('change', e => { ui.tagFilter = e.target.value; renderContacts(); });
+document.getElementById('dSearch').addEventListener('input', e => { ui.searchD = e.target.value; renderPipeline(); });
+document.querySelectorAll('.view-toggle button[data-pview]').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.view-toggle button[data-pview]').forEach(x => x.classList.toggle('active', x === b));
+    ui.pview = b.dataset.pview;
+    renderPipeline();
+  });
+});
+
+/* ---------- IMPORT / EXPORT ---------- */
+document.getElementById('importBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+document.getElementById('importAllBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  e.target.value = '';
+  if (file.name.toLowerCase().endsWith('.json')) await importJSON(text);
+  else if (file.name.toLowerCase().endsWith('.vcf')) await importVCard(text);
+  else await importCSV(text);
+});
+async function importCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) { toast('CSV looks empty'); return; }
+  const headers = parseCSVRow(lines[0]).map(h => h.toLowerCase().trim());
+  const idx = (names) => { for (const n of names) { const i = headers.indexOf(n); if (i >= 0) return i; } return -1; };
+  const ni = idx(['name','full name','contact','first name']);
+  const ei = idx(['email','e-mail']);
+  const ci = idx(['company','organization','organisation']);
+  const pi = idx(['phone','mobile','telephone']);
+  const ri = idx(['role','title','position','job title']);
+  const ti = idx(['tags']);
+  let added = 0;
+  for (let i = 1; i < lines.length; i++) {
+    const row = parseCSVRow(lines[i]);
+    const name = ni >= 0 ? row[ni] : row[0];
+    if (!name || !name.trim()) continue;
+    const lic = Konomi.status();
+    if (lic.tier === 'sovereign' && state.contacts.length >= FREE_CAPS.contacts) { toast(`Hit free cap at ${FREE_CAPS.contacts}`); break; }
+    const c = {
+      id: uid(),
+      name: name.trim(),
+      email: ei >= 0 ? (row[ei]||'').trim() : '',
+      company: ci >= 0 ? (row[ci]||'').trim() : '',
+      phone: pi >= 0 ? (row[pi]||'').trim() : '',
+      role: ri >= 0 ? (row[ri]||'').trim() : '',
+      tags: ti >= 0 ? (row[ti]||'').split(/[;|]/).map(s => s.trim()).filter(Boolean) : [],
+      linkedin: '', notes: '', lastContact: new Date().toISOString().slice(0,10),
+    };
+    await saveContact(c);
+    state.contacts.push(c);
+    added++;
+  }
+  toast(`Imported ${added} contact${added===1?'':'s'}`);
+  renderContacts();
+}
+function parseCSVRow(line) {
+  const out = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQ) {
+      if (ch === '"' && line[i+1] === '"') { cur += '"'; i++; }
+      else if (ch === '"') inQ = false;
+      else cur += ch;
+    } else {
+      if (ch === ',') { out.push(cur); cur = ''; }
+      else if (ch === '"') inQ = true;
+      else cur += ch;
+    }
+  }
+  out.push(cur);
+  return out;
+}
+async function importVCard(text) {
+  const cards = text.split(/BEGIN:VCARD/i).slice(1);
+  let added = 0;
+  for (const raw of cards) {
+    const card = 'BEGIN:VCARD' + raw;
+    const get = (k) => { const m = card.match(new RegExp('^' + k + '[^:]*:(.*)$','im')); return m ? m[1].trim() : ''; };
+    const fn = get('FN') || get('N').split(';').filter(Boolean).reverse().join(' ');
+    if (!fn) continue;
+    const lic = Konomi.status();
+    if (lic.tier === 'sovereign' && state.contacts.length >= FREE_CAPS.contacts) { toast(`Hit free cap at ${FREE_CAPS.contacts}`); break; }
+    const c = {
+      id: uid(), name: fn, email: get('EMAIL'), phone: get('TEL'),
+      company: get('ORG').split(';')[0] || '', role: get('TITLE'),
+      linkedin: '', tags: [], notes: '', lastContact: new Date().toISOString().slice(0,10),
+    };
+    await saveContact(c);
+    state.contacts.push(c);
+    added++;
+  }
+  toast(`Imported ${added} contact${added===1?'':'s'} from vCard`);
+  renderContacts();
+}
+async function importJSON(text) {
+  try {
+    const obj = JSON.parse(text);
+    if (obj.contacts) for (const c of obj.contacts) { await saveContact(c); }
+    if (obj.deals) for (const d of obj.deals) { await saveDeal(d); }
+    if (obj.activities) for (const a of obj.activities) { await saveActivity(a); }
+    if (obj.settings) { state.settings = Object.assign(state.settings, obj.settings); await saveSettings(); }
+    await loadAll();
+    toast('Imported JSON');
+    renderContacts();
+  } catch(e) { toast('Bad JSON file'); }
+}
+
+document.getElementById('exportContactsBtn').addEventListener('click', () => downloadFile('fallcrm-contacts.csv', toCSV(state.contacts), 'text/csv'));
+document.getElementById('exportDealsBtn').addEventListener('click', () => {
+  const grouped = STAGES.map(s => {
+    const ds = state.deals.filter(d => d.stage === s);
+    return `\n# ${s}\n` + toCSV(ds);
+  }).join('\n');
+  downloadFile('fallcrm-deals-by-stage.csv', grouped, 'text/csv');
+});
+document.getElementById('exportAllBtn').addEventListener('click', () => {
+  const blob = { version: 1, exportedAt: new Date().toISOString(), contacts: state.contacts, deals: state.deals, activities: state.activities, settings: state.settings };
+  downloadFile('fallcrm-export.json', JSON.stringify(blob, null, 2), 'application/json');
+});
+function toCSV(rows) {
+  if (rows.length === 0) return '';
+  const keys = [...new Set(rows.flatMap(r => Object.keys(r)))];
+  const esc = (v) => { if (v == null) return ''; const s = Array.isArray(v) ? v.join(';') : String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s; };
+  return keys.join(',') + '\n' + rows.map(r => keys.map(k => esc(r[k])).join(',')).join('\n');
+}
+function downloadFile(name, content, mime) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+document.getElementById('wipeBtn').addEventListener('click', async () => {
+  if (!confirm('Wipe ALL fallcrm data on this device? This cannot be undone.')) return;
+  await DB.clearAll();
+  state = { contacts: [], deals: [], activities: [], settings: { id:'main', anchorDate:null, meshEnabled:true } };
+  toast('All data wiped');
+  renderContacts();
+});
+
+/* ---------- UTIL ---------- */
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmt(n) { return Number(n||0).toLocaleString('en-GB'); }
+let toastT = null;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+/* ---------- BOOT ---------- */
+(async () => {
+  await loadAll();
+  Mesh.setEnabled(state.settings.meshEnabled !== false);
+  updateQuotaDisplay();
+  renderContacts();
+  /* close modal on backdrop click */
+  document.querySelectorAll('.modal-backdrop').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+})();
+
+/* register PWA SW shim — none, manifest only */
+</script>
+
+</body>
+</html>

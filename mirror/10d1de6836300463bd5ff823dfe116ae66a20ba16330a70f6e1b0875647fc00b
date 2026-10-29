@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>seedmind · a knowledge organism that dreams and breeds</title>
+<meta name="description" content="A personal knowledge organism in one file. It holds your life's notes, dreams overnight forming its own connections, and seeds a living copy to someone else that grows their version. It's alive, and it breeds.">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#0a0d0b">
+<style>
+  :root{
+    --bg:#0a0d0b; --panel:#111612; --panel2:#18201a; --border:#233026; --ink:#e8f0ea; --dim:#8aa093;
+    --seed:#7fd99a; --gold:#e0b23a; --kin:#5fd08a; --comp:#e0b23a; --clash:#e77b6b; --violet:#b79bff;
+    --serif:Georgia,'Times New Roman',serif; --sans:system-ui,-apple-system,'Segoe UI',sans-serif; --mono:ui-monospace,'SFMono-Regular',Menlo,monospace;
+  }
+  @media (prefers-color-scheme:light){ :root{ --bg:#f2f5f0; --panel:#fff; --panel2:#eef2ea; --border:#dde5dc; --ink:#141a15; --dim:#5f6f62; } }
+  :root[data-theme=dark]{ --bg:#0a0d0b; --panel:#111612; --panel2:#18201a; --border:#233026; --ink:#e8f0ea; --dim:#8aa093; }
+  :root[data-theme=light]{ --bg:#f2f5f0; --panel:#fff; --panel2:#eef2ea; --border:#dde5dc; --ink:#141a15; --dim:#5f6f62; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--sans);-webkit-font-smoothing:antialiased;min-height:100dvh}
+  .wrap{max-width:1000px;margin:0 auto;padding:20px 16px 50px}
+  header{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(24px,5vw,36px);letter-spacing:-.02em}
+  h1 .leaf{color:var(--seed)} h1 em{color:var(--seed);font-style:normal}
+  .who{font-family:var(--mono);font-size:12px;color:var(--dim);text-align:right}
+  .who b{color:var(--seed)}
+  .planted{background:linear-gradient(90deg,color-mix(in srgb,var(--seed) 18%,transparent),transparent);border:1px solid var(--seed);border-radius:12px;padding:11px 14px;margin:10px 0;font-size:14px}
+  .planted b{color:var(--seed)}
+  .add{display:flex;gap:8px;margin:14px 0 8px}
+  .add input{flex:1;font-size:16px;padding:13px 15px;border-radius:11px;border:1px solid var(--border);background:var(--panel2);color:var(--ink)}
+  .add input:focus{outline:none;border-color:var(--seed)}
+  .add button{font-weight:700;font-size:14px;padding:0 18px;border-radius:11px;border:1px solid var(--seed);background:var(--seed);color:#08110b;cursor:pointer}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
+  button.g{font-family:var(--sans);font-weight:700;font-size:13px;padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--ink);cursor:pointer;transition:.14s}
+  button.g:hover{border-color:var(--seed);color:var(--seed)}
+  .stat{font-family:var(--mono);font-size:12px;color:var(--dim);margin-left:auto;text-align:right}
+  .stat b{color:var(--ink)}
+  canvas{width:100%;height:auto;display:block;border-radius:14px;background:radial-gradient(120% 90% at 50% 0%,var(--panel2),var(--panel));border:1px solid var(--border);touch-action:none}
+  .focus{margin-top:10px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:13px 15px;min-height:56px}
+  .focus .m{font-size:15px} .focus .c{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:6px}
+  .focus .lk{display:inline-block;font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);margin:3px 4px 0 0}
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--seed);color:var(--ink);border-radius:12px;padding:11px 18px;font-size:14px;box-shadow:0 8px 30px rgba(0,0,0,.4);opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:9}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .empty{color:var(--dim);text-align:center;padding:26px;font-size:14px}
+  footer{color:var(--dim);font-family:var(--mono);font-size:11px;margin-top:22px;text-align:center;line-height:1.8}
+  footer a{color:var(--seed);text-decoration:none}
+  .themebtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--panel);color:var(--ink);cursor:pointer;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="leaf">🌱</span> seed<em>mind</em></h1>
+    <div style="display:flex;gap:10px;align-items:center">
+      <div class="who" id="who">—</div>
+      <button class="themebtn" id="theme" title="theme">◐</button>
+    </div>
+  </header>
+  <div id="plantedBanner"></div>
+  <p style="color:var(--dim);font-size:14px;max-width:640px">A knowledge organism in one file. Tell it things. It <b style="color:var(--ink)">dreams overnight</b> and forms its own connections. <b style="color:var(--ink)">Seed a copy</b> to someone and it grows <em>their</em> version. It's alive, and it breeds.</p>
+
+  <div class="add">
+    <input id="mem" placeholder="tell it something — a note, a thought, a fact about your life…" autocomplete="off" spellcheck="false">
+    <button id="addBtn">remember</button>
+  </div>
+  <div class="bar">
+    <button class="g" id="dreamBtn">🌙 dream now</button>
+    <button class="g" id="seedBtn">🌱 seed a copy</button>
+    <button class="g" id="plantBtn">plant a seed…</button>
+    <input type="file" id="plantFile" accept=".html,.json,.seed" style="display:none">
+    <button class="g" id="renameBtn">name it</button>
+    <button class="g" id="wipeBtn" title="start a fresh organism">✕ fresh</button>
+    <div class="stat" id="stat">—</div>
+  </div>
+
+  <canvas id="graph" width="960" height="440"></canvas>
+  <div class="focus" id="focus"><div class="empty">the graph is your mind — each dot a memory, each line a connection it heard. click one.</div></div>
+
+  <footer>
+    a living primitive · holds · dreams (Gary's cycle) · breeds · sovereign, offline, no server, no cloud — your life stays yours<br>
+    <span id="lineage"></span> · <a href="https://github.com/sjgant80-hub/seedmind">source</a><br>
+    <span style="opacity:.8">The dream cycle — idle consolidation that links what was missed and wakes smarter — is the design of Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service LLC, from his Nexus system.</span>
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import Seedmind, { sig } from './seedmind.mjs';
+
+const $ = s => document.querySelector(s);
+const toast = (t) => { const e = $('#toast'); e.textContent = t; e.classList.add('show'); clearTimeout(e._t); e._t = setTimeout(() => e.classList.remove('show'), 2600); };
+const KEY = 'seedmind:self';
+
+// ── bootstrap: a planted seed (this file was exported to me) → become a CHILD; else load mine / new ──
+let organism, planted = false;
+function boot() {
+  if (window.__SEED__) {
+    const owner = prompt("🌱 You've been seeded from someone's seedmind.\nWhat should this new organism (yours) be called?", '') || 'me';
+    organism = Seedmind.plant(window.__SEED__, { id: 'seed-' + sig(owner + Date.now()), owner });
+    planted = true;
+    save();
+  } else {
+    const saved = localStorage.getItem(KEY);
+    if (saved) { try { organism = Seedmind.fromJSON(JSON.parse(saved)); } catch { organism = fresh(); } }
+    else organism = fresh();
+  }
+}
+function fresh() { const name = ''; return new Seedmind({ id: 'seed-' + sig('me' + Date.now()), owner: name }); }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(organism.toJSON())); } catch {} }
+
+// ── graph layout (lightweight force sim on canvas) ──
+const cv = $('#graph'), cx = cv.getContext('2d'), css = getComputedStyle(document.documentElement), col = n => css.getPropertyValue(n).trim();
+const P = new Map();  // memId -> {x,y,vx,vy}
+let selected = null;
+const EDGE_COL = { kin: '--kin', complementary: '--comp', clash: '--clash' };
+function syncNodes() {
+  for (const m of organism.memories.values()) if (!P.has(m.id)) P.set(m.id, { x: cv.width / 2 + (Math.random() - .5) * 200, y: cv.height / 2 + (Math.random() - .5) * 160, vx: 0, vy: 0 });
+  for (const id of [...P.keys()]) if (!organism.memories.has(id)) P.delete(id);
+}
+function step() {
+  const ids = [...P.keys()], edges = [...organism.edges.values()];
+  for (let i = 0; i < ids.length; i++) { const a = P.get(ids[i]); for (let j = i + 1; j < ids.length; j++) { const b = P.get(ids[j]); let dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy || 1, f = 900 / d2; const d = Math.sqrt(d2); dx /= d; dy /= d; a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f; } }
+  for (const e of edges) { const a = P.get(e.a), b = P.get(e.b); if (!a || !b) continue; let dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1, f = (d - 90) * 0.01; dx /= d; dy /= d; a.vx += dx * f; a.vy += dy * f; b.vx -= dx * f; b.vy -= dy * f; }
+  const cxp = cv.width / 2, cyp = cv.height / 2;
+  for (const p of P.values()) { p.vx += (cxp - p.x) * 0.002; p.vy += (cyp - p.y) * 0.002; p.vx *= 0.86; p.vy *= 0.86; p.x += p.vx; p.y += p.vy; p.x = Math.max(16, Math.min(cv.width - 16, p.x)); p.y = Math.max(16, Math.min(cv.height - 16, p.y)); }
+}
+function draw() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+  const nbrs = selected ? new Set(organism.neighbors(selected)) : null;
+  for (const e of organism.edges.values()) { const a = P.get(e.a), b = P.get(e.b); if (!a || !b) continue; const on = !selected || e.a === selected || e.b === selected; cx.strokeStyle = col(EDGE_COL[e.type] || '--dim'); cx.globalAlpha = on ? 0.75 : 0.12; cx.lineWidth = on ? 1.8 : 1; cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke(); }
+  cx.globalAlpha = 1;
+  for (const m of organism.memories.values()) { const p = P.get(m.id); if (!p) continue; const sel = m.id === selected, near = nbrs && nbrs.has(m.id); const r = sel ? 8 : (m.seeded ? 5 : 6); cx.fillStyle = m.seeded ? col('--dim') : col('--seed'); cx.globalAlpha = !selected || sel || near ? 1 : 0.3; cx.beginPath(); cx.arc(p.x, p.y, r, 0, 7); cx.fill(); if (sel) { cx.strokeStyle = col('--ink'); cx.lineWidth = 2; cx.stroke(); } }
+  cx.globalAlpha = 1;
+}
+let raf; function loop() { step(); draw(); raf = requestAnimationFrame(loop); }
+
+cv.addEventListener('pointerdown', e => { const b = cv.getBoundingClientRect(), mx = (e.clientX - b.left) * cv.width / b.width, my = (e.clientY - b.top) * cv.height / b.height; let best = null, bd = 400; for (const [id, p] of P) { const d = (p.x - mx) ** 2 + (p.y - my) ** 2; if (d < bd) { bd = d; best = id; } } selected = best; renderFocus(); });
+
+function renderFocus() {
+  const f = $('#focus');
+  if (!selected || !organism.memories.has(selected)) { f.innerHTML = '<div class="empty">click a memory to see what it connects to.</div>'; return; }
+  const m = organism.memories.get(selected), conns = organism.connections(m.id);
+  const links = conns.map(c => { const e = organism.edges.get(organism._ekey(m.id, c.id)); const t = e ? e.type : '·'; return `<span class="lk" style="border-color:${col(EDGE_COL[t] || '--border')}">${t} → ${c.text.slice(0, 42)}</span>`; }).join('');
+  f.innerHTML = `<div class="m">${m.seeded ? '🌱 ' : ''}${m.text}</div><div class="c">${conns.length} connection${conns.length === 1 ? '' : 's'}${m.seeded ? ' · inherited from your seed' : ''}</div>${links || '<div class="c">no connections yet — it may find some when it dreams.</div>'}`;
+}
+
+function refresh() { syncNodes(); renderStat(); renderWho(); save(); }
+function renderStat() { const s = organism.stats(); $('#stat').innerHTML = `<b>${s.memories}</b> memories · <b>${s.connections}</b> connections · <b>${s.dreams}</b> dreams`; }
+function renderWho() {
+  const s = organism.stats();
+  $('#who').innerHTML = (s.owner ? `<b>${s.owner}</b>'s mind · ` : '') + `gen ${s.depth} · <b>${s.id.slice(-6)}</b>`;
+  $('#lineage').textContent = s.depth > 0 ? `generation ${s.depth} of a bloodline (root ${String(s.root).slice(-6)})` : 'a root organism';
+  const pb = $('#plantedBanner');
+  pb.innerHTML = planted ? `<div class="planted">🌱 <b>This organism was seeded from another.</b> It carries ${[...organism.memories.values()].filter(m => m.seeded).length} inherited memories (the grey dots). Add your own and it becomes <b>yours</b> — a new self on the same bloodline.</div>` : '';
+}
+
+// ── actions ──
+function addMemory() { const t = $('#mem').value.trim(); if (!t) return; const r = organism.remember(t); $('#mem').value = ''; if (r) { selected = r.id; toast('remembered'); } refresh(); renderFocus(); nudgeIdle(); }
+$('#addBtn').onclick = addMemory;
+$('#mem').addEventListener('keydown', e => { if (e.key === 'Enter') addMemory(); });
+
+$('#dreamBtn').onclick = () => { const d = organism.dream(); refresh(); renderFocus(); toast(d.count ? `🌙 dreamed ${d.count} new connection${d.count === 1 ? '' : 's'}${d.bridges.length ? ` · ${d.bridges.length} bridge${d.bridges.length === 1 ? '' : 's'}` : ''}` : '🌙 no new connections this cycle — it has consolidated'); };
+
+$('#renameBtn').onclick = () => { const n = prompt('name this organism (whose mind is it?)', organism.owner || ''); if (n != null) { organism.owner = n.trim(); refresh(); } };
+$('#wipeBtn').onclick = () => { if (confirm('Start a completely fresh organism? This clears the current one from this device (export a seed first if you want to keep it).')) { organism = fresh(); planted = false; P.clear(); selected = null; refresh(); renderFocus(); toast('fresh organism'); } };
+
+// SEED A COPY — export a self-contained HTML that opens as a LIVING CHILD carrying this genome.
+$('#seedBtn').onclick = async () => {
+  try {
+    const [html, kernel] = await Promise.all([fetch('./index.html').then(r => r.text()), fetch('./seedmind.mjs').then(r => r.text())]);
+    const genome = JSON.stringify(organism.seed());
+    const inlineKernel = kernel.replace(/^export\s+(?=const|function|class|async)/gm, '').replace(/^export\s*\{[^}]*\}\s*;?\s*$/gm, '').replace(/^export\s+default[^\n;]*;?\s*$/gm, '');
+    let out = html.replace(/^\s*import\s+[^;]*from\s*['"]\.\/seedmind\.mjs['"];?\s*$/m, '/* seedmind kernel inlined below (self-contained seed) */');
+    out = out.replace('<script type="module">', `<script type="module">\n/* ══ inlined seedmind kernel — this file is a living seed, no server needed ══ */\n${inlineKernel}\nwindow.__SEED__=${genome};\n`);
+    const blob = new Blob([out], { type: 'text/html' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `seedmind-${(organism.owner || 'seed').replace(/[^a-z0-9]+/gi, '-')}.html`; a.click();
+    toast('🌱 seed exported — send it to someone; opening it grows their version');
+  } catch (e) { toast('export needs the app served over http (open the live page)'); }
+};
+
+// PLANT — import a .seed/.json genome (the .html seeds auto-plant on open)
+$('#plantBtn').onclick = () => $('#plantFile').click();
+$('#plantFile').onchange = async (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  const text = await file.text();
+  let bundle = null;
+  try { bundle = JSON.parse(text); } catch { const m = text.match(/window\.__SEED__=(\{[\s\S]*?\});/); if (m) try { bundle = JSON.parse(m[1]); } catch {} }
+  if (!bundle || !bundle.genome) { toast('not a seed file'); return; }
+  const owner = prompt('planting a seed — what should your new organism be called?', organism.owner || 'me') || 'me';
+  organism = Seedmind.plant(bundle, { id: 'seed-' + sig(owner + Date.now()), owner }); planted = true; P.clear(); selected = null; refresh(); renderFocus(); toast('🌱 planted — it grew a child from that seed');
+};
+
+// ── "alive": dream on idle (Gary's cycle runs while you're away) ──
+let idle; function nudgeIdle() { clearTimeout(idle); idle = setTimeout(() => { const d = organism.dream(); if (d.count) { refresh(); toast(`🌙 while you were away it formed ${d.count} connection${d.count === 1 ? '' : 's'}`); } }, 30000); }
+
+$('#theme').onclick = () => { const r = document.documentElement, cur = r.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'); r.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark'); };
+
+boot(); refresh(); renderFocus(); loop(); nudgeIdle();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+</script>
+</body>
+</html>

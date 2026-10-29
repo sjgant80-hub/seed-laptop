@@ -1,0 +1,2594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FallLedger · sovereign double-entry general ledger</title>
+<link rel="manifest" href='data:application/manifest+json,{"name":"FallLedger","short_name":"FallLedger","start_url":"./","display":"standalone","background_color":"%230b0a0f","theme_color":"%23ff8c00","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 192 192%27><rect width=%27192%27 height=%27192%27 fill=%27%230b0a0f%27 rx=%2728%27/><text x=%2796%27 y=%27130%27 font-family=%27Georgia, serif%27 font-size=%27108%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23ff8c00%27>◊</text></svg>","sizes":"192x192","type":"image/svg+xml"}]}'>
+<style>
+:root{
+  --void:#0b0a0f;--void-2:#13121a;--ink:#1a1922;--ink-2:#22212c;
+  --line:#2a2934;--line-soft:#1f1e28;
+  --cream:#e6e1d6;--cream-dim:#a8a395;--cream-muted:#6e6a5e;
+  --brass:#b8974a;--amber:#ff8c00;--ox:#8b1a1a;
+  --green:#4ade80;--red:#ef4444;--blue:#60a5fa;--yellow:#fbbf24;
+  --serif:Georgia,'Libre Baskerville',ui-serif,serif;
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:'IBM Plex Mono','SF Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--void);color:var(--cream);font-family:var(--sans);font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit;background:transparent;border:0;outline:0}
+button{cursor:pointer}
+a{color:var(--brass);text-decoration:none}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:var(--ink-2)}
+
+.app{display:grid;grid-template-rows:42px auto 1fr;height:100vh;width:100vw}
+
+/* Header */
+.hdr{display:flex;align-items:center;gap:12px;padding:0 14px;background:linear-gradient(180deg,var(--void-2),var(--void));border-bottom:1px solid var(--line);height:42px;font-size:12px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:15px;font-weight:700;letter-spacing:.5px}
+.brand .glyph{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:linear-gradient(135deg,var(--brass),var(--amber));color:var(--void);font-family:var(--serif);font-size:18px;font-weight:700}
+.brand .nm{color:var(--cream)}
+.brand .v{color:var(--cream-muted);font-family:var(--mono);font-size:10px;margin-left:2px}
+.hdr-sp{flex:1}
+.hdr select,.hdr button{padding:4px 10px;background:var(--ink);border:1px solid var(--line);border-radius:5px;color:var(--cream);font-size:11px;font-family:var(--mono)}
+.hdr select:hover,.hdr button:hover{background:var(--ink-2);border-color:var(--brass)}
+.hdr .closed-badge{padding:4px 8px;background:rgba(239,68,68,.12);border:1px solid var(--red);color:var(--red);border-radius:5px;font-family:var(--mono);font-size:10px}
+.hdr .closed-badge.open{background:rgba(74,222,128,.08);border-color:var(--green);color:var(--green)}
+.hdr .tier-badge{padding:4px 8px;background:var(--ink);border:1px solid var(--line);border-radius:5px;font-family:var(--mono);font-size:10px;color:var(--cream-dim)}
+.hdr .tier-badge.t3{border-color:var(--brass);color:var(--brass)}
+.hdr .auto-btn{background:linear-gradient(135deg,var(--brass),var(--amber));color:var(--void);font-weight:600;border:0}
+
+/* Tabs */
+.tabs{display:flex;background:var(--void-2);border-bottom:1px solid var(--line);padding:0 6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:9px 14px;color:var(--cream-dim);font-size:12px;font-family:var(--mono);letter-spacing:.4px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--cream)}
+.tab.active{color:var(--amber);border-bottom-color:var(--amber)}
+
+/* Main pane */
+.main{overflow:auto;padding:18px 22px;background:var(--void)}
+.pane{display:none;animation:fade .2s ease-out}
+.pane.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:none}}
+
+h1,h2,h3{font-family:var(--serif);font-weight:700;color:var(--cream);letter-spacing:.3px}
+h1{font-size:22px;margin-bottom:4px}
+h2{font-size:16px;margin:18px 0 10px}
+h3{font-size:13px;margin:14px 0 6px;color:var(--brass)}
+.sub{color:var(--cream-muted);font-size:11px;font-family:var(--mono);margin-bottom:14px}
+
+/* Toolbar */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:14px}
+.toolbar input,.toolbar select{padding:6px 10px;background:var(--ink);border:1px solid var(--line);border-radius:5px;font-size:12px}
+.toolbar input:focus,.toolbar select:focus{border-color:var(--brass)}
+.btn{padding:6px 12px;background:var(--ink);border:1px solid var(--line);border-radius:5px;color:var(--cream);font-size:12px;font-family:var(--mono);transition:.15s}
+.btn:hover{background:var(--ink-2);border-color:var(--brass)}
+.btn.primary{background:linear-gradient(135deg,var(--brass),var(--amber));color:var(--void);font-weight:600;border:0}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.danger{border-color:var(--ox);color:var(--red)}
+.btn.danger:hover{background:rgba(239,68,68,.08)}
+.btn.ghost{border-color:transparent;color:var(--cream-dim)}
+
+/* Tables */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;font-family:var(--mono)}
+.tbl th,.tbl td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line-soft)}
+.tbl th{font-size:10px;letter-spacing:.6px;color:var(--cream-muted);text-transform:uppercase;background:var(--void-2);font-weight:600;position:sticky;top:0}
+.tbl td.num,.tbl th.num{text-align:right}
+.tbl tr:hover td{background:var(--void-2)}
+.tbl .acc-code{color:var(--brass);width:60px}
+.tbl .pos{color:var(--green)}
+.tbl .neg{color:var(--red)}
+.tbl .muted{color:var(--cream-muted)}
+.tbl .total td{font-weight:700;color:var(--amber);border-top:2px solid var(--line);border-bottom:0;background:var(--void-2)}
+.tbl .indent-1{padding-left:24px}
+.tbl .indent-2{padding-left:44px}
+
+/* Cards */
+.card{background:var(--ink);border:1px solid var(--line);border-radius:8px;padding:14px;margin-bottom:12px}
+.card h3{margin-top:0}
+.grid{display:grid;gap:12px}
+.grid-2{grid-template-columns:1fr 1fr}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.kv{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--line-soft);font-size:12px;font-family:var(--mono)}
+.kv:last-child{border-bottom:0}
+.kv .k{color:var(--cream-muted)}
+.kv .v{color:var(--cream)}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
+.modal-bg.show{display:flex}
+.modal{background:var(--ink);border:1px solid var(--line);border-radius:10px;width:100%;max-width:720px;max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.modal-hd{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.modal-hd h2{margin:0}
+.modal-bd{padding:18px}
+.modal-ft{padding:12px 18px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px}
+.close-x{background:transparent;border:0;color:var(--cream-muted);font-size:20px;cursor:pointer;padding:0 6px}
+
+/* Form */
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;color:var(--cream-muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:8px 10px;background:var(--void-2);border:1px solid var(--line);border-radius:5px;font-size:13px;color:var(--cream)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brass)}
+.field textarea{resize:vertical;min-height:60px;font-family:var(--mono);font-size:12px}
+.row{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+.row.r3{grid-template-columns:repeat(3,1fr)}
+.row.r4{grid-template-columns:repeat(4,1fr)}
+
+/* Journal entry lines */
+.j-lines{display:grid;gap:6px;margin-bottom:12px}
+.j-line{display:grid;grid-template-columns:2.5fr 1.5fr 1fr 1fr 26px;gap:6px;align-items:center}
+.j-line select,.j-line input{padding:6px 8px;background:var(--void-2);border:1px solid var(--line);border-radius:4px;font-size:12px;font-family:var(--mono)}
+.j-line .rm{background:transparent;border:0;color:var(--red);font-size:16px;padding:0;cursor:pointer}
+.j-totals{display:flex;justify-content:space-between;padding:8px 12px;background:var(--void-2);border-radius:5px;font-family:var(--mono);font-size:12px}
+.j-totals .ok{color:var(--green)}
+.j-totals .bad{color:var(--red)}
+
+/* Palette */
+.palette-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-start;justify-content:center;padding-top:14vh;z-index:200}
+.palette-bg.show{display:flex}
+.palette{background:var(--ink);border:1px solid var(--brass);border-radius:10px;width:100%;max-width:600px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+.palette-hd{display:flex;align-items:center;gap:10px;padding:14px;border-bottom:1px solid var(--line)}
+.palette-hd .glyph{font-family:var(--serif);font-size:22px;color:var(--amber)}
+.palette-hd input{flex:1;background:transparent;font-size:15px;color:var(--cream);font-family:var(--mono)}
+.palette-hd .badge{padding:3px 8px;background:var(--void-2);border:1px solid var(--line);border-radius:4px;font-size:10px;font-family:var(--mono);color:var(--cream-dim)}
+.palette-bd{padding:14px;max-height:50vh;overflow:auto;font-size:12px;font-family:var(--mono);color:var(--cream-dim)}
+.palette-bd .hit{padding:6px 8px;border-radius:4px;cursor:pointer}
+.palette-bd .hit:hover{background:var(--void-2);color:var(--cream)}
+
+/* Empty state */
+.empty{text-align:center;padding:60px 20px;color:var(--cream-muted)}
+.empty .glyph{font-family:var(--serif);font-size:48px;color:var(--brass);margin-bottom:14px}
+.empty h3{color:var(--cream);font-size:18px;margin-bottom:6px}
+.empty p{font-size:12px;font-family:var(--mono);margin-bottom:14px}
+
+/* Pager */
+.pager{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;font-family:var(--mono);color:var(--cream-muted)}
+.pager .pgs{display:flex;gap:4px}
+.pager button{padding:3px 8px;background:var(--ink);border:1px solid var(--line);border-radius:4px;color:var(--cream);font-family:var(--mono);font-size:11px}
+.pager button.active{background:var(--brass);color:var(--void);border-color:var(--brass)}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;padding:10px 16px;background:var(--ink);border:1px solid var(--brass);border-radius:6px;font-family:var(--mono);font-size:12px;z-index:300;animation:slide .25s ease-out}
+.toast.ok{border-color:var(--green);color:var(--green)}
+.toast.err{border-color:var(--red);color:var(--red)}
+@keyframes slide{from{transform:translateX(20px);opacity:0}to{transform:none;opacity:1}}
+
+/* Assertions */
+.assert{padding:8px 12px;border-radius:5px;font-family:var(--mono);font-size:11px;margin-bottom:10px;display:inline-block}
+.assert.ok{background:rgba(74,222,128,.08);border:1px solid var(--green);color:var(--green)}
+.assert.bad{background:rgba(239,68,68,.1);border:1px solid var(--red);color:var(--red)}
+
+/* Responsive */
+@media (max-width:760px){
+  .hdr{gap:6px;padding:0 8px}
+  .hdr select,.hdr .closed-badge,.hdr .tier-badge{font-size:10px;padding:3px 6px}
+  .hdr .auto-btn span.lbl{display:none}
+  .brand .nm{display:none}
+  .main{padding:12px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .row,.row.r3,.row.r4{grid-template-columns:1fr}
+  .j-line{grid-template-columns:1fr 1fr;grid-template-areas:'a a' 'm m' 'd c' 'x x'}
+  .tab{padding:8px 10px;font-size:11px}
+}
+</style>
+<!-- FALL_KIT_BEGIN v1 · DO NOT EDIT THIS BLOCK MANUALLY -->
+<script>
+/*!
+ * Fall Kit · v3.2.0 · the shared cascade for every estate seed (the brain stud of the estate's Lego socket)
+ * MIT · AI-Native Solutions · ai-nativesolutions.com
+ *
+ * Inlineable JS module. Drop into any seed via <script> or copy-paste inline.
+ * Preserves single-HTML sovereignty (no external deps until user opts in to T2 WebLLM or T3 BYOK).
+ *
+ * What it gives every seed:
+ *  - Tier picker: T0 (off · default) · T2 (WebLLM in-browser, 5 models 1B-70B) · T3 (BYOK)
+ *  - Universal text: FallKit.aiComplete(system, user, maxTokens) → string|null
+ *  - NEW · Universal image: FallKit.aiImage(prompt, opts) → { url } | null
+ *  - NEW · Universal video: FallKit.aiVideo(prompt, opts) → { url } | null
+ *  - NEW · Universal TTS:   FallKit.aiTTS(text, opts)     → { url | blob } | null
+ *  - NEW · Universal STT:   FallKit.aiSTT(blob, opts)     → { text } | null
+ *  - NEW in v3 · Conversation: FallKit.aiChat(system, history, user, maxTokens) → { text, assistant } | null
+ *    (the caller appends the user turn and `assistant` to its own history: a conversation only grows, never edited)
+ *  - NEW in v3 · Recycling: the system prompt is sent first and the same each call, marked for Anthropic's cache;
+ *    OpenAI, Google and OpenRouter cache repeated openings themselves. FallKit.lastUsage() says what the last call
+ *    read, how much of it the provider reused, and what it wrote.
+ *  - NEW in v3.1 · Ask about this page: the chip's panel answers questions from the page's own words through the brain
+ *    the person picked, so the chip is useful in any build: FallKit.askPage(question) → { text, why }
+ *  - AI chip UI in header · settings modal with tabs for each modality
+ *  - Same-device mesh (BroadcastChannel: estate seeds open on this device find each other; not cross-device)
+ *  - NEW in v3.2 · The mesh speaks LIGHT: every message is a LIGHT packet signed by this device's own key and checked
+ *    before it is read (the estate going live, Phase 2). The LIGHT part is one gated module on this origin
+ *    (/fall-kit/core/mesh.mjs), loaded only when the mesh is switched on; an old JSON message still arrives, marked
+ *    legacy; on a page served anywhere else the mesh speaks JSON as before. FallKit.meshStats() counts what it heard.
+ *  - Help section partial: FallKit.helpSection()
+ *  - Settings panel:       FallKit.openSettings()
+ *
+ * Doctrine:
+ *  - T0 fallback ALWAYS works · aiComplete returns null · caller MUST degrade gracefully
+ *  - NEVER hide a feature behind AI · NEVER proxy API keys · NEVER log keys
+ *  - Keys are held in this tab only, unless the owner ticks "remember my keys on this device" (v3: every estate
+ *    page at this address shares one browser storage, so a key kept there can be read by any of them) · sent direct
+ *    to the provider · never proxied through us
+ *  - WebLLM is lazy-loaded · model weights download ONLY on user opt-in
+ */
+(function (root) {
+  'use strict';
+
+  const FALL_KIT_VERSION = '3.2.0';
+
+  // ─── WebLLM (T2) model registry ─────────────────────────────────────
+  const WEBLLM_MODELS = {
+    'llama-1b':  { id: 'Llama-3.2-1B-Instruct-q4f16_1-MLC',   size: '~700MB', label: '1B · fast · any laptop / phone' },
+    'llama-3b':  { id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',   size: '~2GB',   label: '3B · balanced · default · most laptops' },
+    'qwen-7b':   { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC',     size: '~5GB',   label: '7B · capable · needs decent GPU (M-series Mac / 8GB+ VRAM)' },
+    'llama-8b':  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',   size: '~5GB',   label: '8B · common · needs decent GPU' },
+    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' },
+  };
+  const DEFAULT_MODEL = 'llama-3b';
+
+  // ─── T3 · BYOK · TEXT providers ─────────────────────────────────────
+  const TEXT_PROVIDERS = {
+    anthropic:  { label: 'Anthropic Claude',   models: ['claude-opus-5-5','claude-sonnet-5-5','claude-haiku-5-5'],                default: 'claude-opus-5-5',     type: 'anthropic' },
+    openai:     { label: 'OpenAI',             models: ['gpt-4o','gpt-4o-mini','o1-mini','gpt-4.1'],                              default: 'gpt-4o-mini',         type: 'openai' },
+    google:     { label: 'Google Gemini',      models: ['gemini-2.5-pro','gemini-2.5-flash','gemini-2.0-flash'],                  default: 'gemini-2.5-flash',    type: 'google' },
+    groq:       { label: 'Groq (fast)',        models: ['llama-3.3-70b-versatile','llama-3.1-70b-versatile','mixtral-8x7b-32768'], default: 'llama-3.3-70b-versatile', type: 'openai_compat', url: 'https://api.groq.com/openai/v1/chat/completions' },
+    cerebras:   { label: 'Cerebras (fastest)', models: ['llama-3.3-70b','llama-3.1-70b','llama3.1-8b'],                            default: 'llama-3.3-70b',       type: 'openai_compat', url: 'https://api.cerebras.ai/v1/chat/completions' },
+    openrouter: { label: 'OpenRouter (any)',   models: ['anthropic/claude-3.5-sonnet','openai/gpt-4o','google/gemini-pro-1.5','meta-llama/llama-3.3-70b-instruct'], default: 'meta-llama/llama-3.3-70b-instruct', type: 'openai_compat', url: 'https://openrouter.ai/api/v1/chat/completions' },
+    deepseek:   { label: 'DeepSeek',           models: ['deepseek-chat','deepseek-reasoner'],                                     default: 'deepseek-chat',       type: 'openai_compat', url: 'https://api.deepseek.com/v1/chat/completions' },
+    mistral:    { label: 'Mistral',            models: ['mistral-large-latest','mistral-small-latest','open-mistral-nemo'],       default: 'mistral-small-latest',type: 'openai_compat', url: 'https://api.mistral.ai/v1/chat/completions' },
+    cohere:     { label: 'Cohere',             models: ['command-r-plus-08-2024','command-r-08-2024'],                            default: 'command-r-08-2024',   type: 'cohere' },
+    together:   { label: 'Together AI',        models: ['meta-llama/Llama-3.3-70B-Instruct-Turbo','Qwen/Qwen2.5-72B-Instruct-Turbo'], default: 'meta-llama/Llama-3.3-70B-Instruct-Turbo', type: 'openai_compat', url: 'https://api.together.xyz/v1/chat/completions' },
+    huggingface:{ label: 'HuggingFace Inf.',   models: ['meta-llama/Llama-3.3-70B-Instruct','Qwen/Qwen2.5-72B-Instruct'],          default: 'meta-llama/Llama-3.3-70B-Instruct', type: 'hf_inference' },
+    xai:        { label: 'xAI Grok',           models: ['grok-2-latest','grok-2-1212','grok-vision-beta'],                        default: 'grok-2-latest',       type: 'openai_compat', url: 'https://api.x.ai/v1/chat/completions' },
+  };
+
+  // ─── T3 · BYOK · IMAGE providers ────────────────────────────────────
+  const IMAGE_PROVIDERS = {
+    fal:         { label: 'fal.ai (Flux + more)', models: ['fal-ai/flux/schnell','fal-ai/flux-pro/v1.1-ultra','fal-ai/flux/dev','fal-ai/recraft-v3'], default: 'fal-ai/flux/schnell',    type: 'fal' },
+    huggingface: { label: 'HuggingFace Inf.',     models: ['black-forest-labs/FLUX.1-schnell','black-forest-labs/FLUX.1-dev','stabilityai/stable-diffusion-3.5-large'], default: 'black-forest-labs/FLUX.1-schnell', type: 'hf_image' },
+    replicate:   { label: 'Replicate',            models: ['black-forest-labs/flux-schnell','black-forest-labs/flux-1.1-pro-ultra','stability-ai/stable-diffusion-3.5-large'], default: 'black-forest-labs/flux-schnell', type: 'replicate' },
+    openai:      { label: 'OpenAI DALL-E',        models: ['dall-e-3','dall-e-2'],                                                                   default: 'dall-e-3',              type: 'openai_image' },
+    google:      { label: 'Google Imagen',        models: ['imagen-3.0-generate-002','imagen-3.0-fast-generate-001'],                                default: 'imagen-3.0-generate-002',type: 'google_image' },
+    ideogram:    { label: 'Ideogram',             models: ['V_2','V_2_TURBO','V_1'],                                                                 default: 'V_2',                   type: 'ideogram' },
+    leonardo:    { label: 'Leonardo AI',          models: ['b24e16ff-06e3-43eb-8d33-4416c2d75876','1e60896f-3c26-4296-8ecc-53e2afecc132'],           default: 'b24e16ff-06e3-43eb-8d33-4416c2d75876', type: 'leonardo' },
+    xai:         { label: 'xAI Aurora',           models: ['grok-2-image-1212'],                                                                    default: 'grok-2-image-1212',     type: 'openai_image_compat', url: 'https://api.x.ai/v1/images/generations' },
+  };
+
+  // ─── T3 · BYOK · VIDEO providers ────────────────────────────────────
+  const VIDEO_PROVIDERS = {
+    fal:      { label: 'fal.ai (Kling/LTX/Veo)', models: ['fal-ai/kling-video/v2/master/text-to-video','fal-ai/ltx-video','fal-ai/veo3'], default: 'fal-ai/ltx-video', type: 'fal' },
+    luma:     { label: 'Luma Dream Machine',      models: ['luma-1.5','ray-2'],                                          default: 'luma-1.5',       type: 'luma' },
+    runway:   { label: 'Runway Gen-3',            models: ['gen3a_turbo','gen3a'],                                       default: 'gen3a_turbo',    type: 'runway' },
+    pika:     { label: 'Pika 2',                  models: ['pika-2.0'],                                                  default: 'pika-2.0',       type: 'pika' },
+    kling:    { label: 'Kling (direct)',          models: ['kling-v2-master','kling-v1.6-pro'],                          default: 'kling-v2-master',type: 'kling' },
+  };
+
+  // ─── T3 · BYOK · TTS providers ──────────────────────────────────────
+  const TTS_PROVIDERS = {
+    elevenlabs: { label: 'ElevenLabs',    models: ['eleven_turbo_v2_5','eleven_multilingual_v2'], default: 'eleven_turbo_v2_5', type: 'elevenlabs' },
+    openai:     { label: 'OpenAI TTS',    models: ['tts-1','tts-1-hd'],                            default: 'tts-1',            type: 'openai_tts' },
+    playht:     { label: 'PlayHT',        models: ['PlayHT2.0-turbo','PlayHT2.0'],                 default: 'PlayHT2.0-turbo',  type: 'playht' },
+    cartesia:   { label: 'Cartesia Sonic',models: ['sonic-english','sonic-multilingual'],           default: 'sonic-english',    type: 'cartesia' },
+  };
+
+  // ─── T3 · BYOK · STT providers ──────────────────────────────────────
+  const STT_PROVIDERS = {
+    deepgram:   { label: 'Deepgram Nova',     models: ['nova-2','nova-3'],                default: 'nova-2',     type: 'deepgram' },
+    assemblyai: { label: 'AssemblyAI',        models: ['universal-1','best'],             default: 'universal-1',type: 'assemblyai' },
+    openai:     { label: 'OpenAI Whisper',    models: ['whisper-1'],                      default: 'whisper-1',  type: 'openai_stt' },
+  };
+
+  // ─── State ──────────────────────────────────────────────────────────
+  const MODALITIES = ['text', 'image', 'video', 'tts', 'stt'];
+  const emptyKeys = () => ({ text: {}, image: {}, video: {}, tts: {}, stt: {} });
+  /**
+   * What a stored config holds, split into what may be stored (the tier, providers, models) and what is held in this
+   * tab only (the keys). Keys stay stored only when the owner chose "remember my keys on this device"; a config written
+   * the old way (keys stored, no choice made) has its keys moved into the tab and stored no longer. Pure.
+   * → { config, secrets, moved } (moved: how many keys were taken out of storage)
+   */
+  function configFrom(c) {
+    c = c && typeof c === 'object' && !Array.isArray(c) ? Object.assign({}, c) : {};
+    if (c.api_key && !c.keys) {   // v1 → v2: one text key at the top level
+      c.keys = emptyKeys();
+      c.keys.text[c.api_provider || 'anthropic'] = { key: c.api_key, model: c.api_model };
+    }
+    delete c.api_key;
+    const secrets = emptyKeys(), models = emptyKeys();
+    let moved = 0;
+    for (const m of MODALITIES) {
+      const held = c.keys && c.keys[m] && typeof c.keys[m] === 'object' ? c.keys[m] : {};
+      for (const pk of Object.keys(held)) {
+        const e = held[pk] || {};
+        if (typeof e.key === 'string' && e.key) { secrets[m][pk] = e.key; moved++; }
+        if (typeof e.model === 'string' && e.model) models[m][pk] = e.model;
+      }
+      const kept = c.models && c.models[m] && typeof c.models[m] === 'object' ? c.models[m] : {};
+      for (const pk of Object.keys(kept)) if (typeof kept[pk] === 'string' && kept[pk]) models[m][pk] = models[m][pk] || kept[pk];
+    }
+    c.models = models;
+    const remember = c.remember_keys === true;
+    if (!remember) delete c.keys;
+    return { config: c, secrets: secrets, moved: remember ? 0 : moved };
+  }
+  /** what is written to storage: the config, with the keys only if the owner chose to remember them. Pure. */
+  function storedForm(config, secrets) {
+    const out = Object.assign({}, config);
+    delete out.keys;
+    if (config.remember_keys === true) {
+      out.keys = emptyKeys();
+      for (const m of MODALITIES) for (const pk of Object.keys(secrets[m] || {})) out.keys[m][pk] = { key: secrets[m][pk], model: (config.models && config.models[m] && config.models[m][pk]) || undefined };
+    }
+    return out;
+  }
+  const BOOT = (function () {
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem('fall-kit.config') || '{}'); } catch (e) { stored = {}; }
+    return configFrom(stored);
+  })();
+  const STATE = {
+    config: BOOT.config,
+    secrets: BOOT.secrets,   // the keys: this tab only, unless remember_keys
+    ai: { ready: false, loading: false, progress: 0, engine: null, model: null },
+    mesh: { active: false, peers: new Map(), bc: null, signal: null, light: null, stats: { sent: 0, admitted: 0, legacy: 0, refused: {} } },
+    lastUsage: null,
+    ask: { opening: null, talk: [], last: null },   // the talk about this page: its opening, kept identical, and its turns
+  };
+
+  function saveConfig() { try { localStorage.setItem('fall-kit.config', JSON.stringify(storedForm(STATE.config, STATE.secrets))); } catch (e) {} }
+  if (BOOT.moved) saveConfig();   // keys stored the old way leave shared storage now; they stay usable in this tab
+  function getKey(modality, providerKey) { return (STATE.secrets[modality] && STATE.secrets[modality][providerKey]) || ''; }
+  function getModel(modality, providerKey, registry) {
+    return (STATE.config.models && STATE.config.models[modality] && STATE.config.models[modality][providerKey]) || registry[providerKey]?.default;
+  }
+  function setKey(modality, providerKey, key, model) {
+    STATE.secrets[modality] = STATE.secrets[modality] || {};
+    if (key) STATE.secrets[modality][providerKey] = key;
+    STATE.config.models = STATE.config.models || emptyKeys();
+    STATE.config.models[modality] = STATE.config.models[modality] || {};
+    if (model) STATE.config.models[modality][providerKey] = model;
+    saveConfig();
+  }
+  function forgetKeys() { STATE.secrets = emptyKeys(); STATE.config.remember_keys = false; saveConfig(); renderAiChip(); }
+
+  // ─── DOM helpers ────────────────────────────────────────────────────
+  function $(s, root) { return (root || document).querySelector(s); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+  // ─── AI tier ────────────────────────────────────────────────────────
+  function aiTier() { return STATE.config.ai_tier || 'T0'; }
+  function activeTextProvider() { return STATE.config.text_provider || 'anthropic'; }
+
+  function renderAiChip() {
+    const chip = $('#fk-ai-chip');
+    if (!chip) return;
+    const txt = $('#fk-ai-chip-text');
+    chip.classList.remove('fk-chip-live', 'fk-chip-loading', 'fk-chip-warn');
+    const tier = aiTier();
+    if (tier === 'T0') { txt.textContent = 'T0 · off'; }
+    else if (tier === 'T2') {
+      if (STATE.ai.ready) { txt.textContent = 'T2 ' + (WEBLLM_MODELS[STATE.config.webllm_model || DEFAULT_MODEL]?.label.split(' · ')[0] || '') + ' · ready'; chip.classList.add('fk-chip-live'); }
+      else if (STATE.ai.loading) { txt.textContent = 'T2 loading ' + Math.round(STATE.ai.progress) + '%'; chip.classList.add('fk-chip-loading'); }
+      else { txt.textContent = 'T2 · click to load'; chip.classList.add('fk-chip-warn'); }
+    } else if (tier === 'T3') {
+      const p = activeTextProvider();
+      if (getKey('text', p)) { txt.textContent = 'T3 ' + (TEXT_PROVIDERS[p]?.label.split(' ')[0] || 'BYOK') + ' · active'; chip.classList.add('fk-chip-live'); }
+      else { txt.textContent = 'T3 · no key set'; chip.classList.add('fk-chip-warn'); }
+    }
+  }
+
+  async function loadWebLLM(modelKey) {
+    if (STATE.ai.loading) return;
+    const key = modelKey || STATE.config.webllm_model || DEFAULT_MODEL;
+    const model = WEBLLM_MODELS[key];
+    if (!model) { console.error('fall-kit: unknown model', key); return; }
+    if (STATE.ai.ready && STATE.ai.model === model.id) return;
+    STATE.ai.loading = true; STATE.ai.progress = 0; renderAiChip();
+    notify('Loading WebLLM · ' + model.label + ' · ' + model.size + ' first time', 'info');
+    try {
+      const { CreateMLCEngine } = await import('https://esm.run/@mlc-ai/web-llm@0.2.79');
+      const engine = await CreateMLCEngine(model.id, {
+        initProgressCallback: p => { STATE.ai.progress = (p.progress || 0) * 100; renderAiChip(); }
+      });
+      STATE.ai.engine = engine; STATE.ai.model = model.id; STATE.ai.ready = true; STATE.ai.loading = false;
+      STATE.config.webllm_model = key; saveConfig(); renderAiChip();
+      notify('WebLLM ready · sovereign mode · ' + model.label.split(' · ')[0], 'ok');
+    } catch (e) {
+      console.error('fall-kit: WebLLM load failed', e);
+      STATE.ai.loading = false; renderAiChip();
+      notify('WebLLM load failed · ' + e.message, 'err');
+    }
+  }
+
+  // ═══════════════════════ TEXT · aiComplete · aiChat ═══════════════
+  // One way to ask every text provider: the system prompt first and the same each call (so a provider can reuse its
+  // reading of it), then the conversation, which only ever grows. Pure pieces (requestOf, textOf, usageOf) are exposed
+  // on FallKit for tests; nothing pure here touches the network.
+  const isObj = (x) => x !== null && typeof x === 'object' && !Array.isArray(x);
+  const count = (x) => (Number.isInteger(x) && x >= 0 ? x : 0);
+  /** Claude models from 5.x think before they answer: room for that, and a light effort for an assistant's reply */
+  const THINKS = (model) => /^claude-(?:opus|sonnet|haiku|fable|mythos)-5/.test(model);
+  /** Claude models with a server-side fallback when a request is declined (Haiku has none) */
+  const FALLS_BACK = (model) => /^claude-(?:opus|sonnet|fable)-5/.test(model);
+  /** a message's words, whatever shape a provider keeps it in */
+  function wordsOf(m) {
+    if (!isObj(m)) return '';
+    if (typeof m.content === 'string') return m.content;
+    if (Array.isArray(m.content)) return m.content.filter((b) => isObj(b) && b.type === 'text' && typeof b.text === 'string').map((b) => b.text).join('\n');
+    return '';
+  }
+  /**
+   * The request a text provider is sent: { url, headers, body } for type (anthropic | openai | google | openai_compat |
+   * cohere | hf_inference). messages: [{ role: 'user' | 'assistant', content }]. Pure: the key is placed, never kept.
+   */
+  function requestOf(type, opts) {
+    const { model, key, system, messages, maxTokens, url } = opts;
+    const max = Number.isInteger(maxTokens) && maxTokens > 0 ? maxTokens : 600;
+    const plain = messages.map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: wordsOf(m) }));
+    if (type === 'anthropic') {
+      const headers = { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' };
+      const body = { model, max_tokens: THINKS(model) ? Math.max(max * 4, 4000) : max, system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
+        messages: messages.map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content })) };
+      if (THINKS(model)) body.output_config = { effort: 'low' };
+      if (FALLS_BACK(model)) { headers['anthropic-beta'] = 'server-side-fallback-2026-07-01'; body.fallbacks = 'default'; }
+      return { url: 'https://api.anthropic.com/v1/messages', headers, body };
+    }
+    if (type === 'openai') return { url: 'https://api.openai.com/v1/chat/completions', headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + key }, body: { model, max_completion_tokens: max, messages: [{ role: 'system', content: system }].concat(plain) } };
+    if (type === 'google') return { url: 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', headers: { 'content-type': 'application/json', 'x-goog-api-key': key },
+      body: { systemInstruction: { parts: [{ text: system }] }, contents: plain.map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })), generationConfig: { maxOutputTokens: max } } };
+    if (type === 'cohere') return { url: 'https://api.cohere.com/v2/chat', headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + key }, body: { model, max_tokens: max, messages: [{ role: 'system', content: system }].concat(plain) } };
+    if (type === 'hf_inference') return { url: 'https://api-inference.huggingface.co/models/' + model + '/v1/chat/completions', headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + key }, body: { model, max_tokens: max, messages: [{ role: 'system', content: system }].concat(plain) } };
+    if (type === 'openai_compat') return { url: url, headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + key }, body: { model, max_tokens: max, messages: [{ role: 'system', content: system }].concat(plain) } };
+    return null;
+  }
+  /** the answer's words from a provider's reply, or null when it declined or said nothing. Pure. */
+  function textOf(type, j) {
+    if (!isObj(j)) return null;
+    let t = '';
+    if (type === 'anthropic') { if (j.stop_reason === 'refusal' || !Array.isArray(j.content)) return null; t = wordsOf({ content: j.content }); }
+    else if (type === 'google') { const c = Array.isArray(j.candidates) ? j.candidates[0] : null; t = c && isObj(c.content) && Array.isArray(c.content.parts) ? c.content.parts.map((p) => (isObj(p) && typeof p.text === 'string' ? p.text : '')).join('') : ''; }
+    else if (type === 'cohere') { t = isObj(j.message) && Array.isArray(j.message.content) ? wordsOf({ content: j.message.content.map((b) => Object.assign({ type: 'text' }, b)) }) : ''; }
+    else { const c = Array.isArray(j.choices) ? j.choices[0] : null; t = c && isObj(c.message) && typeof c.message.content === 'string' ? c.message.content : ''; }
+    t = t.trim();
+    return t ? t : null;
+  }
+  /** what a call used, read from a provider's own usage record: { read, recycled, written, out }. Pure. */
+  function usageOf(type, j) {
+    const u = isObj(j) ? (type === 'google' ? j.usageMetadata : type === 'cohere' && isObj(j.usage) ? j.usage.tokens : j.usage) : null;
+    if (!isObj(u)) return { read: 0, recycled: 0, written: 0, out: 0 };
+    if (type === 'anthropic') { const recycled = count(u.cache_read_input_tokens), written = count(u.cache_creation_input_tokens); return { read: count(u.input_tokens) + recycled + written, recycled, written, out: count(u.output_tokens) }; }
+    if (type === 'google') { const read = count(u.promptTokenCount); return { read, recycled: Math.min(read, count(u.cachedContentTokenCount)), written: 0, out: count(u.candidatesTokenCount) + count(u.thoughtsTokenCount) }; }
+    if (type === 'cohere') return { read: count(u.input_tokens), recycled: 0, written: 0, out: count(u.output_tokens) };
+    const read = count(u.prompt_tokens), d = isObj(u.prompt_tokens_details) ? u.prompt_tokens_details : {};
+    return { read, recycled: Math.min(read, count(d.cached_tokens)), written: 0, out: count(u.completion_tokens) };
+  }
+
+  async function aiComplete(systemPrompt, userMsg, maxTokens) {
+    const r = await aiChat(systemPrompt, [], userMsg, maxTokens);
+    return r ? r.text : null;
+  }
+  /**
+   * One turn of a conversation: the system prompt, the history so far (unchanged), and the user's words. → { text,
+   * assistant } — the caller appends { role: 'user', content: userMsg } and `assistant` to its history (assistant is the
+   * reply as the provider gave it, so a provider that checks its own earlier turns sees them unchanged) — or null when no
+   * tier can answer.
+   */
+  async function aiChat(systemPrompt, history, userMsg, maxTokens) {
+    maxTokens = maxTokens || 600;
+    const messages = (Array.isArray(history) ? history : []).concat([{ role: 'user', content: String(userMsg == null ? '' : userMsg) }]);
+    const tier = aiTier();
+    if (tier === 'T2' && STATE.ai.ready && STATE.ai.engine) {
+      const r = await STATE.ai.engine.chat.completions.create({
+        messages: [{ role: 'system', content: systemPrompt }].concat(messages.map((m) => ({ role: m.role, content: wordsOf(m) }))), max_tokens: maxTokens,
+      });
+      const text = r.choices[0].message.content;
+      STATE.lastUsage = Object.assign({ provider: 'webllm' }, usageOf('openai', r));
+      return { text: text, assistant: { role: 'assistant', content: text } };
+    }
+    if (tier === 'T3') {
+      const p = activeTextProvider(); const key = getKey('text', p);
+      if (!key) return null;
+      return await textCall(p, systemPrompt, messages, maxTokens);
+    }
+    return null;
+  }
+
+  async function textCall(providerKey, sys, messages, maxTokens) {
+    const p = TEXT_PROVIDERS[providerKey];
+    const model = getModel('text', providerKey, TEXT_PROVIDERS);
+    const req = requestOf(p.type, { model, key: getKey('text', providerKey), system: sys, messages, maxTokens, url: p.url });
+    if (!req) throw new Error('unknown text provider type: ' + p.type);
+    const r = await fetch(req.url, { method: 'POST', headers: req.headers, body: JSON.stringify(req.body) });
+    if (!r.ok) throw new Error(p.label + ' ' + r.status);
+    const j = await r.json();
+    STATE.lastUsage = Object.assign({ provider: providerKey, model: model }, usageOf(p.type, j));
+    const text = textOf(p.type, j);
+    if (text === null) return null;
+    return { text: text, assistant: p.type === 'anthropic' ? { role: 'assistant', content: j.content } : { role: 'assistant', content: text } };
+  }
+
+  // ═══════════════════════ ASK · about this page ═════════════════════
+  // The kit's own use of the brain, so the chip is useful in any build, wired or not: a question about the page, answered
+  // from the page's own words. The opening is read once per talk and sent byte-identical every question, so a provider
+  // that caches recycles it; a talk starts afresh after MAX_ASKS questions or when the person starts again.
+  const PAGE_MAX = 12000, MAX_ASKS = 20;
+  const ASK_OPENING = 'You are the helper inside a web page. Answer questions about this page and how to use it, briefly and in plain words. Use only what the page says below; when it does not say, say so.';
+  /** the opening for questions about a page: who the helper is, then the page's title, description and text. Pure. */
+  function pageOpening(page) {
+    const p = isObj(page) ? page : {};
+    const line = (s, n) => (typeof s === 'string' ? s : '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const text = (typeof p.text === 'string' ? p.text : '').replace(/[ \t\r\f\v]+/g, ' ').replace(/ *\n[\s]*/g, '\n').trim().slice(0, PAGE_MAX);
+    const about = line(p.description, 400);
+    return ASK_OPENING + '\n\nPAGE: ' + (line(p.title, 200) || '(no title)') + '\n' + (about ? 'ABOUT: ' + about + '\n' : '') + 'TEXT:\n' + text;
+  }
+  function readPage() {   // the page as its reader has it, without the kit's own chip, panel and code
+    const d = document.querySelector('meta[name="description"]');
+    const body = document.body ? document.body.cloneNode(true) : null;
+    if (body) {
+      body.querySelectorAll('#fk-modal-bg, #fk-ai-chip, #fk-toast, script, style, noscript, template').forEach((e) => e.remove());
+      body.querySelectorAll('td, th').forEach((e) => e.append(' | '));   // keep cells and blocks apart, as a reader sees them
+      body.querySelectorAll('p, div, li, tr, h1, h2, h3, h4, h5, h6, br, pre, dt, dd, figcaption, blockquote, section, article, header, footer, nav, label, button, option').forEach((e) => e.append('\n'));
+    }
+    return { title: document.title, description: d ? d.getAttribute('content') : '', text: body ? body.textContent : '' };
+  }
+  async function askPage(question) {
+    const q = String(question == null ? '' : question).trim();
+    if (!q) return { text: null, why: 'Type a question first.' };
+    if (aiTier() === 'T0') return { text: null, why: 'AI is off. Pick T2 (a model in your browser) or T3 (your own key) below, press Save, then ask.' };
+    const t = STATE.ask;
+    if (!t.opening || t.talk.length >= MAX_ASKS * 2) { t.opening = pageOpening(readPage()); t.talk = []; }
+    const r = await aiChat(t.opening, t.talk, q, 600);
+    if (!r) return { text: null, why: aiTier() === 'T2' ? 'The in-browser model is not loaded yet: press Load model below.' : 'No key is set for this provider: add one below and press Save.' };
+    t.talk.push({ role: 'user', content: q }, r.assistant);
+    t.last = r.text;
+    return { text: r.text, why: null };
+  }
+
+  // ═══════════════════════ IMAGE · aiImage ═══════════════════════════
+  async function aiImage(prompt, opts) {
+    opts = opts || {};
+    const providerKey = opts.provider || STATE.config.image_provider || 'fal';
+    const p = IMAGE_PROVIDERS[providerKey];
+    const key = getKey('image', providerKey);
+    if (!key) return null;
+    const model = opts.model || getModel('image', providerKey, IMAGE_PROVIDERS);
+
+    if (p.type === 'fal') {
+      const r = await fetch('https://fal.run/' + model, {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Key ' + key },
+        body: JSON.stringify({ prompt, image_size: opts.size || 'landscape_4_3', num_inference_steps: opts.steps || 4 }),
+      });
+      if (!r.ok) throw new Error('fal ' + r.status);
+      const j = await r.json();
+      return { url: j.images?.[0]?.url || j.image?.url, raw: j };
+    }
+    if (p.type === 'hf_image') {
+      const r = await fetch('https://api-inference.huggingface.co/models/' + model, {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ inputs: prompt }),
+      });
+      if (!r.ok) throw new Error('HF ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    if (p.type === 'replicate') {
+      const r = await fetch('https://api.replicate.com/v1/predictions', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Token ' + key, 'Prefer': 'wait' },
+        body: JSON.stringify({ version: model, input: { prompt, num_outputs: 1 } }),
+      });
+      if (!r.ok) throw new Error('Replicate ' + r.status);
+      const j = await r.json();
+      return { url: Array.isArray(j.output) ? j.output[0] : j.output, raw: j };
+    }
+    if (p.type === 'openai_image') {
+      const r = await fetch('https://api.openai.com/v1/images/generations', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, prompt, n: 1, size: opts.size || '1024x1024' }),
+      });
+      if (!r.ok) throw new Error('OpenAI ' + r.status);
+      const j = await r.json();
+      return { url: j.data[0].url, raw: j };
+    }
+    if (p.type === 'openai_image_compat') {
+      const r = await fetch(p.url, {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, prompt, n: 1 }),
+      });
+      if (!r.ok) throw new Error(p.label + ' ' + r.status);
+      const j = await r.json();
+      return { url: j.data[0].url, raw: j };
+    }
+    if (p.type === 'google_image') {
+      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + model + ':predict?key=' + encodeURIComponent(key), {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ instances: [{ prompt }], parameters: { sampleCount: 1 } }),
+      });
+      if (!r.ok) throw new Error('Google Imagen ' + r.status);
+      const j = await r.json();
+      return { url: 'data:image/png;base64,' + j.predictions[0].bytesBase64Encoded, raw: j };
+    }
+    if (p.type === 'ideogram') {
+      const r = await fetch('https://api.ideogram.ai/generate', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Api-Key': key },
+        body: JSON.stringify({ image_request: { prompt, model, aspect_ratio: opts.size || 'ASPECT_16_9' } }),
+      });
+      if (!r.ok) throw new Error('Ideogram ' + r.status);
+      const j = await r.json();
+      return { url: j.data[0].url, raw: j };
+    }
+    if (p.type === 'leonardo') {
+      const r = await fetch('https://cloud.leonardo.ai/api/rest/v1/generations', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ prompt, modelId: model, num_images: 1, width: 1024, height: 576 }),
+      });
+      if (!r.ok) throw new Error('Leonardo ' + r.status);
+      const j = await r.json();
+      return { id: j.sdGenerationJob.generationId, raw: j, note: 'poll /generations/:id for URL' };
+    }
+    throw new Error('unknown image provider type: ' + p.type);
+  }
+
+  // ═══════════════════════ VIDEO · aiVideo ═══════════════════════════
+  async function aiVideo(prompt, opts) {
+    opts = opts || {};
+    const providerKey = opts.provider || STATE.config.video_provider || 'fal';
+    const p = VIDEO_PROVIDERS[providerKey];
+    const key = getKey('video', providerKey);
+    if (!key) return null;
+    const model = opts.model || getModel('video', providerKey, VIDEO_PROVIDERS);
+
+    if (p.type === 'fal') {
+      const r = await fetch('https://fal.run/' + model, {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Key ' + key },
+        body: JSON.stringify({ prompt, duration: opts.duration || '5s', aspect_ratio: opts.aspect || '16:9' }),
+      });
+      if (!r.ok) throw new Error('fal ' + r.status);
+      const j = await r.json();
+      return { url: j.video?.url || j.output?.url, raw: j };
+    }
+    if (p.type === 'luma') {
+      const r = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ prompt, model, aspect_ratio: opts.aspect || '16:9' }),
+      });
+      if (!r.ok) throw new Error('Luma ' + r.status);
+      const j = await r.json();
+      return { id: j.id, raw: j, note: 'poll /generations/:id for URL' };
+    }
+    if (p.type === 'runway') {
+      const r = await fetch('https://api.dev.runwayml.com/v1/image_to_video', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key, 'X-Runway-Version': '2024-11-06' },
+        body: JSON.stringify({ model, promptText: prompt, duration: opts.duration || 5, ratio: opts.aspect || '1280:768' }),
+      });
+      if (!r.ok) throw new Error('Runway ' + r.status);
+      const j = await r.json();
+      return { id: j.id, raw: j, note: 'poll for URL' };
+    }
+    if (p.type === 'pika') {
+      const r = await fetch('https://api.pika.art/generate/2.0', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ prompt }),
+      });
+      if (!r.ok) throw new Error('Pika ' + r.status);
+      const j = await r.json();
+      return { id: j.id, raw: j, note: 'poll for URL' };
+    }
+    if (p.type === 'kling') {
+      const r = await fetch('https://api.klingai.com/v1/videos/text2video', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, prompt }),
+      });
+      if (!r.ok) throw new Error('Kling ' + r.status);
+      const j = await r.json();
+      return { id: j.data.task_id, raw: j, note: 'poll for URL' };
+    }
+    throw new Error('unknown video provider type: ' + p.type);
+  }
+
+  // ═══════════════════════ TTS · aiTTS ═══════════════════════════════
+  async function aiTTS(text, opts) {
+    opts = opts || {};
+    const providerKey = opts.provider || STATE.config.tts_provider || 'elevenlabs';
+    const p = TTS_PROVIDERS[providerKey];
+    const key = getKey('tts', providerKey);
+    if (!key) return null;
+    const model = opts.model || getModel('tts', providerKey, TTS_PROVIDERS);
+
+    if (p.type === 'elevenlabs') {
+      const voice = opts.voice || '21m00Tcm4TlvDq8ikWAM';
+      const r = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voice, {
+        method: 'POST', headers: { 'xi-api-key': key, 'content-type': 'application/json' },
+        body: JSON.stringify({ text, model_id: model }),
+      });
+      if (!r.ok) throw new Error('ElevenLabs ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    if (p.type === 'openai_tts') {
+      const r = await fetch('https://api.openai.com/v1/audio/speech', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
+        body: JSON.stringify({ model, input: text, voice: opts.voice || 'alloy' }),
+      });
+      if (!r.ok) throw new Error('OpenAI TTS ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    if (p.type === 'cartesia') {
+      const r = await fetch('https://api.cartesia.ai/tts/bytes', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'X-API-Key': key, 'Cartesia-Version': '2024-11-13' },
+        body: JSON.stringify({ model_id: model, transcript: text, voice: { mode: 'id', id: opts.voice || 'a0e99841-438c-4a64-b679-ae501e7d6091' }, output_format: { container: 'mp3', encoding: 'mp3', sample_rate: 44100 } }),
+      });
+      if (!r.ok) throw new Error('Cartesia ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    if (p.type === 'playht') {
+      const r = await fetch('https://api.play.ht/api/v2/tts/stream', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key, 'X-USER-ID': opts.userId || '' },
+        body: JSON.stringify({ text, voice: opts.voice || 's3://voice-cloning-zero-shot/d9ff78ba-d016-47f6-b0ef-dd630f59414e/female-cs/manifest.json', voice_engine: model }),
+      });
+      if (!r.ok) throw new Error('PlayHT ' + r.status);
+      const blob = await r.blob();
+      return { url: URL.createObjectURL(blob), blob };
+    }
+    throw new Error('unknown TTS provider type: ' + p.type);
+  }
+
+  // ═══════════════════════ STT · aiSTT ═══════════════════════════════
+  async function aiSTT(blob, opts) {
+    opts = opts || {};
+    const providerKey = opts.provider || STATE.config.stt_provider || 'deepgram';
+    const p = STT_PROVIDERS[providerKey];
+    const key = getKey('stt', providerKey);
+    if (!key) return null;
+    const model = opts.model || getModel('stt', providerKey, STT_PROVIDERS);
+
+    if (p.type === 'deepgram') {
+      const r = await fetch('https://api.deepgram.com/v1/listen?model=' + model + '&smart_format=true', {
+        method: 'POST', headers: { 'Authorization': 'Token ' + key, 'content-type': blob.type || 'audio/wav' },
+        body: blob,
+      });
+      if (!r.ok) throw new Error('Deepgram ' + r.status);
+      const j = await r.json();
+      return { text: j.results?.channels?.[0]?.alternatives?.[0]?.transcript, raw: j };
+    }
+    if (p.type === 'assemblyai') {
+      const up = await fetch('https://api.assemblyai.com/v2/upload', { method: 'POST', headers: { 'Authorization': key }, body: blob });
+      const upJ = await up.json();
+      const r = await fetch('https://api.assemblyai.com/v2/transcript', {
+        method: 'POST', headers: { 'content-type': 'application/json', 'Authorization': key },
+        body: JSON.stringify({ audio_url: upJ.upload_url, speech_model: model }),
+      });
+      if (!r.ok) throw new Error('AssemblyAI ' + r.status);
+      const j = await r.json();
+      return { id: j.id, raw: j, note: 'poll for text' };
+    }
+    if (p.type === 'openai_stt') {
+      const fd = new FormData();
+      fd.append('file', blob, 'audio.wav');
+      fd.append('model', model);
+      const r = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+        method: 'POST', headers: { 'Authorization': 'Bearer ' + key }, body: fd,
+      });
+      if (!r.ok) throw new Error('OpenAI Whisper ' + r.status);
+      const j = await r.json();
+      return { text: j.text, raw: j };
+    }
+    throw new Error('unknown STT provider type: ' + p.type);
+  }
+
+  // ─── WebRTC P2P mesh ────────────────────────────────────────────────
+  const MESH_CHANNEL = 'fall-signal';
+  const MESH_MODULE = '/fall-kit/core/mesh.mjs', MESH_DEVICE = '/fall-kit/core/mesh-device.mjs';
+  // v3.2: the LIGHT mesh, loaded from this origin when the mesh is switched on. null = JSON, as before v3.2.
+  async function lightMesh() {
+    try {
+      const [M, D] = await Promise.all([import(MESH_MODULE), import(MESH_DEVICE)]);
+      const dev = await D.openDevice();
+      const tab = crypto.getRandomValues(new Uint32Array(1))[0];
+      return { M, dev, tab, seq: 0, last: new Map() };
+    } catch (e) { return null; }
+  }
+  function meshSend(value) {
+    const L = STATE.mesh.light, bc = STATE.mesh.bc;
+    if (!L) { bc.postMessage(value); STATE.mesh.stats.sent++; return; }
+    L.seq += 1;
+    L.M.speak(value, { slot: L.dev.slot, tab: L.tab, seq: L.seq, sign: L.dev.sign }).then((r) => { if (r.ok && STATE.mesh.bc) { STATE.mesh.bc.postMessage(r.bytes); STATE.mesh.stats.sent++; } });
+  }
+  async function meshStart(opts) {
+    if (STATE.mesh.active) return;
+    opts = opts || {};
+    const seedId = opts.seedId || (location.pathname + '#' + Math.random().toString(36).slice(2, 8));
+    STATE.mesh.seedId = seedId;
+    try { STATE.mesh.bc = new BroadcastChannel(MESH_CHANNEL); }
+    catch (e) { console.warn('fall-kit: BroadcastChannel unavailable'); return; }
+    STATE.mesh.active = true;
+    STATE.mesh.light = opts.light === false ? null : await lightMesh();
+    const st = STATE.mesh.stats;
+    STATE.mesh.bc.onmessage = async (e) => {
+      const L = STATE.mesh.light;
+      if (!L) {
+        const m = e.data;
+        if (!m || !m.kind || m.peerId === seedId) return;
+        if (opts.onMessage) opts.onMessage(m);
+        return;
+      }
+      const r = await L.M.hearMesh(e.data, { slot: L.dev.slot, id: L.dev.id, raw: L.dev.raw, verifyBytes: L.dev.verifyBytes, last: L.last });
+      if (!r.ok) { st.refused[r.stage] = (st.refused[r.stage] || 0) + 1; return; }
+      if (r.legacy) st.legacy++; else st.admitted++;
+      if (r.value.peerId === seedId) return;
+      if (opts.onMessage) opts.onMessage(Object.assign({}, r.value, r.legacy ? { legacy: true } : { light: true, tab: r.tab }));
+    };
+    meshSend({ kind: 'fall-kit:hello', peerId: seedId, ts: Date.now(), seedName: opts.seedName || 'unknown' });
+    notify('Mesh active · channel ' + MESH_CHANNEL + (STATE.mesh.light ? ' · LIGHT' : ''), 'ok');
+  }
+  function meshPost(kind, payload) {
+    if (!STATE.mesh.active || !STATE.mesh.bc) return false;
+    meshSend({ kind: kind, peerId: STATE.mesh.seedId, ts: Date.now(), payload: payload });
+    return true;
+  }
+  function meshStats() {
+    const s = STATE.mesh.stats;
+    return { active: STATE.mesh.active, light: !!STATE.mesh.light, tab: STATE.mesh.light ? STATE.mesh.light.tab : null, sent: s.sent, admitted: s.admitted, legacy: s.legacy, refused: Object.assign({}, s.refused) };
+  }
+
+  // ─── Toast ──────────────────────────────────────────────────────────
+  function notify(msg, kind) {
+    let t = $('#fk-toast');
+    if (!t) {
+      t = document.createElement('div'); t.id = 'fk-toast';
+      t.style.cssText = 'position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);background:#c08a3a;color:#0a0a0a;padding:9px 18px;border-radius:3px;font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;opacity:0;transition:all .22s;z-index:10000;pointer-events:none';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.background = kind === 'err' ? '#a14a2a' : kind === 'ok' ? '#6b8d4a' : '#c08a3a';
+    t.style.color = kind === 'err' ? '#fff' : '#0a0a0a';
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(t._to);
+    t._to = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2400);
+  }
+
+  // ─── Settings modal · tabs for text/image/video/audio ───────────────
+  function providerOptions(registry, currentKey) {
+    return Object.entries(registry).map(([k, p]) => `<option value="${k}"${currentKey===k?' selected':''}>${esc(p.label)}</option>`).join('');
+  }
+  function modelOptions(registry, providerKey, currentModel) {
+    const p = registry[providerKey]; if (!p) return '';
+    return p.models.map(m => `<option value="${m}"${currentModel===m?' selected':''}>${esc(m)}</option>`).join('');
+  }
+
+  function openSettings(startTab) {
+    let bg = $('#fk-modal-bg');
+    if (!bg) {
+      bg = document.createElement('div'); bg.id = 'fk-modal-bg';
+      bg.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:flex-start;justify-content:center;padding:60px 16px;overflow-y:auto;z-index:9999';
+      bg.onclick = e => { if (e.target.id === 'fk-modal-bg') closeSettings(); };
+      document.body.appendChild(bg);
+    }
+    const tier = aiTier();
+    const tab = startTab || STATE._lastTab || 'text';
+    STATE._lastTab = tab;
+    const textP = activeTextProvider();
+    const imgP = STATE.config.image_provider || 'fal';
+    const vidP = STATE.config.video_provider || 'fal';
+    const ttsP = STATE.config.tts_provider || 'elevenlabs';
+    const sttP = STATE.config.stt_provider || 'deepgram';
+
+    const styleInput = 'width:100%;padding:8px 11px;background:#22212c;border:1px solid #3a342c;color:#ebe3d2;border-radius:3px;font-size:13px;font-family:inherit;margin-bottom:10px';
+    const styleLabel = 'display:block;font-size:11px;color:#a89e88;letter-spacing:.04em;margin-bottom:6px;text-transform:uppercase';
+
+    function modalityBlock(modality, registry, currentProvider, currentKeyVal, currentModel) {
+      const p = registry[currentProvider];
+      return `
+        <label style="${styleLabel}">Provider</label>
+        <select id="fk-${modality}-provider" style="${styleInput}">${providerOptions(registry, currentProvider)}</select>
+        <label style="${styleLabel}">Model</label>
+        <select id="fk-${modality}-model" style="${styleInput}">${modelOptions(registry, currentProvider, currentModel)}</select>
+        <label style="${styleLabel}">API key</label>
+        <input type="password" id="fk-${modality}-key" value="${esc(currentKeyVal)}" placeholder="${currentKeyVal ? '(set · leave to keep)' : 'paste key here'}" autocomplete="off" style="${styleInput};font-family:ui-monospace,Menlo,monospace">
+        <div style="font-size:11px;color:#6e6a5e;line-height:1.55;margin-top:2px">Key held in this tab only (unless you tick “remember” below). Sent direct to the provider — never proxied through us.</div>
+      `;
+    }
+
+    bg.innerHTML = `
+      <div style="background:#13121a;border:1px solid #c08a3a;border-radius:5px;max-width:640px;width:100%;padding:22px 24px;color:#ebe3d2;font-family:system-ui,-apple-system,sans-serif;font-size:13.5px;line-height:1.55">
+        <h3 style="font-family:Georgia,serif;font-size:18px;color:#c08a3a;margin-bottom:14px">◊ Fall Kit · your AI helper</h3>
+
+        <div style="margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label for="fk-ask" style="${styleLabel}">Ask about this page</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input id="fk-ask" type="text" placeholder="How do I use this?" autocomplete="off" style="${styleInput};flex:1;min-width:180px;margin-bottom:0">
+            <button id="fk-ask-go" style="padding:7px 14px;background:#c08a3a;color:#0a0a0a;border:none;border-radius:3px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">Ask</button>
+            <button id="fk-ask-new" style="padding:7px 12px;background:transparent;color:#a89e88;border:1px solid #3a342c;border-radius:3px;font-size:11px;cursor:pointer;font-family:inherit">Start again</button>
+          </div>
+          <div id="fk-ask-out" aria-live="polite" style="white-space:pre-wrap;margin-top:10px;font-size:13px;color:#ebe3d2;line-height:1.6"></div>
+          <div style="font-size:11px;color:#6e6a5e;line-height:1.55;margin-top:6px">Answered from this page’s own words, by the brain you pick below. The page is read once per talk and sent the same each time, so a provider that caches pays for it once.</div>
+        </div>
+
+        <div style="margin-bottom:14px"><label style="${styleLabel}">Tier</label>
+          <select id="fk-tier" style="${styleInput}">
+            <option value="T0"${tier==='T0'?' selected':''}>T0 · off (default · the seed works fully without AI)</option>
+            <option value="T2"${tier==='T2'?' selected':''}>T2 · WebLLM in-browser · sovereign · pick a model below</option>
+            <option value="T3"${tier==='T3'?' selected':''}>T3 · BYOK · configure providers per modality below</option>
+          </select>
+        </div>
+
+        <div id="fk-t2-block" style="display:${tier==='T2'?'block':'none'};margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label style="${styleLabel}">WebLLM model · 1B → 70B cascade</label>
+          <select id="fk-model" style="${styleInput}">
+            ${Object.entries(WEBLLM_MODELS).map(([k,m]) => `<option value="${k}"${(STATE.config.webllm_model||DEFAULT_MODEL)===k?' selected':''}>${esc(m.label)} · ${esc(m.size)}</option>`).join('')}
+          </select>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <button id="fk-load-llm" style="padding:7px 14px;background:#c08a3a;color:#0a0a0a;border:none;border-radius:3px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">${STATE.ai.ready?'✓ Loaded · switch':'Load model (one-time download)'}</button>
+            <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.04em">${STATE.ai.ready?'ready':STATE.ai.loading?Math.round(STATE.ai.progress)+'%':'not loaded'}</span>
+          </div>
+        </div>
+
+        <div id="fk-t3-block" style="display:${tier==='T3'?'block':'none'};margin-bottom:14px">
+          <div style="display:flex;gap:2px;margin-bottom:10px;border-bottom:1px solid #2a2934">
+            ${['text','image','video','tts','stt'].map(m => `<button data-tab="${m}" class="fk-tab${tab===m?' on':''}" style="padding:8px 14px;background:${tab===m?'#22212c':'transparent'};color:${tab===m?'#c08a3a':'#a89e88'};border:none;border-bottom:2px solid ${tab===m?'#c08a3a':'transparent'};font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;cursor:pointer">${m}</button>`).join('')}
+          </div>
+          <div style="padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+            ${tab==='text'  ? modalityBlock('text',  TEXT_PROVIDERS,  textP, getKey('text',  textP), getModel('text',  textP, TEXT_PROVIDERS))  : ''}
+            ${tab==='image' ? modalityBlock('image', IMAGE_PROVIDERS, imgP,  getKey('image', imgP),  getModel('image', imgP,  IMAGE_PROVIDERS)) : ''}
+            ${tab==='video' ? modalityBlock('video', VIDEO_PROVIDERS, vidP,  getKey('video', vidP),  getModel('video', vidP,  VIDEO_PROVIDERS)) : ''}
+            ${tab==='tts'   ? modalityBlock('tts',   TTS_PROVIDERS,   ttsP,  getKey('tts',   ttsP),  getModel('tts',   ttsP,   TTS_PROVIDERS))   : ''}
+            ${tab==='stt'   ? modalityBlock('stt',   STT_PROVIDERS,   sttP,  getKey('stt',   sttP),  getModel('stt',   sttP,   STT_PROVIDERS))   : ''}
+          </div>
+          <label style="display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:12px;color:#ebe3d2;cursor:pointer"><input type="checkbox" id="fk-remember"${STATE.config.remember_keys===true?' checked':''} style="margin-top:2px"> Remember my keys on this device</label>
+          <div style="font-size:11px;color:#a14a2a;line-height:1.55;margin:4px 0 0 22px">Every estate page at this web address shares this browser’s storage, so a remembered key can be read by any of them. Leave it off and your keys are held in this tab only: close it and they are gone.</div>
+          <button id="fk-forget" style="margin-top:10px;padding:6px 12px;background:transparent;color:#a89e88;border:1px solid #3a342c;border-radius:3px;font-size:11px;cursor:pointer;font-family:inherit">Forget my keys</button>
+        </div>
+
+        <div style="margin-bottom:14px;padding:12px 14px;background:#1a1922;border:1px solid #2a2934;border-radius:4px">
+          <label style="${styleLabel}">Cross-seed mesh</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="fk-mesh-toggle" style="padding:6px 12px;background:${STATE.mesh.active?'#6b8d4a':'#1a1922'};color:${STATE.mesh.active?'#fff':'#a89e88'};border:1px solid ${STATE.mesh.active?'#6b8d4a':'#3a342c'};border-radius:3px;font-size:11px;cursor:pointer;font-family:inherit">${STATE.mesh.active?'✓ Active · disconnect':'Activate mesh'}</button>
+            <span style="font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#6e6a5e;letter-spacing:.04em">channel · <code style="background:#22212c;padding:1px 5px;border-radius:2px">${MESH_CHANNEL}</code></span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+          <button onclick="FallKit.closeSettings()" style="padding:7px 14px;background:transparent;color:#a89e88;border:1px solid #3a342c;border-radius:3px;font-size:12px;cursor:pointer;font-family:inherit">Close</button>
+          <button id="fk-save" style="padding:7px 14px;background:#c08a3a;color:#0a0a0a;border:none;border-radius:3px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">Save</button>
+        </div>
+        <div style="margin-top:14px;font-family:ui-monospace,Menlo,monospace;font-size:9px;color:#6e6a5e;letter-spacing:.08em;text-align:center">◊ Fall Kit v${FALL_KIT_VERSION} · MIT · ai-nativesolutions.com</div>
+      </div>`;
+
+    const askOut = $('#fk-ask-out');
+    if (STATE.ask.last) askOut.textContent = STATE.ask.last;
+    const ask = async () => {
+      const go = $('#fk-ask-go'); go.disabled = true; askOut.textContent = '…';
+      try { const r = await askPage($('#fk-ask').value); askOut.textContent = r.text === null ? r.why : r.text; }
+      catch (e) { askOut.textContent = 'The provider said no: ' + e.message; }
+      go.disabled = false;
+    };
+    $('#fk-ask-go').onclick = ask;
+    $('#fk-ask').onkeydown = (e) => { if (e.key === 'Enter') ask(); };
+    $('#fk-ask-new').onclick = () => { STATE.ask = { opening: null, talk: [], last: null }; askOut.textContent = 'A fresh talk: the page is read again at the next question.'; };
+
+    $('#fk-tier').onchange = () => {
+      const t = $('#fk-tier').value;
+      $('#fk-t2-block').style.display = t === 'T2' ? 'block' : 'none';
+      $('#fk-t3-block').style.display = t === 'T3' ? 'block' : 'none';
+    };
+    document.querySelectorAll('.fk-tab').forEach(b => b.onclick = () => { STATE._lastTab = b.dataset.tab; openSettings(b.dataset.tab); });
+
+    ['text','image','video','tts','stt'].forEach(m => {
+      const sel = $('#fk-' + m + '-provider');
+      if (!sel) return;
+      const registry = { text: TEXT_PROVIDERS, image: IMAGE_PROVIDERS, video: VIDEO_PROVIDERS, tts: TTS_PROVIDERS, stt: STT_PROVIDERS }[m];
+      sel.onchange = () => {
+        const pk = sel.value;
+        const modelSel = $('#fk-' + m + '-model');
+        modelSel.innerHTML = modelOptions(registry, pk, registry[pk].default);
+        const keyInput = $('#fk-' + m + '-key');
+        const existing = getKey(m, pk);
+        keyInput.value = existing;
+        keyInput.placeholder = existing ? '(set · leave to keep)' : 'paste key here';
+      };
+    });
+
+    $('#fk-load-llm') && ($('#fk-load-llm').onclick = () => { loadWebLLM($('#fk-model').value); });
+    $('#fk-mesh-toggle').onclick = () => {
+      if (STATE.mesh.active) { STATE.mesh.bc?.close(); STATE.mesh.active = false; STATE.mesh.bc = null; notify('Mesh disconnected'); }
+      else meshStart({ seedName: STATE.config.seedName || 'seed' });
+      openSettings(STATE._lastTab);
+    };
+
+    $('#fk-forget') && ($('#fk-forget').onclick = () => { forgetKeys(); notify('Keys forgotten · this tab and this device', 'ok'); openSettings(STATE._lastTab); });
+    $('#fk-save').onclick = () => {
+      STATE.config.ai_tier = $('#fk-tier').value;
+      if ($('#fk-remember')) STATE.config.remember_keys = $('#fk-remember').checked;
+      if ($('#fk-model')) STATE.config.webllm_model = $('#fk-model').value;
+      ['text','image','video','tts','stt'].forEach(m => {
+        const provSel = $('#fk-' + m + '-provider');
+        if (!provSel) return;
+        const pk = provSel.value;
+        const model = $('#fk-' + m + '-model').value;
+        const newKey = $('#fk-' + m + '-key').value.trim();
+        const existing = getKey(m, pk);
+        STATE.config[m + '_provider'] = pk;
+        if (newKey || existing) setKey(m, pk, newKey || existing, model);
+      });
+      saveConfig(); renderAiChip(); notify('Saved', 'ok'); closeSettings();
+    };
+  }
+  function closeSettings() { const bg = $('#fk-modal-bg'); if (bg) bg.remove(); }
+
+  // ─── Help section ───────────────────────────────────────────────────
+  function helpSection() {
+    return `<div style="background:rgba(192,138,58,.05);border:1px solid #3a342c;border-radius:4px;padding:18px 22px;margin:14px 0">
+      <h4 style="font-family:Georgia,serif;font-size:15px;color:#c08a3a;margin-bottom:12px">◊ Fall Kit · AI cascade · 3 tiers · 5 modalities</h4>
+      <p style="font-size:13px;color:#a89e88;line-height:1.7;margin-bottom:10px">This seed runs fully without AI (<strong style="color:#c08a3a">T0</strong>, default). Enable a tier in settings if you want AI-assist:</p>
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+        <thead><tr><th style="padding:6px 10px;text-align:left;background:rgba(0,0,0,.2);font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.08em;text-transform:uppercase">Tier</th><th style="padding:6px 10px;text-align:left;background:rgba(0,0,0,.2);font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#a89e88;letter-spacing:.08em;text-transform:uppercase">What it is</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T0</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">Off. The seed works fully. No AI · no downloads · no API calls.</td></tr>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T2</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">WebLLM in-browser. Pick a model: 1B (700MB) → 3B (2GB, default) → 7B (5GB) → 70B (40GB). One-time download, offline forever. Zero data leaves.</td></tr>
+          <tr><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#c08a3a;font-weight:600">T3</td><td style="padding:6px 10px;border-top:1px solid #2a2934;color:#a89e88">BYOK · 12 text providers (Claude, GPT, Gemini, Groq, Cerebras, DeepSeek, OpenRouter, Mistral, Cohere, Together, HuggingFace, Grok) · 7 image (fal, HF, Replicate, DALL-E, Imagen, Ideogram, Leonardo, Aurora) · 5 video (fal, Luma, Runway, Pika, Kling) · 4 TTS (ElevenLabs, OpenAI, PlayHT, Cartesia) · 3 STT (Deepgram, AssemblyAI, Whisper). You bring keys, you pay direct. Keys are held in this tab only, unless you choose to remember them on this device. The same opening is sent first every time, so a provider that caches can reuse its reading of it.</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:#6e6a5e;line-height:1.6;margin-top:10px">Open the AI chip in the header to switch tier or check status. Cross-seed mesh activates a BroadcastChannel on <code style="background:#1a1922;padding:1px 5px;border-radius:2px">${MESH_CHANNEL}</code> so other estate seeds on the same device discover this one.</p>
+    </div>`;
+  }
+
+  // ─── CSS for AI chip ────────────────────────────────────────────────
+  function injectCss() {
+    if (STATE.cssIn) return;   // the kit knows it added its styles; no lookup of an id the build's own page never has
+    STATE.cssIn = true;
+    const s = document.createElement('style');
+    s.id = 'fk-css';
+    s.textContent = `
+      #fk-ai-chip { display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:3px; font-family:ui-monospace,Menlo,monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; font-weight:600; cursor:pointer; border:1px solid #3a342c; background:#1a1922; color:#a89e88; user-select:none; vertical-align:middle }
+      #fk-ai-chip:hover { border-color:#c08a3a; color:#ebe3d2 }
+      #fk-ai-chip.fk-chip-live { border-color:#6b8d4a; color:#6b8d4a; background:rgba(107,141,74,.10) }
+      #fk-ai-chip.fk-chip-loading { border-color:#e8a83a; color:#e8a83a; background:rgba(232,168,58,.10) }
+      #fk-ai-chip.fk-chip-warn { border-color:#a14a2a; color:#a14a2a; background:rgba(161,74,42,.08) }
+      #fk-ai-chip .fk-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0 }
+      #fk-ai-chip.fk-chip-loading .fk-dot { animation:fk-pulse 1s infinite }
+      @keyframes fk-pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+      .fk-ai-assist { display:inline-flex; align-items:center; gap:5px; padding:4px 9px; font-size:11px; border:1px solid #c08a3a; color:#c08a3a; background:transparent; border-radius:3px; cursor:pointer; font-family:inherit }
+      .fk-ai-assist:hover { background:#c08a3a; color:#0a0a0a }
+      .fk-ai-assist::before { content:'✦'; font-size:12px }
+    `;
+    document.head.appendChild(s);
+  }
+
+  // ─── The floating chip keeps clear of the build's own fixed bars and controls ─────────
+  // A build's bottom tab bar or floating button stays put while the page scrolls, so a chip over it would hide it. The
+  // chip looks at what is under it and moves up past it; a fixed container as tall as the page counts only by the
+  // control under the chip. Content that scrolls is not in the way.
+  function blockerUnder(el) {
+    let fixed = null;
+    for (let e = el; e && e !== document.body && e !== document.documentElement; e = e.parentElement) {
+      const pos = getComputedStyle(e).position;
+      if (pos === 'fixed' || pos === 'sticky') { fixed = e; break; }
+    }
+    if (!fixed) return null;
+    if (fixed.getBoundingClientRect().height <= innerHeight * 0.4) return fixed;
+    return el.closest('button, a, input, select, textarea, label, [role=button], [tabindex]');
+  }
+  function placeChip(chip) {
+    if (!chip || chip.dataset.anchored) return;
+    chip.style.top = ''; chip.style.bottom = '14px';
+    for (let i = 0; i < 6; i++) {
+      const r = chip.getBoundingClientRect();
+      chip.style.visibility = 'hidden';
+      const hit = [[r.left + 2, r.top + 2], [r.right - 2, r.top + 2], [r.left + 2, r.bottom - 2], [r.right - 2, r.bottom - 2]]
+        .map(([x, y]) => document.elementFromPoint(x, y)).filter(Boolean).map(blockerUnder).find(Boolean);
+      chip.style.visibility = '';
+      if (!hit) return;
+      const bottom = innerHeight - hit.getBoundingClientRect().top + 8;
+      if (bottom > innerHeight * 0.6) { chip.style.bottom = ''; chip.style.top = '14px'; return; }
+      chip.style.bottom = bottom + 'px';
+    }
+  }
+
+  // ─── Init ───────────────────────────────────────────────────────────
+  function init(opts) {
+    opts = opts || {};
+    injectCss();
+    if (opts.seedName) STATE.config.seedName = opts.seedName;
+    if ($('#fk-ai-chip')) { renderAiChip(); return { version: FALL_KIT_VERSION, mounted: false }; }
+    const chip = document.createElement('button');
+    chip.id = 'fk-ai-chip';
+    chip.title = 'AI helper · ask about this page, or pick the brain';
+    chip.innerHTML = '<span class="fk-dot"></span><span id="fk-ai-chip-text">T0 · off</span>';
+    chip.onclick = () => openSettings();
+    const anchor = opts.chipAnchor ? $(opts.chipAnchor) : null;
+    if (anchor) { anchor.appendChild(chip); chip.dataset.anchored = '1'; }
+    else {
+      chip.style.cssText += ';position:fixed;bottom:14px;left:14px;z-index:9998;box-shadow:0 4px 14px rgba(0,0,0,.4)';
+      document.body.appendChild(chip);
+      const place = () => placeChip(chip);
+      setTimeout(place, 0); setTimeout(place, 1200);   // once now, once after the build has laid itself out
+      let t = null; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(place, 200); });
+    }
+    renderAiChip();
+    if (BOOT.moved) notify('AI keys are now held in this tab only · tick “remember” in AI settings to keep them', 'info');
+    return { version: FALL_KIT_VERSION, mounted: true };
+  }
+
+  // ─── Public API ─────────────────────────────────────────────────────
+  root.FallKit = {
+    version: FALL_KIT_VERSION,
+    init: init,
+    aiTier: aiTier,
+    aiComplete: aiComplete,
+    aiChat: aiChat,
+    askPage: askPage,
+    pageOpening: pageOpening,
+    lastUsage: () => STATE.lastUsage,
+    forgetKeys: forgetKeys,
+    requestOf: requestOf,
+    textOf: textOf,
+    usageOf: usageOf,
+    configFrom: configFrom,
+    storedForm: storedForm,
+    aiImage: aiImage,
+    aiVideo: aiVideo,
+    aiTTS: aiTTS,
+    aiSTT: aiSTT,
+    loadWebLLM: loadWebLLM,
+    openSettings: openSettings,
+    closeSettings: closeSettings,
+    renderAiChip: renderAiChip,
+    helpSection: helpSection,
+    meshStart: meshStart,
+    meshPost: meshPost,
+    meshStats: meshStats,
+    notify: notify,
+    MODELS: WEBLLM_MODELS,
+    TEXT_PROVIDERS: TEXT_PROVIDERS,
+    IMAGE_PROVIDERS: IMAGE_PROVIDERS,
+    VIDEO_PROVIDERS: VIDEO_PROVIDERS,
+    TTS_PROVIDERS: TTS_PROVIDERS,
+    STT_PROVIDERS: STT_PROVIDERS,
+    state: STATE,
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+  // fall-kit init · auto-mounts a floating AI chip bottom-left
+  (function () {
+    function go() { if (typeof FallKit !== 'undefined') FallKit.init({ seedName: "fallledger" }); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go);
+    else go();
+  })();
+</script>
+<!-- FALL_KIT_END v1 -->
+</head>
+<body>
+<div class="app">
+
+  <!-- header -->
+  <header class="hdr">
+    <div class="brand">
+      <span class="glyph">◊</span>
+      <span class="nm">FallLedger</span>
+      <span class="v">v1.0.0 · 541</span>
+    </div>
+    <div class="hdr-sp"></div>
+    <select id="periodSel">
+      <option value="month">this month</option>
+      <option value="quarter">this quarter</option>
+      <option value="year">this year</option>
+      <option value="custom">custom...</option>
+    </select>
+    <div class="closed-badge open" id="closedBadge">no close</div>
+    <button class="auto-btn" id="openPalette" title="Ctrl+K">Ω <span class="lbl">autopilot</span></button>
+    <div class="tier-badge" id="tierBadge">offline</div>
+    <button id="openSettings" title="settings">⚙</button>
+  </header>
+
+  <!-- tabs -->
+  <nav class="tabs">
+    <div class="tab active" data-pane="journals">journals</div>
+    <div class="tab" data-pane="coa">chart of accounts</div>
+    <div class="tab" data-pane="tb">trial balance</div>
+    <div class="tab" data-pane="pl">profit &amp; loss</div>
+    <div class="tab" data-pane="bs">balance sheet</div>
+    <div class="tab" data-pane="cf">cash flow</div>
+    <div class="tab" data-pane="vat">VAT</div>
+  </nav>
+
+  <!-- main -->
+  <main class="main">
+
+    <!-- journals -->
+    <section class="pane active" id="pane-journals">
+      <h1>Journals</h1>
+      <p class="sub">double-entry entries · debits = credits · locked once posted</p>
+      <div class="toolbar">
+        <button class="btn primary" id="newJournal">+ new journal</button>
+        <input id="jSearch" placeholder="search ref / narrative...">
+        <input id="jFrom" type="date" title="from">
+        <input id="jTo" type="date" title="to">
+        <select id="jAcct"><option value="">all accounts</option></select>
+        <input id="jAmt" type="number" placeholder="min amount" step="0.01">
+        <button class="btn ghost" id="jClear">clear</button>
+      </div>
+      <div id="journalList"></div>
+      <div class="pager" id="jPager"></div>
+    </section>
+
+    <!-- chart of accounts -->
+    <section class="pane" id="pane-coa">
+      <h1>Chart of Accounts</h1>
+      <p class="sub">UK SME pre-seeded · add / edit · delete blocked if used</p>
+      <div class="toolbar">
+        <button class="btn primary" id="newAccount">+ new account</button>
+        <select id="coaFilter">
+          <option value="">all categories</option>
+          <option value="asset">asset</option>
+          <option value="liability">liability</option>
+          <option value="equity">equity</option>
+          <option value="revenue">revenue</option>
+          <option value="expense">expense</option>
+        </select>
+        <button class="btn" id="reseed">reseed default CoA</button>
+      </div>
+      <div id="coaList"></div>
+    </section>
+
+    <!-- trial balance -->
+    <section class="pane" id="pane-tb">
+      <h1>Trial Balance</h1>
+      <p class="sub">every account · debit + credit + net · totals must equal</p>
+      <div class="toolbar">
+        <input id="tbFrom" type="date">
+        <input id="tbTo" type="date">
+        <button class="btn" id="tbRun">run</button>
+        <button class="btn" id="tbExport">export PDF</button>
+        <button class="btn ghost" id="tbCsv">CSV</button>
+      </div>
+      <div id="tbBody"></div>
+    </section>
+
+    <!-- p&l -->
+    <section class="pane" id="pane-pl">
+      <h1>Profit &amp; Loss</h1>
+      <p class="sub">revenue − expense by category · gross / operating / net</p>
+      <div class="toolbar">
+        <input id="plFrom" type="date">
+        <input id="plTo" type="date">
+        <button class="btn" id="plRun">run</button>
+        <button class="btn" id="plExport">export PDF</button>
+      </div>
+      <div id="plBody"></div>
+    </section>
+
+    <!-- balance sheet -->
+    <section class="pane" id="pane-bs">
+      <h1>Balance Sheet</h1>
+      <p class="sub">at a point in time · assets = liabilities + equity</p>
+      <div class="toolbar">
+        <input id="bsAt" type="date">
+        <button class="btn" id="bsRun">run</button>
+        <button class="btn" id="bsExport">export PDF</button>
+      </div>
+      <div id="bsBody"></div>
+    </section>
+
+    <!-- cash flow -->
+    <section class="pane" id="pane-cf">
+      <h1>Cash Flow Statement</h1>
+      <p class="sub">indirect method · operating · investing · financing</p>
+      <div class="toolbar">
+        <input id="cfFrom" type="date">
+        <input id="cfTo" type="date">
+        <button class="btn" id="cfRun">run</button>
+        <button class="btn" id="cfExport">export PDF</button>
+      </div>
+      <div id="cfBody"></div>
+    </section>
+
+    <!-- vat -->
+    <section class="pane" id="pane-vat">
+      <h1>VAT Return</h1>
+      <p class="sub">HMRC boxes 1-9 · informational · MTD submission requires HMRC-recognised software</p>
+      <div class="toolbar">
+        <input id="vatFrom" type="date">
+        <input id="vatTo" type="date">
+        <button class="btn" id="vatRun">run</button>
+        <button class="btn" id="vatCsv">export CSV</button>
+        <button class="btn" id="vatExport">export PDF</button>
+      </div>
+      <div id="vatBody"></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- palette -->
+<div class="palette-bg" id="palette">
+  <div class="palette">
+    <div class="palette-hd"><span class="glyph">Ω</span><input id="pInput" placeholder="post journal: sales 1000 to bank · trial balance this month · p&l last quarter..."><span class="badge" id="pTier">T0</span></div>
+    <div class="palette-bd" id="pBody"></div>
+  </div>
+</div>
+
+<!-- generic modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal" id="modalBox">
+    <div class="modal-hd"><h2 id="modalTitle">modal</h2><button class="close-x" data-close>×</button></div>
+    <div class="modal-bd" id="modalBody"></div>
+    <div class="modal-ft" id="modalFoot"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ========================================================================== */
+/* FallLedger · sovereign double-entry general ledger                         */
+/* PRIME 541 · v1.0.0 · MIT · ◊·κ=1                                            */
+/* ========================================================================== */
+
+const TOOLNAME='fallledger';
+const PRIME=541;
+const VERSION='1.0.0';
+
+/* -------------------- state -------------------- */
+const state={
+  accounts:[],
+  journals:[],
+  periods:[],
+  settings:{
+    vatRegistered:true,
+    vatScheme:'Standard',
+    homeCurrency:'GBP',
+    multiCurrency:false,
+    anthropicKey:'',openaiKey:'',geminiKey:'',openrouterKey:''
+  },
+  ui:{
+    tab:'journals',
+    jPage:0,
+    jFilters:{search:'',from:'',to:'',acct:'',amt:''},
+    coaFilter:'',
+    pageSize:50
+  }
+};
+
+/* -------------------- IndexedDB -------------------- */
+const DB_NAME='fallledger';
+const DB_VER=1;
+let db=null;
+
+function openDB(){
+  return new Promise((res,rej)=>{
+    const r=indexedDB.open(DB_NAME,DB_VER);
+    r.onupgradeneeded=e=>{
+      const d=e.target.result;
+      if(!d.objectStoreNames.contains('accounts'))d.createObjectStore('accounts',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('journals'))d.createObjectStore('journals',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('periods'))d.createObjectStore('periods',{keyPath:'id'});
+      if(!d.objectStoreNames.contains('settings'))d.createObjectStore('settings',{keyPath:'k'});
+    };
+    r.onsuccess=e=>{db=e.target.result;res()};
+    r.onerror=e=>rej(e);
+  });
+}
+function dbAll(store){return new Promise((res,rej)=>{const tx=db.transaction(store,'readonly');const s=tx.objectStore(store);const r=s.getAll();r.onsuccess=()=>res(r.result);r.onerror=e=>rej(e)})}
+function dbPut(store,obj){return new Promise((res,rej)=>{const tx=db.transaction(store,'readwrite');const r=tx.objectStore(store).put(obj);r.onsuccess=()=>res();r.onerror=e=>rej(e)})}
+function dbDel(store,id){return new Promise((res,rej)=>{const tx=db.transaction(store,'readwrite');const r=tx.objectStore(store).delete(id);r.onsuccess=()=>res();r.onerror=e=>rej(e)})}
+function dbClear(store){return new Promise((res,rej)=>{const tx=db.transaction(store,'readwrite');const r=tx.objectStore(store).clear();r.onsuccess=()=>res();r.onerror=e=>rej(e)})}
+
+async function loadAll(){
+  state.accounts=await dbAll('accounts');
+  state.journals=await dbAll('journals');
+  state.periods=await dbAll('periods');
+  const s=await dbAll('settings');
+  s.forEach(r=>{state.settings[r.k]=r.v});
+}
+async function saveSetting(k,v){state.settings[k]=v;await dbPut('settings',{k,v})}
+
+/* -------------------- seed CoA -------------------- */
+const SEED_COA=[
+  // assets
+  {code:'1000',name:'Cash on Hand',category:'asset'},
+  {code:'1010',name:'Bank',category:'asset'},
+  {code:'1020',name:'Bank · Reserve',category:'asset'},
+  {code:'1100',name:'Trade Debtors',category:'asset'},
+  {code:'1200',name:'Prepayments',category:'asset'},
+  {code:'1300',name:'Stock / Inventory',category:'asset'},
+  {code:'1500',name:'Plant & Equipment',category:'asset'},
+  {code:'1510',name:'Accumulated Depreciation',category:'asset'},
+  // liabilities
+  {code:'2000',name:'Trade Creditors',category:'liability'},
+  {code:'2100',name:'Accruals',category:'liability'},
+  {code:'2200',name:'VAT Control',category:'liability'},
+  {code:'2210',name:'PAYE / NIC',category:'liability'},
+  {code:'2300',name:'Corporation Tax',category:'liability'},
+  {code:'2400',name:'Director Loan',category:'liability'},
+  {code:'2500',name:'Bank Loan',category:'liability'},
+  // equity
+  {code:'3000',name:'Share Capital',category:'equity'},
+  {code:'3100',name:'Retained Earnings',category:'equity'},
+  {code:'3200',name:'Drawings',category:'equity'},
+  // revenue
+  {code:'4000',name:'Sales',category:'revenue'},
+  {code:'4010',name:'Service Income',category:'revenue'},
+  {code:'4100',name:'Other Income',category:'revenue'},
+  {code:'4200',name:'Interest Received',category:'revenue'},
+  // expenses
+  {code:'5000',name:'Cost of Sales',category:'expense'},
+  {code:'5100',name:'Subcontractors',category:'expense'},
+  {code:'6000',name:'Salaries',category:'expense'},
+  {code:'6010',name:'Employer NIC',category:'expense'},
+  {code:'6100',name:'Rent',category:'expense'},
+  {code:'6110',name:'Utilities',category:'expense'},
+  {code:'6120',name:'Insurance',category:'expense'},
+  {code:'6200',name:'Marketing',category:'expense'},
+  {code:'6210',name:'Travel',category:'expense'},
+  {code:'6220',name:'Office Supplies',category:'expense'},
+  {code:'6300',name:'Software & Subscriptions',category:'expense'},
+  {code:'6400',name:'Professional Fees',category:'expense'},
+  {code:'6500',name:'Bank Charges',category:'expense'},
+  {code:'6600',name:'Depreciation',category:'expense'},
+  {code:'6700',name:'Bad Debts',category:'expense'},
+  {code:'6800',name:'Interest Paid',category:'expense'}
+];
+
+async function seedCoA(force){
+  if(state.accounts.length>0 && !force)return;
+  if(force){await dbClear('accounts');state.accounts=[]}
+  for(const a of SEED_COA){
+    const acc={id:'A'+a.code,code:a.code,name:a.name,category:a.category,parent:null,currency:state.settings.homeCurrency||'GBP'};
+    await dbPut('accounts',acc);
+    state.accounts.push(acc);
+  }
+}
+
+/* -------------------- helpers -------------------- */
+const $=id=>document.getElementById(id);
+const fmt=n=>{const v=Number(n)||0;return v.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})};
+const today=()=>new Date().toISOString().slice(0,10);
+const uid=p=>(p||'')+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+function periodRange(kind){
+  const now=new Date();
+  const y=now.getFullYear(),m=now.getMonth();
+  if(kind==='month')return{from:new Date(y,m,1).toISOString().slice(0,10),to:new Date(y,m+1,0).toISOString().slice(0,10)};
+  if(kind==='quarter'){const q=Math.floor(m/3);return{from:new Date(y,q*3,1).toISOString().slice(0,10),to:new Date(y,q*3+3,0).toISOString().slice(0,10)}}
+  if(kind==='year')return{from:y+'-01-01',to:y+'-12-31'};
+  return{from:y+'-01-01',to:today()};
+}
+function getAcct(id){return state.accounts.find(a=>a.id===id)}
+function getAcctByCode(code){return state.accounts.find(a=>a.code===String(code))}
+function getAcctByName(q){q=q.toLowerCase();return state.accounts.find(a=>a.name.toLowerCase()===q)||state.accounts.find(a=>a.name.toLowerCase().includes(q))}
+function periodClosedFor(date){
+  const close=state.periods.length?state.periods[state.periods.length-1].closeDate:null;
+  return close && date<=close;
+}
+function toast(msg,kind){
+  const el=document.createElement('div');
+  el.className='toast '+(kind||'');
+  el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),2600);
+}
+
+/* -------------------- ledger math -------------------- */
+// ⚑ THIS DROPPED WHAT IT COULD NOT PLACE. It looked each line-s account up in its running totals
+// and, finding none, returned early without a word, so every journal balanced individually and the
+// trial balance did not, and no screen in the application could say why. The kernel names them.
+function trialBalanceOf(from,to){
+  return LEDGER.trialBalance(state.journals, state.accounts, {
+    from, to, homeCurrency:(state.settings && state.settings.homeCurrency) || 'GBP',
+  });
+}
+
+function balances(from,to){
+  const tb=trialBalanceOf(from,to);
+  const out={};
+  tb.rows.forEach(r=>{
+    out[r.accountId]={
+      debit:LEDGER.pounds(r.debit), credit:LEDGER.pounds(r.credit), net:LEDGER.pounds(r.net),
+      category:r.category, code:r.code, name:r.name,
+    };
+  });
+  out.__trial={ balanced:tb.balanced, unplaced:tb.unplaced,
+    debits:LEDGER.pounds(tb.debits), credits:LEDGER.pounds(tb.credits) };
+  return out;
+}
+
+// ════════════════════════════════════════════════════════════════
+// THE GATED LEDGER KERNEL — inlined verbatim by build-page.mjs from ledger.mjs.
+// Do not edit between the markers: edit ledger.mjs, re-run the gate, rebuild the page.
+// ════════════════════════════════════════════════════════════════
+const LEDGER = (function () {
+/* __LEDGER_KERNEL__ */
+// ledger.mjs — a ledger has one rule, and this is the rule.
+//
+// fallledger DOES check that debits equal credits, which is more than most of the estate managed.
+// What it checks is the problem.
+//
+// ⚑ THE EXCHANGE RATE WAS DECORATION. Every line stores a `currency` and an `fxRate`. Search the file:
+// `fxRate` is written once, at the moment a journal is posted, and read nowhere — not by the balance
+// check, not by the trial balance, not by the profit and loss. So a journal debiting £100 and
+// crediting $100 balances perfectly, and the books are out by the difference for ever after.
+//
+// ⚑ A COMMA SILENTLY BECAME ZERO. Amounts were read as `Number(l.debit)||0`, and `Number('1,000')` is
+// NaN, so a line typed the way money is written on a proposal becomes 0. Type both sides that way and
+// the journal is all zeros — which balances, and posts, and records nothing.
+//
+// ⚑ IT BALANCED TO WITHIN HALF A PENNY. The old check allowed the two sides to differ by up to
+// 0.005, because it summed pounds as floating point and needed the slack. Counted in whole pence
+// there is nothing to tolerate: money balances exactly or it is not balanced. A tolerance is a
+// decision to lose money slowly.
+//
+// ⚑ AND THE TRIAL BALANCE DROPPED WHAT IT COULD NOT PLACE. It looked each line's account up in its
+// running totals and, finding none, returned early without a word — so a line posted to an account
+// that has since been deleted was skipped in silence. Every journal still balanced individually, the
+// trial balance did not, and nothing anywhere said why. The entire purpose of a trial balance is that
+// it balances; one that quietly cannot is worse than none at all.
+//
+// (Both faults are described here in prose rather than quoted as code on purpose: the page inlines
+// this file, and CI greps the page for the old expressions. A guard that trips on a comment explaining
+// the bug is a guard nobody can live with — the same trap fall-graft met with its own closing tags.)
+//
+// Pure: no storage, no clock, no DOM. Money is integer pence throughout.
+
+/** The two sides. A line carries exactly one of them. */
+const DEBIT = 'debit';
+const CREDIT = 'credit';
+
+/**
+ * Money as whole pence, or null.
+ *
+ * Accepts what people type — "1,000", "£1,000.50", " 1000 " — and refuses what nobody means. Rounds
+ * to the penny at the boundary so nothing downstream ever holds a fraction of one.
+ */
+function pence(value) {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? Math.round(value * 100) : null;
+  }
+  if (typeof value !== 'string') return null;
+  const cleaned = value.replace(/[£$€,\s]/g, '');
+  if (cleaned === '' || !/^-?\d+(\.\d+)?$/.test(cleaned)) return null;   // no exponents, no junk
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? Math.round(n * 100) : null;
+}
+
+/** Pence back to pounds, for display. */
+function pounds(p) {
+  const n = Number(p);
+  return Number.isFinite(n) ? Math.round(n) / 100 : null;
+}
+
+/**
+ * One line, normalised — or the reasons it is not a line.
+ *
+ * ⚑ EXACTLY ONE SIDE. A line carrying both a debit and a credit is not a double entry, it is a net
+ * figure with the working thrown away, and it makes every account it touches unauditable.
+ */
+function normalizeLine(line, opts) {
+  const l = (line && typeof line === 'object') ? line : {};
+  const o = (opts && typeof opts === 'object') ? opts : {};
+  const problems = [];
+
+  const dr = l.debit === undefined || l.debit === null || l.debit === '' ? 0 : pence(l.debit);
+  const cr = l.credit === undefined || l.credit === null || l.credit === '' ? 0 : pence(l.credit);
+
+  if (dr === null || cr === null) problems.push('that is not an amount — "1,000" and "£1,000.50" are fine, letters are not');
+  if (dr !== null && dr < 0) problems.push('a debit cannot be negative — credit the other account instead');
+  if (cr !== null && cr < 0) problems.push('a credit cannot be negative — debit the other account instead');
+  if (dr && cr) problems.push('a line is a debit or a credit, never both');
+  if (!dr && !cr) problems.push('a line with no amount is not a line');
+
+  const accountId = l.accountId == null ? '' : String(l.accountId);
+  if (!accountId) problems.push('a line needs an account');
+  else if (Array.isArray(o.accounts) && !o.accounts.some(a => a && String(a.id) === accountId)) {
+    problems.push(`there is no account ${accountId}`);
+  }
+
+  const rate = fxRateOf(l.fxRate);
+  if (rate === null) problems.push('the exchange rate is not a usable number');
+
+  if (problems.length) return { ok: false, problems, line: null };
+  return {
+    ok: true, problems: [],
+    line: { accountId, debit: dr, credit: cr, side: dr ? DEBIT : CREDIT, amount: dr || cr,
+            currency: currencyOf(l.currency), fxRate: rate, fxRateGiven: rateWasGiven(l.fxRate),
+            memo: typeof l.memo === 'string' ? l.memo : '' },
+  };
+}
+
+function currencyOf(v) {
+  return typeof v === 'string' && /^[A-Za-z]{3}$/.test(v.trim()) ? v.trim().toUpperCase() : 'GBP';
+}
+
+/** A rate must be a positive finite number. Absent means 1; zero and negative mean nothing at all. */
+function fxRateOf(value) {
+  if (value === undefined || value === null || value === '') return 1;
+  const n = Number(value);
+  return (Number.isFinite(n) && n > 0) ? n : null;
+}
+
+/** Was a rate actually stated, as opposed to defaulted? On a foreign line that difference is money. */
+function rateWasGiven(value) {
+  return !(value === undefined || value === null || value === '');
+}
+
+/**
+ * ⚑ WHAT A LINE IS WORTH IN THE BOOKS' OWN CURRENCY.
+ *
+ * This is the function whose absence made the exchange rate decoration. Everything that adds money up
+ * goes through it, so a foreign line can never be compared against a home one by accident again.
+ */
+function homeAmount(line, homeCurrency) {
+  const l = (line && typeof line === 'object') ? line : {};
+  const amount = Number(l.amount);
+  if (!Number.isFinite(amount)) return null;
+  const home = currencyOf(homeCurrency);
+
+  // A home-currency line is already in home money. Any rate sitting on it is ignored: a stray rate
+  // must never quietly restate sterling.
+  if (currencyOf(l.currency) === home) return Math.round(amount);
+
+  // ⚑ A FOREIGN LINE WITH NO STATED RATE CONVERTS TO NOTHING. Defaulting it to 1 is how $100 came to
+  // equal £100 in the first place — the difference between "the rate is one" and "nobody said" is
+  // exactly the money that goes missing. It has to be written down, even when it really is 1.
+  const given = ('fxRateGiven' in l) ? l.fxRateGiven === true : rateWasGiven(l.fxRate);
+  if (!given) return null;
+  const rate = fxRateOf(l.fxRate);
+  if (rate === null) return null;
+  return Math.round(amount * rate);
+}
+
+/**
+ * ⚑ THE RULE. Every reason at once, because being told one fault at a time is five trips back.
+ *
+ * Balanced means EXACTLY balanced, in whole pence, after every line has been converted into the books'
+ * own currency. No tolerance.
+ */
+function validateJournal(entry, opts) {
+  const e = (entry && typeof entry === 'object') ? entry : {};
+  const o = (opts && typeof opts === 'object') ? opts : {};
+  const home = currencyOf(o.homeCurrency);
+  const problems = [];
+
+  const raw = Array.isArray(e.lines) ? e.lines : [];
+  if (raw.length < 2) problems.push('a journal needs at least two lines');
+
+  const lines = [];
+  raw.forEach((l, i) => {
+    const r = normalizeLine(l, o);
+    if (!r.ok) r.problems.forEach(p => problems.push(`line ${i + 1}: ${p}`));
+    else lines.push(r.line);
+  });
+
+  let dr = 0, cr = 0, unconvertible = 0;
+  for (const l of lines) {
+    const home_ = homeAmount(l, home);
+    if (home_ === null) { unconvertible++; continue; }
+    if (l.side === DEBIT) dr += home_; else cr += home_;
+  }
+  if (unconvertible) problems.push(`${unconvertible} line(s) cannot be converted into ${home}`);
+
+  if (!problems.length && dr !== cr) {
+    problems.push(`debits (${fmtPence(dr)}) must equal credits (${fmtPence(cr)}) — out by ${fmtPence(Math.abs(dr - cr))}`);
+  }
+
+  if (problems.length) return { ok: false, problems, debits: dr, credits: cr, lines: null };
+  return { ok: true, problems: [], debits: dr, credits: cr, lines };
+}
+
+function fmtPence(p) {
+  const v = Math.abs(p) / 100;
+  return (p < 0 ? '-' : '') + '£' + v.toFixed(2);
+}
+
+/** Journals that count toward the books. Voided and unposted are history, not balance. */
+function livePostings(journals) {
+  return (Array.isArray(journals) ? journals : [])
+    .filter(j => j && typeof j === 'object' && j.posted !== false && j.voided !== true);
+}
+
+/**
+ * ⚑ THE TRIAL BALANCE, AND WHAT IT COULD NOT PLACE.
+ *
+ * Returns per-account totals AND `unplaced` — every line whose account does not exist. The old code
+ * dropped those silently, so the report simply stopped balancing and no screen in the application
+ * could tell anybody why. A number that cannot be explained is not a number a bookkeeper can sign.
+ */
+function trialBalance(journals, accounts, opts) {
+  const o = (opts && typeof opts === 'object') ? opts : {};
+  const home = currencyOf(o.homeCurrency);
+  const accs = Array.isArray(accounts) ? accounts.filter(a => a && a.id != null) : [];
+  const byId = new Map(accs.map(a => [String(a.id), a]));
+
+  const rows = new Map(accs.map(a => [String(a.id), {
+    accountId: String(a.id), code: a.code || '', name: a.name || '', category: a.category || '',
+    debit: 0, credit: 0, net: 0,
+  }]));
+  const unplaced = [];
+  let totalDr = 0, totalCr = 0;
+
+  for (const j of livePostings(journals)) {
+    if (o.from && String(j.date) < o.from) continue;
+    if (o.to && String(j.date) > o.to) continue;
+    for (const raw of (Array.isArray(j.lines) ? j.lines : [])) {
+      const norm = normalizeLine(raw, {});          // no account list: shape only
+      if (!norm.ok) { unplaced.push({ journalId: j.id ?? null, accountId: raw && raw.accountId, why: norm.problems[0] }); continue; }
+      const l = norm.line;
+      const amount = homeAmount(l, home);
+      if (amount === null) { unplaced.push({ journalId: j.id ?? null, accountId: l.accountId, why: `cannot be converted into ${home}` }); continue; }
+      const row = rows.get(l.accountId);
+      if (!row) { unplaced.push({ journalId: j.id ?? null, accountId: l.accountId, why: 'there is no such account' }); continue; }
+      if (l.side === DEBIT) { row.debit += amount; totalDr += amount; }
+      else { row.credit += amount; totalCr += amount; }
+    }
+  }
+
+  for (const row of rows.values()) {
+    row.net = (row.category === 'asset' || row.category === 'expense')
+      ? row.debit - row.credit
+      : row.credit - row.debit;
+  }
+
+  return {
+    rows: [...rows.values()],
+    debits: totalDr, credits: totalCr,
+    balanced: totalDr === totalCr && unplaced.length === 0,
+    unplaced,
+    homeCurrency: home,
+  };
+}
+
+/** Reversing an entry swaps every side. It must balance for the same reason the original did. */
+function reversalOf(journal) {
+  const j = (journal && typeof journal === 'object') ? journal : {};
+  const lines = (Array.isArray(j.lines) ? j.lines : []).map(l => ({
+    ...l, debit: l && l.credit, credit: l && l.debit,
+    memo: 'reversal · ' + ((l && l.memo) || ''),
+  }));
+  return { ref: 'REV-' + (j.ref || String(j.id || '').slice(0, 6)), narrative: 'Reversal of ' + (j.ref || j.id || ''), lines, reversalOf: j.id ?? null };
+}
+
+
+/* __END_LEDGER_KERNEL__ */
+return { DEBIT, CREDIT, pence, pounds, fxRateOf, normalizeLine, homeAmount,
+  validateJournal, livePostings, trialBalance, reversalOf };
+})();
+
+function postJournal(entry,opts){
+  opts=opts||{};
+  // entry: {date, ref, narrative, lines:[{accountId, debit, credit, memo}]}
+  // ⚑ THE RULE, OUT OF THE GATED KERNEL. What was here checked that debits equalled credits, which
+  // is more than most tools manage — but it summed pounds as floating point and tolerated half a
+  // penny; it read amounts as Number(l.debit)||0, so a line typed "1,000" silently became zero and a
+  // journal of all zeros balanced and posted; and it ignored the currency and fxRate stored on every
+  // line, so £100 debited against $100 credited balanced perfectly.
+  const check = LEDGER.validateJournal(entry, {
+    accounts: state.accounts,
+    homeCurrency: (state.settings && state.settings.homeCurrency) || 'GBP',
+  });
+  if(!check.ok) throw new Error(check.problems.join(' · '));
+  if(!entry.date)entry.date=today();
+  if(periodClosedFor(entry.date) && !opts.unlock)throw new Error('period closed for '+entry.date+' — unlock first');
+  const j={
+    id:entry.id||uid('J'),
+    date:entry.date,
+    ref:entry.ref||'',
+    narrative:entry.narrative||'',
+    // What is stored is what was checked, in pence, so the two can never disagree.
+    lines:check.lines.map(l=>({
+      accountId:l.accountId,
+      debit:LEDGER.pounds(l.debit),
+      credit:LEDGER.pounds(l.credit),
+      debitPence:l.debit,
+      creditPence:l.credit,
+      memo:l.memo,
+      currency:l.currency,
+      fxRate:l.fxRate,
+      fxRateGiven:l.fxRateGiven
+    })),
+    posted:true,
+    voided:false,
+    reversalOf:entry.reversalOf||null,
+    source:entry.source||'manual',
+    createdAt:Date.now()
+  };
+  return dbPut('journals',j).then(()=>{
+    state.journals.push(j);
+    return j;
+  });
+}
+
+async function reverseJournal(jid){
+  const j=state.journals.find(x=>x.id===jid);
+  if(!j)throw new Error('not found');
+  if(j.reversalOf)throw new Error('already a reversal');
+  const base=LEDGER.reversalOf(j);
+  const rev={ date:today(), ...base, source:'reversal' };
+  await postJournal(rev,{unlock:true});
+}
+
+/* -------------------- Cascade T0/T2/T3 -------------------- */
+const Cascade={
+  async detectTier(){if(await this._probe())return'T2';const s=state.settings;if(s.anthropicKey||s.openaiKey||s.geminiKey||s.openrouterKey)return'T3';return'T0'},
+  async _probe(){if(this._p!==undefined)return this._p;try{this._p=await Promise.race([fetch('http://127.0.0.1:11434/api/tags').then(r=>r.ok),new Promise(r=>setTimeout(()=>r(false),350))])}catch(e){this._p=false}return this._p},
+  async generate(sys,user,maxTok){const s=state.settings,max=maxTok||1200;
+    if(s.anthropicKey)try{const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':s.anthropicKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:max,system:sys,messages:[{role:'user',content:user}]})});const d=await r.json();return{tier:'T3·Claude',text:d?.content?.[0]?.text||''}}catch(e){}
+    if(s.geminiKey)try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${s.geminiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:sys}]},contents:[{parts:[{text:user}]}]})});const d=await r.json();return{tier:'T3·Gemini',text:d?.candidates?.[0]?.content?.parts?.[0]?.text||''}}catch(e){}
+    if(s.openaiKey)try{const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.openaiKey},body:JSON.stringify({model:'gpt-4o-mini',messages:[{role:'system',content:sys},{role:'user',content:user}]})});const d=await r.json();return{tier:'T3·GPT',text:d?.choices?.[0]?.message?.content||''}}catch(e){}
+    if(s.openrouterKey)try{const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.openrouterKey,'HTTP-Referer':location.origin},body:JSON.stringify({model:'anthropic/claude-haiku-4-5',messages:[{role:'system',content:sys},{role:'user',content:user}]})});const d=await r.json();return{tier:'T3·OpenRouter',text:d?.choices?.[0]?.message?.content||''}}catch(e){}
+    return{tier:'T0',text:null}
+  }
+};
+async function updateTierBadge(){const t=await Cascade.detectTier();const el=document.getElementById('tierBadge');if(el){el.textContent=t==='T0'?'offline':t;el.classList.toggle('t3',t!=='T0')}}
+
+/* -------------------- rendering -------------------- */
+function renderTab(name){
+  state.ui.tab=name;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.pane===name));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('active',p.id==='pane-'+name));
+  if(name==='journals')renderJournals();
+  if(name==='coa')renderCoA();
+  if(name==='tb')renderTrialBalance();
+  if(name==='pl')renderPL();
+  if(name==='bs')renderBS();
+  if(name==='cf')renderCF();
+  if(name==='vat')renderVAT();
+}
+
+/* --- journals --- */
+function refreshAcctFilter(){
+  const sel=$('jAcct');
+  if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">all accounts</option>'+state.accounts.sort((a,b)=>a.code.localeCompare(b.code)).map(a=>`<option value="${a.id}">${a.code} · ${a.name}</option>`).join('');
+  sel.value=cur;
+}
+
+function filteredJournals(){
+  const f=state.ui.jFilters;
+  return state.journals.filter(j=>{
+    if(f.search){const q=f.search.toLowerCase();if(!(j.ref||'').toLowerCase().includes(q) && !(j.narrative||'').toLowerCase().includes(q))return false}
+    if(f.from && j.date<f.from)return false;
+    if(f.to && j.date>f.to)return false;
+    if(f.acct && !j.lines.some(l=>l.accountId===f.acct))return false;
+    if(f.amt){const t=j.lines.reduce((s,l)=>s+(Number(l.debit)||0),0);if(t<Number(f.amt))return false}
+    return true;
+  }).sort((a,b)=>b.date.localeCompare(a.date)||b.createdAt-a.createdAt);
+}
+
+function renderJournals(){
+  const all=filteredJournals();
+  const ps=state.ui.pageSize;
+  const pages=Math.max(1,Math.ceil(all.length/ps));
+  if(state.ui.jPage>=pages)state.ui.jPage=0;
+  const page=all.slice(state.ui.jPage*ps,(state.ui.jPage+1)*ps);
+  if(all.length===0){
+    $('journalList').innerHTML=`<div class="empty"><div class="glyph">◊</div><h3>no journals yet</h3><p>post your first entry · the chart of accounts is already seeded · feeds from fallinvoice / fallap auto-post here</p><button class="btn primary" onclick="openJournalModal()">+ new journal</button></div>`;
+    $('jPager').innerHTML='';return;
+  }
+  let html='<table class="tbl"><thead><tr><th>date</th><th>ref</th><th>narrative</th><th>lines</th><th class="num">total</th><th>state</th><th></th></tr></thead><tbody>';
+  page.forEach(j=>{
+    const tot=j.lines.reduce((s,l)=>s+(Number(l.debit)||0),0);
+    const lines=j.lines.map(l=>{const a=getAcct(l.accountId);return (a?a.code:'?')+(l.debit?' Dr '+fmt(l.debit):' Cr '+fmt(l.credit))}).join(' · ');
+    html+=`<tr>
+      <td>${j.date}</td>
+      <td>${j.ref||'<span class="muted">—</span>'}</td>
+      <td>${j.narrative||''}${j.source&&j.source!=='manual'?' <span class="muted">[via '+j.source+']</span>':''}</td>
+      <td class="muted" style="font-size:11px">${lines}</td>
+      <td class="num">${fmt(tot)}</td>
+      <td>${j.reversalOf?'<span class="muted">reversal</span>':'<span class="pos">posted</span>'}</td>
+      <td><button class="btn ghost" onclick="viewJournal('${j.id}')">view</button> <button class="btn ghost" onclick="reverseJ('${j.id}')">reverse</button></td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  $('journalList').innerHTML=html;
+  // pager
+  let p='<span>'+all.length+' entries · page '+(state.ui.jPage+1)+'/'+pages+'</span><div class="pgs">';
+  for(let i=0;i<Math.min(pages,10);i++)p+='<button class="'+(i===state.ui.jPage?'active':'')+'" onclick="state.ui.jPage='+i+';renderJournals()">'+(i+1)+'</button>';
+  p+='</div>';
+  $('jPager').innerHTML=p;
+}
+
+window.viewJournal=function(jid){
+  const j=state.journals.find(x=>x.id===jid);if(!j)return;
+  let html='<div class="kv"><span class="k">date</span><span class="v">'+j.date+'</span></div>';
+  html+='<div class="kv"><span class="k">ref</span><span class="v">'+(j.ref||'—')+'</span></div>';
+  html+='<div class="kv"><span class="k">narrative</span><span class="v">'+(j.narrative||'—')+'</span></div>';
+  html+='<div class="kv"><span class="k">source</span><span class="v">'+(j.source||'manual')+'</span></div>';
+  html+='<h3>Lines</h3><table class="tbl"><thead><tr><th>account</th><th>memo</th><th class="num">debit</th><th class="num">credit</th></tr></thead><tbody>';
+  let dr=0,cr=0;
+  j.lines.forEach(l=>{const a=getAcct(l.accountId);dr+=Number(l.debit)||0;cr+=Number(l.credit)||0;html+='<tr><td>'+(a?a.code+' · '+a.name:'?')+'</td><td class="muted">'+(l.memo||'')+'</td><td class="num">'+(l.debit?fmt(l.debit):'')+'</td><td class="num">'+(l.credit?fmt(l.credit):'')+'</td></tr>'});
+  html+='<tr class="total"><td colspan="2">total</td><td class="num">'+fmt(dr)+'</td><td class="num">'+fmt(cr)+'</td></tr></tbody></table>';
+  openModal('Journal · '+(j.ref||j.id.slice(0,8)),html,[{label:'close',action:closeModal}]);
+};
+
+window.reverseJ=async function(jid){
+  if(!confirm('Post a reversal of this entry?'))return;
+  try{await reverseJournal(jid);toast('reversal posted','ok');renderJournals()}
+  catch(e){toast(e.message,'err')}
+};
+
+/* --- journal entry modal --- */
+let modalLines=[];
+
+window.openJournalModal=function(prefill){
+  modalLines=prefill&&prefill.lines?prefill.lines.slice():[{accountId:'',debit:0,credit:0,memo:''},{accountId:'',debit:0,credit:0,memo:''}];
+  const date=(prefill&&prefill.date)||today();
+  const ref=(prefill&&prefill.ref)||'';
+  const narr=(prefill&&prefill.narrative)||'';
+  const html=`
+    <div class="row r3">
+      <div class="field"><label>date</label><input type="date" id="jeDate" value="${date}"></div>
+      <div class="field"><label>ref</label><input id="jeRef" value="${ref}" placeholder="e.g. INV-001"></div>
+      <div class="field"><label>narrative</label><input id="jeNarr" value="${narr}" placeholder="description"></div>
+    </div>
+    <h3>Lines</h3>
+    <div class="j-lines" id="jeLines"></div>
+    <button class="btn" id="jeAdd">+ add line</button>
+    <div class="j-totals" id="jeTotals"></div>
+  `;
+  openModal('New Journal Entry',html,[
+    {label:'cancel',action:closeModal,ghost:true},
+    {label:'post entry',action:postModalJournal,primary:true}
+  ]);
+  renderModalLines();
+  $('jeAdd').onclick=()=>{modalLines.push({accountId:'',debit:0,credit:0,memo:''});renderModalLines()};
+};
+
+function renderModalLines(){
+  const acctOpts='<option value="">— select —</option>'+state.accounts.sort((a,b)=>a.code.localeCompare(b.code)).map(a=>`<option value="${a.id}">${a.code} · ${a.name}</option>`).join('');
+  const el=$('jeLines');
+  el.innerHTML=modalLines.map((l,i)=>`
+    <div class="j-line">
+      <select data-i="${i}" data-k="accountId">${acctOpts.replace(`value="${l.accountId}"`,`value="${l.accountId}" selected`)}</select>
+      <input data-i="${i}" data-k="memo" placeholder="memo" value="${l.memo||''}">
+      <input data-i="${i}" data-k="debit" type="number" step="0.01" placeholder="debit" value="${l.debit||''}">
+      <input data-i="${i}" data-k="credit" type="number" step="0.01" placeholder="credit" value="${l.credit||''}">
+      <button class="rm" data-rm="${i}" title="remove">×</button>
+    </div>`).join('');
+  el.querySelectorAll('select,input').forEach(inp=>{
+    inp.addEventListener('input',e=>{
+      const i=+e.target.dataset.i,k=e.target.dataset.k;
+      let v=e.target.value;
+      if(k==='debit'||k==='credit')v=Number(v)||0;
+      modalLines[i][k]=v;
+      updateModalTotals();
+    });
+  });
+  el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{const i=+b.dataset.rm;modalLines.splice(i,1);if(modalLines.length<2)modalLines.push({accountId:'',debit:0,credit:0,memo:''});renderModalLines()});
+  updateModalTotals();
+}
+
+function updateModalTotals(){
+  // ⚑ THE PREVIEW MUST AGREE WITH THE POST. This counted amounts its own way, so once the posting
+  // path went through the kernel the two could disagree: type 1,000 and the running total showed
+  // nothing while the journal posted a thousand pounds. A screen that contradicts what the button
+  // is about to do is worse than no screen. Same kernel, same answer.
+  const check=LEDGER.validateJournal({lines:modalLines},{
+    accounts:state.accounts,
+    homeCurrency:(state.settings && state.settings.homeCurrency) || "GBP",
+  });
+  const dr=LEDGER.pounds(check.debits), cr=LEDGER.pounds(check.credits);
+  const ok=check.ok;
+  $('jeTotals').innerHTML=`<span>total debits: <strong>${fmt(dr)}</strong></span><span>total credits: <strong>${fmt(cr)}</strong></span><span class="${ok?'ok':'bad'}">${ok?'balanced ✓':'out by '+fmt(Math.abs(dr-cr))}</span>`;
+}
+
+async function postModalJournal(){
+  try{
+    await postJournal({
+      date:$('jeDate').value,
+      ref:$('jeRef').value,
+      narrative:$('jeNarr').value,
+      lines:modalLines.filter(l=>l.accountId)
+    });
+    toast('journal posted','ok');
+    closeModal();
+    renderJournals();
+  }catch(e){toast(e.message,'err')}
+}
+
+/* --- chart of accounts --- */
+function renderCoA(){
+  const list=state.accounts.filter(a=>!state.ui.coaFilter||a.category===state.ui.coaFilter).sort((a,b)=>a.code.localeCompare(b.code));
+  if(list.length===0){
+    $('coaList').innerHTML='<div class="empty"><div class="glyph">◊</div><h3>no accounts</h3><p>seed the UK SME chart of accounts</p><button class="btn primary" onclick="seedCoA(true).then(()=>{refreshAcctFilter();renderCoA();toast(\'seeded\',\'ok\')})">seed default CoA</button></div>';
+    return;
+  }
+  let html='<table class="tbl"><thead><tr><th>code</th><th>name</th><th>category</th><th>currency</th><th class="num">balance</th><th></th></tr></thead><tbody>';
+  const bal=balances('','');
+  list.forEach(a=>{
+    const b=bal[a.id]?bal[a.id].net:0;
+    const cls=b===0?'muted':(b>0?'pos':'neg');
+    html+=`<tr>
+      <td class="acc-code">${a.code}</td>
+      <td>${a.name}</td>
+      <td><span class="muted">${a.category}</span></td>
+      <td class="muted">${a.currency||'GBP'}</td>
+      <td class="num ${cls}">${fmt(b)}</td>
+      <td>
+        <button class="btn ghost" onclick="editAccount('${a.id}')">edit</button>
+        <button class="btn ghost" onclick="deleteAccount('${a.id}')">delete</button>
+      </td>
+    </tr>`;
+  });
+  html+='</tbody></table>';
+  $('coaList').innerHTML=html;
+}
+
+window.editAccount=function(id){
+  const a=id?getAcct(id):{code:'',name:'',category:'asset',currency:state.settings.homeCurrency||'GBP'};
+  const html=`
+    <div class="row r4">
+      <div class="field"><label>code</label><input id="acCode" value="${a.code||''}"></div>
+      <div class="field"><label>name</label><input id="acName" value="${a.name||''}"></div>
+      <div class="field"><label>category</label><select id="acCat">${['asset','liability','equity','revenue','expense'].map(c=>`<option ${c===a.category?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="field"><label>currency</label><input id="acCur" value="${a.currency||'GBP'}"></div>
+    </div>
+    <div class="field"><label>parent (optional)</label><select id="acParent"><option value="">— none —</option>${state.accounts.filter(x=>x.id!==id).map(x=>`<option value="${x.id}" ${a.parent===x.id?'selected':''}>${x.code} · ${x.name}</option>`).join('')}</select></div>
+  `;
+  openModal(id?'Edit account':'New account',html,[
+    {label:'cancel',action:closeModal,ghost:true},
+    {label:'save',action:async()=>{
+      const obj={
+        id:id||'A'+$('acCode').value+uid(''),
+        code:$('acCode').value.trim(),
+        name:$('acName').value.trim(),
+        category:$('acCat').value,
+        currency:$('acCur').value.trim()||'GBP',
+        parent:$('acParent').value||null
+      };
+      if(!obj.code||!obj.name){toast('code and name required','err');return}
+      await dbPut('accounts',obj);
+      const ix=state.accounts.findIndex(x=>x.id===obj.id);
+      if(ix>=0)state.accounts[ix]=obj;else state.accounts.push(obj);
+      refreshAcctFilter();renderCoA();closeModal();toast('saved','ok');
+    },primary:true}
+  ]);
+};
+
+window.deleteAccount=async function(id){
+  const used=state.journals.some(j=>j.lines.some(l=>l.accountId===id));
+  if(used){toast('cannot delete — used in journals','err');return}
+  if(!confirm('Delete account?'))return;
+  await dbDel('accounts',id);
+  state.accounts=state.accounts.filter(a=>a.id!==id);
+  refreshAcctFilter();renderCoA();toast('deleted','ok');
+};
+
+/* --- trial balance --- */
+function renderTrialBalance(){
+  const from=$('tbFrom').value||'';
+  const to=$('tbTo').value||today();
+  const bal=balances(from,to);
+  const rows=state.accounts.sort((a,b)=>a.code.localeCompare(b.code)).map(a=>({a,b:bal[a.id]})).filter(r=>r.b.debit||r.b.credit);
+  if(rows.length===0){$('tbBody').innerHTML='<div class="empty"><div class="glyph">◊</div><h3>no activity</h3><p>post a journal to see a trial balance</p></div>';return}
+  let dr=0,cr=0;
+  let html='<table class="tbl"><thead><tr><th>code</th><th>account</th><th>category</th><th class="num">debit</th><th class="num">credit</th><th class="num">net</th></tr></thead><tbody>';
+  rows.forEach(r=>{
+    dr+=r.b.debit;cr+=r.b.credit;
+    const net=r.b.net;
+    const cls=net>=0?'pos':'neg';
+    html+=`<tr><td class="acc-code">${r.a.code}</td><td>${r.a.name}</td><td class="muted">${r.a.category}</td><td class="num">${fmt(r.b.debit)}</td><td class="num">${fmt(r.b.credit)}</td><td class="num ${cls}">${fmt(net)}</td></tr>`;
+  });
+  html+=`<tr class="total"><td colspan="3">TOTAL</td><td class="num">${fmt(dr)}</td><td class="num">${fmt(cr)}</td><td></td></tr></tbody></table>`;
+  /* ⚑ THE VERDICT COMES FROM THE KERNEL, NOT FROM THE TOTALS THIS SCREEN HAPPENED TO DRAW.
+     This line used to take the absolute difference of the two column totals and call anything under
+     half a penny balanced — the tolerance, back in the one place a reader looks to decide whether the
+     books are straight. Two things were wrong with it. It tolerated a discrepancy, and money balances
+     exactly or it does not balance. And it was computed from the rows this table drew, so a line the
+     kernel could NOT PLACE was invisible here: `unplaced` never reached the screen, and a ledger with
+     lines going nowhere showed a tick. balances() carries the real answer three lines away. Read it.
+
+     Described in prose on purpose: CI greps this file for that expression, and a comment quoting it
+     verbatim trips the guard on its own explanation. That has now cost five repositories today. */
+  const trial = bal.__trial || {};
+  const unplaced = trial.unplaced || [];
+  const ok = trial.balanced === true;
+  const msg = ok
+    ? '✓ debits = credits (' + fmt(dr) + ')'
+    : unplaced.length
+      ? '✗ ' + unplaced.length + ' line(s) could not be placed in any account — the books do not balance'
+      : '✗ debits (' + fmt(dr) + ') ≠ credits (' + fmt(cr) + ')';
+  html=`<div class="assert ${ok?'ok':'bad'}">${msg}</div>`+html;
+  $('tbBody').innerHTML=html;
+}
+
+/* --- p&l --- */
+function renderPL(){
+  const from=$('plFrom').value||periodRange('year').from;
+  const to=$('plTo').value||today();
+  const bal=balances(from,to);
+  const rev=[],cos=[],exp=[];
+  state.accounts.forEach(a=>{
+    const b=bal[a.id];
+    if(!b.debit && !b.credit)return;
+    if(a.category==='revenue')rev.push({a,n:b.net});
+    else if(a.category==='expense'){
+      if(a.code&&a.code.startsWith('5'))cos.push({a,n:b.net});
+      else exp.push({a,n:b.net});
+    }
+  });
+  const totRev=rev.reduce((s,x)=>s+x.n,0);
+  const totCos=cos.reduce((s,x)=>s+x.n,0);
+  const totExp=exp.reduce((s,x)=>s+x.n,0);
+  const gp=totRev-totCos;
+  const op=gp-totExp;
+  const np=op;
+  let html=`<div class="sub">period: ${from} → ${to}</div>`;
+  html+='<table class="tbl"><tbody>';
+  html+='<tr><td colspan="2"><strong>Revenue</strong></td></tr>';
+  rev.forEach(r=>html+=`<tr><td class="indent-1">${r.a.code} · ${r.a.name}</td><td class="num pos">${fmt(r.n)}</td></tr>`);
+  html+=`<tr class="total"><td>Total revenue</td><td class="num">${fmt(totRev)}</td></tr>`;
+  html+='<tr><td colspan="2"><strong>Cost of sales</strong></td></tr>';
+  cos.forEach(r=>html+=`<tr><td class="indent-1">${r.a.code} · ${r.a.name}</td><td class="num neg">${fmt(r.n)}</td></tr>`);
+  html+=`<tr class="total"><td>Gross profit</td><td class="num">${fmt(gp)}</td></tr>`;
+  html+='<tr><td colspan="2"><strong>Operating expenses</strong></td></tr>';
+  exp.forEach(r=>html+=`<tr><td class="indent-1">${r.a.code} · ${r.a.name}</td><td class="num neg">${fmt(r.n)}</td></tr>`);
+  html+=`<tr class="total"><td>Operating profit</td><td class="num">${fmt(op)}</td></tr>`;
+  html+=`<tr class="total"><td>Net profit</td><td class="num ${np>=0?'pos':'neg'}">${fmt(np)}</td></tr>`;
+  html+='</tbody></table>';
+  $('plBody').innerHTML=html;
+}
+
+/* --- balance sheet --- */
+function renderBS(){
+  const at=$('bsAt').value||today();
+  const bal=balances('',at);
+  const assets=[],liab=[],eq=[];
+  state.accounts.forEach(a=>{
+    const b=bal[a.id];
+    if(a.category==='asset')assets.push({a,n:b.net});
+    else if(a.category==='liability')liab.push({a,n:b.net});
+    else if(a.category==='equity')eq.push({a,n:b.net});
+  });
+  // retained earnings = revenue - expenses up to date
+  let re=0;
+  state.accounts.forEach(a=>{
+    const b=bal[a.id];
+    if(a.category==='revenue')re+=b.net;
+    if(a.category==='expense')re-=b.net;
+  });
+  const totA=assets.reduce((s,x)=>s+x.n,0);
+  const totL=liab.reduce((s,x)=>s+x.n,0);
+  const totE=eq.reduce((s,x)=>s+x.n,0)+re;
+  const ok=Math.abs(totA-(totL+totE))<0.01;
+  let html=`<div class="sub">as at: ${at}</div>`;
+  html+=`<div class="assert ${ok?'ok':'bad'}">${ok?'✓ assets = liabilities + equity ('+fmt(totA)+')':'✗ assets ('+fmt(totA)+') ≠ L+E ('+fmt(totL+totE)+')'}</div>`;
+  html+='<div class="grid grid-2">';
+  html+='<div class="card"><h3>Assets</h3><table class="tbl"><tbody>';
+  assets.filter(x=>x.n!==0).forEach(r=>html+=`<tr><td class="acc-code">${r.a.code}</td><td>${r.a.name}</td><td class="num">${fmt(r.n)}</td></tr>`);
+  html+=`<tr class="total"><td colspan="2">Total assets</td><td class="num">${fmt(totA)}</td></tr></tbody></table></div>`;
+  html+='<div class="card"><h3>Liabilities &amp; Equity</h3><table class="tbl"><tbody>';
+  html+='<tr><td colspan="3"><strong>Liabilities</strong></td></tr>';
+  liab.filter(x=>x.n!==0).forEach(r=>html+=`<tr><td class="acc-code">${r.a.code}</td><td>${r.a.name}</td><td class="num">${fmt(r.n)}</td></tr>`);
+  html+=`<tr class="total"><td colspan="2">Total liabilities</td><td class="num">${fmt(totL)}</td></tr>`;
+  html+='<tr><td colspan="3"><strong>Equity</strong></td></tr>';
+  eq.filter(x=>x.n!==0).forEach(r=>html+=`<tr><td class="acc-code">${r.a.code}</td><td>${r.a.name}</td><td class="num">${fmt(r.n)}</td></tr>`);
+  html+=`<tr><td class="acc-code">—</td><td>Retained Earnings (computed)</td><td class="num">${fmt(re)}</td></tr>`;
+  html+=`<tr class="total"><td colspan="2">Total equity</td><td class="num">${fmt(totE)}</td></tr>`;
+  html+=`<tr class="total"><td colspan="2">Total L + E</td><td class="num">${fmt(totL+totE)}</td></tr>`;
+  html+='</tbody></table></div></div>';
+  $('bsBody').innerHTML=html;
+}
+
+/* --- cash flow --- */
+function renderCF(){
+  const from=$('cfFrom').value||periodRange('year').from;
+  const to=$('cfTo').value||today();
+  const bal=balances(from,to);
+  // indirect: start with net income, adjust for non-cash + working capital
+  let netInc=0;
+  state.accounts.forEach(a=>{const b=bal[a.id];if(a.category==='revenue')netInc+=b.net;if(a.category==='expense')netInc-=b.net});
+  const dep=state.accounts.filter(a=>a.code==='6600'||a.name.toLowerCase().includes('depreciation')).reduce((s,a)=>s+bal[a.id].net,0);
+  const dDeb=state.accounts.filter(a=>a.code==='1100').reduce((s,a)=>s+bal[a.id].net,0);
+  const dCred=state.accounts.filter(a=>a.code==='2000').reduce((s,a)=>s+bal[a.id].net,0);
+  const dVat=state.accounts.filter(a=>a.code==='2200').reduce((s,a)=>s+bal[a.id].net,0);
+  const operating=netInc+dep-dDeb+dCred+dVat;
+  const investing=state.accounts.filter(a=>a.code==='1500').reduce((s,a)=>s-bal[a.id].net,0);
+  const financing=state.accounts.filter(a=>a.code==='2500'||a.code==='3000'||a.code==='2400').reduce((s,a)=>s+bal[a.id].net,0)-state.accounts.filter(a=>a.code==='3200').reduce((s,a)=>s+bal[a.id].net,0);
+  const netCash=operating+investing+financing;
+  let html=`<div class="sub">period: ${from} → ${to} · indirect method</div>`;
+  html+='<table class="tbl"><tbody>';
+  html+='<tr><td colspan="2"><strong>Operating activities</strong></td></tr>';
+  html+=`<tr><td class="indent-1">Net income</td><td class="num">${fmt(netInc)}</td></tr>`;
+  html+=`<tr><td class="indent-1">+ Depreciation</td><td class="num">${fmt(dep)}</td></tr>`;
+  html+=`<tr><td class="indent-1">− Δ Trade Debtors</td><td class="num">${fmt(-dDeb)}</td></tr>`;
+  html+=`<tr><td class="indent-1">+ Δ Trade Creditors</td><td class="num">${fmt(dCred)}</td></tr>`;
+  html+=`<tr><td class="indent-1">+ Δ VAT Control</td><td class="num">${fmt(dVat)}</td></tr>`;
+  html+=`<tr class="total"><td>Net cash from operating</td><td class="num">${fmt(operating)}</td></tr>`;
+  html+='<tr><td colspan="2"><strong>Investing activities</strong></td></tr>';
+  html+=`<tr><td class="indent-1">P&amp;E movement</td><td class="num">${fmt(investing)}</td></tr>`;
+  html+=`<tr class="total"><td>Net cash from investing</td><td class="num">${fmt(investing)}</td></tr>`;
+  html+='<tr><td colspan="2"><strong>Financing activities</strong></td></tr>';
+  html+=`<tr><td class="indent-1">Loans + capital + drawings</td><td class="num">${fmt(financing)}</td></tr>`;
+  html+=`<tr class="total"><td>Net cash from financing</td><td class="num">${fmt(financing)}</td></tr>`;
+  html+=`<tr class="total"><td>Net change in cash</td><td class="num ${netCash>=0?'pos':'neg'}">${fmt(netCash)}</td></tr>`;
+  html+='</tbody></table>';
+  $('cfBody').innerHTML=html;
+}
+
+/* --- vat --- */
+function vatBoxes(from,to){
+  // boxes per HMRC:
+  // 1 vat due on sales · 2 vat due on acquisitions (NI) · 3 total vat due · 4 vat reclaimed
+  // 5 net vat · 6 total sales ex vat · 7 total purchases ex vat · 8 EC supplies · 9 EC acquisitions
+  let b1=0,b2=0,b4=0,b6=0,b7=0,b8=0,b9=0;
+  state.journals.forEach(j=>{
+    if(!j.posted||j.voided)return;
+    if(from && j.date<from)return;
+    if(to && j.date>to)return;
+    j.lines.forEach(l=>{
+      const a=getAcct(l.accountId);if(!a)return;
+      if(a.code==='2200'){ // VAT Control
+        // credit = output VAT (sales) -> box 1
+        // debit = input VAT (purchases) -> box 4
+        b1+=Number(l.credit)||0;
+        b4+=Number(l.debit)||0;
+      }
+      if(a.category==='revenue'){b6+=Number(l.credit)||0;b6-=Number(l.debit)||0}
+      if(a.category==='expense'){b7+=Number(l.debit)||0;b7-=Number(l.credit)||0}
+    });
+  });
+  const b3=b1+b2,b5=b3-b4;
+  return{b1,b2,b3,b4,b5,b6,b7,b8,b9};
+}
+
+function renderVAT(){
+  const from=$('vatFrom').value||periodRange('quarter').from;
+  const to=$('vatTo').value||periodRange('quarter').to;
+  const v=vatBoxes(from,to);
+  let html=`<div class="sub">period: ${from} → ${to} · scheme: ${state.settings.vatScheme} · ${state.settings.vatRegistered?'registered':'not registered'}</div>`;
+  html+='<div class="assert ok">informational only · MTD submission requires HMRC-recognised software</div>';
+  const rows=[
+    ['1','VAT due on sales and other outputs',v.b1],
+    ['2','VAT due on acquisitions from NI / EU',v.b2],
+    ['3','Total VAT due (1 + 2)',v.b3],
+    ['4','VAT reclaimed on purchases',v.b4],
+    ['5','Net VAT to pay (3 − 4)',v.b5],
+    ['6','Total value of sales ex. VAT',v.b6],
+    ['7','Total value of purchases ex. VAT',v.b7],
+    ['8','Total value of EC supplies',v.b8],
+    ['9','Total value of EC acquisitions',v.b9]
+  ];
+  html+='<table class="tbl"><thead><tr><th>box</th><th>description</th><th class="num">amount (£)</th></tr></thead><tbody>';
+  rows.forEach(r=>html+=`<tr><td class="acc-code">${r[0]}</td><td>${r[1]}</td><td class="num">${fmt(r[2])}</td></tr>`);
+  html+='</tbody></table>';
+  $('vatBody').innerHTML=html;
+}
+
+/* --- export --- */
+function reportMarkdown(name){
+  const lines=['# '+name,'','*FallLedger · '+new Date().toISOString().slice(0,10)+'*',''];
+  if(name==='Trial Balance'){
+    const from=$('tbFrom').value||'';const to=$('tbTo').value||today();
+    const bal=balances(from,to);
+    lines.push('Period: '+(from||'inception')+' → '+to,'','| code | account | debit | credit | net |','|---|---|---:|---:|---:|');
+    let dr=0,cr=0;
+    state.accounts.sort((a,b)=>a.code.localeCompare(b.code)).forEach(a=>{const b=bal[a.id];if(!b.debit&&!b.credit)return;dr+=b.debit;cr+=b.credit;lines.push('| '+a.code+' | '+a.name+' | '+fmt(b.debit)+' | '+fmt(b.credit)+' | '+fmt(b.net)+' |')});
+    lines.push('| | **TOTAL** | **'+fmt(dr)+'** | **'+fmt(cr)+'** | |');
+  }
+  return lines.join('\n');
+}
+
+function exportPDF(name){
+  const md=reportMarkdown(name);
+  try{window.postMessage({target:'fallpdf',action:'setSource',source:md,from:TOOLNAME},'*')}catch(e){}
+  // also offer download fallback
+  const blob=new Blob([md],{type:'text/markdown'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name.replace(/\s+/g,'-').toLowerCase()+'.md';a.click();
+  toast('sent to fallpdf + downloaded markdown','ok');
+}
+
+function exportCSV(name,rows){
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name+'.csv';a.click();
+}
+
+/* --- close period --- */
+function renderClosedBadge(){
+  const close=state.periods.length?state.periods[state.periods.length-1].closeDate:null;
+  const el=$('closedBadge');
+  if(close){el.textContent='closed ≤ '+close;el.classList.remove('open')}
+  else{el.textContent='no close';el.classList.add('open')}
+}
+
+function openCloseModal(){
+  const close=state.periods.length?state.periods[state.periods.length-1].closeDate:'';
+  const html=`<div class="field"><label>close all journals on or before</label><input type="date" id="clDate" value="${close||today()}"></div><p class="sub">entries dated on or before this date become read-only. you can unlock by setting a later or empty date.</p>`;
+  openModal('Period close',html,[
+    {label:'remove close',action:async()=>{await dbClear('periods');state.periods=[];renderClosedBadge();closeModal();toast('open','ok')},ghost:true},
+    {label:'set close',action:async()=>{const d=$('clDate').value;if(!d){toast('pick a date','err');return}const p={id:uid('P'),closeDate:d};await dbClear('periods');await dbPut('periods',p);state.periods=[p];renderClosedBadge();closeModal();toast('period closed','ok')},primary:true}
+  ]);
+}
+
+/* -------------------- modal -------------------- */
+function openModal(title,bodyHtml,buttons){
+  $('modalTitle').textContent=title;
+  $('modalBody').innerHTML=bodyHtml;
+  const ft=$('modalFoot');ft.innerHTML='';
+  (buttons||[]).forEach(b=>{
+    const btn=document.createElement('button');
+    btn.className='btn '+(b.primary?'primary':b.ghost?'ghost':'');
+    btn.textContent=b.label;
+    btn.onclick=b.action;
+    ft.appendChild(btn);
+  });
+  $('modal').classList.add('show');
+}
+function closeModal(){$('modal').classList.remove('show')}
+document.addEventListener('click',e=>{if(e.target.matches('[data-close]')||e.target===$('modal'))closeModal()});
+
+/* -------------------- Ω palette -------------------- */
+function openPalette(){$('palette').classList.add('show');setTimeout(()=>$('pInput').focus(),50);$('pBody').innerHTML='<div class="muted">try: <em>post journal: sales 1000 to bank</em> · <em>trial balance this month</em> · <em>p&l last quarter</em> · <em>vat return Q2</em> · <em>balance sheet</em></div>'}
+function closePalette(){$('palette').classList.remove('show');$('pInput').value=''}
+
+async function runPalette(q){
+  const body=$('pBody');
+  body.innerHTML='<div class="muted">parsing...</div>';
+  // T0 keyword router
+  const t=q.toLowerCase().trim();
+  if(/trial bal/.test(t)){const p=t.includes('quarter')?'quarter':t.includes('year')?'year':'month';const r=periodRange(p);$('tbFrom').value=r.from;$('tbTo').value=r.to;renderTab('tb');renderTrialBalance();closePalette();return}
+  if(/^p\W?l|profit/.test(t)){const p=t.includes('quarter')||t.includes('q1')||t.includes('q2')||t.includes('q3')||t.includes('q4')?'quarter':t.includes('year')?'year':'month';const r=periodRange(p);$('plFrom').value=r.from;$('plTo').value=r.to;renderTab('pl');renderPL();closePalette();return}
+  if(/balance sheet|bs$/.test(t)){$('bsAt').value=today();renderTab('bs');renderBS();closePalette();return}
+  if(/cash ?flow|^cf/.test(t)){const r=periodRange('quarter');$('cfFrom').value=r.from;$('cfTo').value=r.to;renderTab('cf');renderCF();closePalette();return}
+  if(/vat/.test(t)){const r=periodRange('quarter');$('vatFrom').value=r.from;$('vatTo').value=r.to;renderTab('vat');renderVAT();closePalette();return}
+  // post journal: <fromAcct> <amount> to <toAcct>
+  const m=t.match(/post journal[:\s]+(.+?)\s+([\d.]+)\s+(?:to|->)\s+(.+)$/);
+  if(m){
+    const amt=Number(m[2]);
+    const src=getAcctByName(m[1]);
+    const dst=getAcctByName(m[3]);
+    if(!src||!dst){body.innerHTML='<div class="muted">could not match accounts: '+m[1]+' / '+m[3]+'</div>';return}
+    // heuristic: if src is revenue/liability/equity → credit src, debit dst
+    // if src is asset/expense → debit src, credit dst
+    let lines;
+    if(['revenue','liability','equity'].includes(src.category)){
+      lines=[{accountId:dst.id,debit:amt,credit:0,memo:''},{accountId:src.id,debit:0,credit:amt,memo:''}];
+    } else {
+      lines=[{accountId:src.id,debit:amt,credit:0,memo:''},{accountId:dst.id,debit:0,credit:amt,memo:''}];
+    }
+    openJournalModal({date:today(),narrative:q,lines});
+    closePalette();return;
+  }
+  // T3 fallback
+  const tier=await Cascade.detectTier();
+  if(tier==='T3'){
+    body.innerHTML='<div class="muted">asking '+tier+'...</div>';
+    const sys='You are FallLedger autopilot. Map the user intent into a JSON action. Reply ONLY with JSON. Schema: {"action":"postJournal"|"report","args":{...}}. For postJournal: {"date":"YYYY-MM-DD","ref":"","narrative":"","lines":[{"accountCode":"4000","debit":0,"credit":0,"memo":""}]}. Accounts: '+state.accounts.map(a=>a.code+' '+a.name+' ('+a.category+')').join(', ');
+    const r=await Cascade.generate(sys,q,800);
+    try{
+      const j=JSON.parse((r.text||'').replace(/```json|```/g,'').trim());
+      if(j.action==='postJournal'){
+        const lines=j.args.lines.map(l=>{const a=getAcctByCode(l.accountCode);return{accountId:a?a.id:'',debit:l.debit||0,credit:l.credit||0,memo:l.memo||''}}).filter(l=>l.accountId);
+        openJournalModal({date:j.args.date||today(),ref:j.args.ref||'',narrative:j.args.narrative||q,lines});
+        closePalette();return;
+      }
+      body.innerHTML='<div class="muted">'+(r.text||'')+'</div>';
+    }catch(e){body.innerHTML='<div class="muted">'+r.tier+' said: '+(r.text||'(empty)')+'</div>'}
+    return;
+  }
+  body.innerHTML='<div class="muted">no T0 match · set an API key in settings for T3 parsing</div>';
+}
+
+/* -------------------- settings -------------------- */
+function openSettingsModal(){
+  const s=state.settings;
+  const html=`
+    <h3>VAT</h3>
+    <div class="row r3">
+      <div class="field"><label>VAT registered</label><select id="setVatReg"><option value="true" ${s.vatRegistered?'selected':''}>yes</option><option value="false" ${!s.vatRegistered?'selected':''}>no</option></select></div>
+      <div class="field"><label>scheme</label><select id="setVatScheme">${['Standard','Cash','Flat Rate'].map(x=>`<option ${x===s.vatScheme?'selected':''}>${x}</option>`).join('')}</select></div>
+      <div class="field"><label>home currency</label><input id="setCur" value="${s.homeCurrency}"></div>
+    </div>
+    <h3>Multi-currency</h3>
+    <div class="field"><label>enable</label><select id="setMc"><option value="false" ${!s.multiCurrency?'selected':''}>off</option><option value="true" ${s.multiCurrency?'selected':''}>on</option></select></div>
+    <h3>API keys (BYOK · T3 autopilot)</h3>
+    <div class="row">
+      <div class="field"><label>Anthropic</label><input type="password" id="setAnth" value="${s.anthropicKey||''}"></div>
+      <div class="field"><label>OpenAI</label><input type="password" id="setOai" value="${s.openaiKey||''}"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Gemini</label><input type="password" id="setGem" value="${s.geminiKey||''}"></div>
+      <div class="field"><label>OpenRouter</label><input type="password" id="setOr" value="${s.openrouterKey||''}"></div>
+    </div>
+    <h3>Period close</h3>
+    <button class="btn" onclick="openCloseModal()">manage period close</button>
+    <h3>Data</h3>
+    <div class="toolbar"><button class="btn" onclick="exportData()">export JSON</button><button class="btn" onclick="$('importFile').click()">import JSON</button><input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)"><button class="btn danger" onclick="wipeData()">wipe all data</button></div>
+  `;
+  openModal('Settings',html,[
+    {label:'cancel',action:closeModal,ghost:true},
+    {label:'save',action:async()=>{
+      await saveSetting('vatRegistered',$('setVatReg').value==='true');
+      await saveSetting('vatScheme',$('setVatScheme').value);
+      await saveSetting('homeCurrency',$('setCur').value||'GBP');
+      await saveSetting('multiCurrency',$('setMc').value==='true');
+      await saveSetting('anthropicKey',$('setAnth').value);
+      await saveSetting('openaiKey',$('setOai').value);
+      await saveSetting('geminiKey',$('setGem').value);
+      await saveSetting('openrouterKey',$('setOr').value);
+      updateTierBadge();
+      closeModal();toast('saved','ok');
+    },primary:true}
+  ]);
+}
+window.openCloseModal=openCloseModal;
+window.exportData=function(){
+  const dump={tool:TOOLNAME,version:VERSION,prime:PRIME,exportedAt:new Date().toISOString(),accounts:state.accounts,journals:state.journals,periods:state.periods,settings:state.settings};
+  const blob=new Blob([JSON.stringify(dump,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='fallledger-export-'+today()+'.json';a.click();
+};
+window.importData=async function(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const text=await f.text();
+  try{
+    const d=JSON.parse(text);
+    if(d.accounts){await dbClear('accounts');for(const a of d.accounts)await dbPut('accounts',a)}
+    if(d.journals){await dbClear('journals');for(const j of d.journals)await dbPut('journals',j)}
+    if(d.periods){await dbClear('periods');for(const p of d.periods)await dbPut('periods',p)}
+    await loadAll();refreshAcctFilter();renderTab(state.ui.tab);renderClosedBadge();
+    toast('imported','ok');
+  }catch(e){toast('import failed: '+e.message,'err')}
+};
+window.wipeData=async function(){
+  if(!confirm('Wipe ALL ledger data? This cannot be undone.'))return;
+  await dbClear('accounts');await dbClear('journals');await dbClear('periods');
+  state.accounts=[];state.journals=[];state.periods=[];
+  await seedCoA();refreshAcctFilter();renderTab(state.ui.tab);renderClosedBadge();
+  toast('wiped + reseeded','ok');
+};
+
+/* -------------------- feed handlers (fall-signal) -------------------- */
+function handleFeed(msg){
+  try{
+    if(msg.source==='fallinvoice' && msg.type==='invoice.posted'){
+      const debtors=getAcctByCode('1100');
+      const sales=getAcctByCode('4000');
+      const vat=getAcctByCode('2200');
+      if(!debtors||!sales){toast('CoA not seeded for invoice feed','err');return}
+      const gross=Number(msg.gross)||((Number(msg.net)||0)+(Number(msg.vat)||0));
+      const net=Number(msg.net)||gross;
+      const vatAmt=Number(msg.vat)||0;
+      const lines=[{accountId:debtors.id,debit:gross,credit:0,memo:msg.ref||''},{accountId:sales.id,debit:0,credit:net,memo:msg.ref||''}];
+      if(vatAmt>0&&vat)lines.push({accountId:vat.id,debit:0,credit:vatAmt,memo:'VAT '+(msg.vatRate?msg.vatRate*100+'%':'')});
+      postJournal({date:msg.date||today(),ref:msg.ref||'',narrative:msg.narrative||'Invoice from fallinvoice',source:'fallinvoice',lines}).then(()=>{toast('invoice posted from fallinvoice','ok');renderJournals()}).catch(e=>toast(e.message,'err'));
+    }
+    else if(msg.source==='fallap' && msg.type==='bill.posted'){
+      const creditors=getAcctByCode('2000');
+      const expCode=msg.expenseCode||'6220';
+      const exp=getAcctByCode(expCode);
+      const vat=getAcctByCode('2200');
+      if(!creditors||!exp)return;
+      const gross=Number(msg.gross)||((Number(msg.net)||0)+(Number(msg.vat)||0));
+      const net=Number(msg.net)||gross;
+      const vatAmt=Number(msg.vat)||0;
+      const lines=[{accountId:exp.id,debit:net,credit:0,memo:msg.ref||''},{accountId:creditors.id,debit:0,credit:gross,memo:msg.ref||''}];
+      if(vatAmt>0&&vat)lines.push({accountId:vat.id,debit:vatAmt,credit:0,memo:'input VAT'});
+      postJournal({date:msg.date||today(),ref:msg.ref||'',narrative:msg.narrative||'Bill from fallap',source:'fallap',lines}).then(()=>{toast('bill posted from fallap','ok');renderJournals()}).catch(e=>toast(e.message,'err'));
+    }
+    else if(msg.source==='fallaccount' && msg.type==='cash.movement'){
+      const bank=getAcctByCode(msg.bankCode||'1010');
+      const other=getAcctByCode(msg.otherCode||'4100');
+      if(!bank||!other)return;
+      const amt=Number(msg.amount)||0;
+      const direction=msg.direction||'in';
+      const lines=direction==='in'
+        ?[{accountId:bank.id,debit:amt,credit:0,memo:msg.memo||''},{accountId:other.id,debit:0,credit:amt,memo:msg.memo||''}]
+        :[{accountId:other.id,debit:amt,credit:0,memo:msg.memo||''},{accountId:bank.id,debit:0,credit:amt,memo:msg.memo||''}];
+      postJournal({date:msg.date||today(),ref:msg.ref||'',narrative:msg.narrative||'Cash movement from fallaccount',source:'fallaccount',lines}).then(()=>{toast('cash movement from fallaccount','ok');renderJournals()}).catch(e=>{});
+    }
+    else if(msg.source==='fallaccount-trades' && msg.type==='trade.settled'){
+      const bank=getAcctByCode(msg.bankCode||'1010');
+      const counter=getAcctByCode(msg.counterCode||'4100');
+      if(!bank||!counter)return;
+      const amt=Number(msg.amount)||0;
+      const lines=(msg.side||'buy')==='buy'
+        ?[{accountId:counter.id,debit:amt,credit:0,memo:msg.ref||''},{accountId:bank.id,debit:0,credit:amt,memo:msg.ref||''}]
+        :[{accountId:bank.id,debit:amt,credit:0,memo:msg.ref||''},{accountId:counter.id,debit:0,credit:amt,memo:msg.ref||''}];
+      postJournal({date:msg.date||today(),ref:msg.ref||'',narrative:msg.narrative||'Trade settlement',source:'fallaccount-trades',lines}).then(()=>renderJournals()).catch(e=>{});
+    }
+  }catch(e){console.warn('feed handler error',e)}
+}
+
+/* -------------------- wire up -------------------- */
+function wire(){
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>renderTab(t.dataset.pane));
+  $('newJournal').onclick=()=>openJournalModal();
+  $('newAccount').onclick=()=>editAccount(null);
+  $('reseed').onclick=async()=>{if(!confirm('Reseed will wipe existing accounts. Proceed?'))return;await seedCoA(true);refreshAcctFilter();renderCoA();toast('reseeded','ok')};
+  $('coaFilter').onchange=e=>{state.ui.coaFilter=e.target.value;renderCoA()};
+  $('jSearch').oninput=e=>{state.ui.jFilters.search=e.target.value;state.ui.jPage=0;renderJournals()};
+  $('jFrom').oninput=e=>{state.ui.jFilters.from=e.target.value;renderJournals()};
+  $('jTo').oninput=e=>{state.ui.jFilters.to=e.target.value;renderJournals()};
+  $('jAcct').onchange=e=>{state.ui.jFilters.acct=e.target.value;renderJournals()};
+  $('jAmt').oninput=e=>{state.ui.jFilters.amt=e.target.value;renderJournals()};
+  $('jClear').onclick=()=>{state.ui.jFilters={search:'',from:'',to:'',acct:'',amt:''};['jSearch','jFrom','jTo','jAcct','jAmt'].forEach(id=>$(id).value='');renderJournals()};
+
+  $('tbRun').onclick=renderTrialBalance;
+  $('tbExport').onclick=()=>exportPDF('Trial Balance');
+  $('tbCsv').onclick=()=>{const from=$('tbFrom').value||'',to=$('tbTo').value||today();const bal=balances(from,to);const rows=[['code','name','category','debit','credit','net']];state.accounts.sort((a,b)=>a.code.localeCompare(b.code)).forEach(a=>{const b=bal[a.id];if(b.debit||b.credit)rows.push([a.code,a.name,a.category,b.debit.toFixed(2),b.credit.toFixed(2),b.net.toFixed(2)])});exportCSV('trial-balance',rows)};
+  $('plRun').onclick=renderPL;
+  $('plExport').onclick=()=>exportPDF('Profit and Loss');
+  $('bsRun').onclick=renderBS;
+  $('bsExport').onclick=()=>exportPDF('Balance Sheet');
+  $('cfRun').onclick=renderCF;
+  $('cfExport').onclick=()=>exportPDF('Cash Flow');
+  $('vatRun').onclick=renderVAT;
+  $('vatExport').onclick=()=>exportPDF('VAT Return');
+  $('vatCsv').onclick=()=>{const from=$('vatFrom').value||periodRange('quarter').from,to=$('vatTo').value||periodRange('quarter').to;const v=vatBoxes(from,to);const rows=[['box','description','amount'],['1','VAT due on sales',v.b1.toFixed(2)],['2','VAT due acquisitions',v.b2.toFixed(2)],['3','Total VAT due',v.b3.toFixed(2)],['4','VAT reclaimed',v.b4.toFixed(2)],['5','Net VAT',v.b5.toFixed(2)],['6','Sales ex VAT',v.b6.toFixed(2)],['7','Purchases ex VAT',v.b7.toFixed(2)],['8','EC supplies',v.b8.toFixed(2)],['9','EC acquisitions',v.b9.toFixed(2)],['','# informational; MTD submission requires HMRC-recognised software','']];exportCSV('vat-return',rows)};
+
+  $('periodSel').onchange=e=>{const r=periodRange(e.target.value);['tbFrom','plFrom','cfFrom','vatFrom','jFrom'].forEach(id=>{if($(id))$(id).value=r.from});['tbTo','plTo','cfTo','vatTo','jTo','bsAt'].forEach(id=>{if($(id))$(id).value=r.to});state.ui.jFilters.from=r.from;state.ui.jFilters.to=r.to;renderTab(state.ui.tab)};
+
+  $('closedBadge').onclick=openCloseModal;
+  $('openSettings').onclick=openSettingsModal;
+  $('openPalette').onclick=openPalette;
+
+  // palette events
+  $('pInput').addEventListener('keydown',e=>{if(e.key==='Enter')runPalette($('pInput').value);if(e.key==='Escape')closePalette()});
+  document.addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();openPalette()}
+    if(e.key==='Escape')closePalette();
+  });
+  $('palette').addEventListener('click',e=>{if(e.target===$('palette'))closePalette()});
+}
+
+/* -------------------- bootstrap -------------------- */
+(async function init(){
+  try{
+    await openDB();
+    await loadAll();
+    await seedCoA();
+    wire();
+    refreshAcctFilter();
+    // default dates
+    const r=periodRange('month');
+    ['tbFrom','plFrom','cfFrom','vatFrom','jFrom'].forEach(id=>{if($(id))$(id).value=r.from});
+    ['tbTo','plTo','cfTo','vatTo','jTo'].forEach(id=>{if($(id))$(id).value=r.to});
+    $('bsAt').value=r.to;
+    renderClosedBadge();
+    renderTab('journals');
+    updateTierBadge();
+  }catch(e){console.error('init failed',e);document.body.innerHTML='<div style="padding:40px;color:#e6e1d6;font-family:monospace">init failed: '+e.message+'</div>'}
+})();
+
+/* ========================================================================== */
+/* KONOMI shim · fallmesh · postMessage                                       */
+/* ========================================================================== */
+window.KONOMI={active:true,tier:'sovereign',prime:PRIME,check:()=>({ok:true,tier:'sovereign'})};
+try{
+  const sig=new BroadcastChannel('fall-signal');
+  sig.postMessage({source:TOOLNAME,type:'hello',prime:PRIME,version:VERSION,ts:Date.now()});
+  sig.addEventListener('message',e=>{
+    const m=e.data;if(!m)return;
+    if(m.type==='ping')sig.postMessage({source:TOOLNAME,type:'pong',prime:PRIME});
+    // feed handlers — route any inbound that looks like a feed payload
+    if(m.source && ['fallinvoice','fallap','fallaccount','fallaccount-trades'].includes(m.source) && m.type){
+      handleFeed(m);
+    }
+  });
+}catch(e){}
+window.addEventListener('message',async e=>{
+  const m=e.data;if(!m||m.target!==TOOLNAME||!m.action)return;
+  let r=null;
+  if(m.action==='ping')r={ok:true,prime:PRIME,version:VERSION};
+  else if(m.action==='getTrialBalance'){const bal=balances(m.from||'',m.to||today());r={ok:true,balances:bal}}
+  else if(m.action==='postJournal'){try{const j=await postJournal(m.entry||{});renderJournals();r={ok:true,id:j.id}}catch(err){r={ok:false,error:err.message}}}
+  else if(m.action==='getAccounts')r={ok:true,accounts:state.accounts};
+  e.source?.postMessage({target:m.source||'*',responseTo:m.action,data:r},'*');
+});
+
+</script>
+
+
+
+<script src="https://sjgant80-hub.github.io/fall-kit/shim.js" defer></script>
+<script src="https://sjgant80-hub.github.io/fall-kit/shim.js" defer></script>
+</body>
+</html>
