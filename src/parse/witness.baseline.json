@@ -1,0 +1,14 @@
+[
+  {
+    "mutation": "!== → ===",
+    "snippet": "if (key !== null && fontCache.has(key)) return fontCache.get(key);",
+    "file": "src/parse/pdf.mjs",
+    "reason": "the font cache: with the mutation a referenced font is never read from the cache and is built again from the same dictionary and the same ToUnicode stream, giving an identical font object, so every page text is the same; a direct (unreferenced) font has key null either way and is never cached"
+  },
+  {
+    "mutation": "!== → ===",
+    "snippet": "if (key !== null) fontCache.set(key, font);",
+    "file": "src/parse/pdf.mjs",
+    "reason": "the font cache: with the mutation referenced fonts are never stored and a null key is stored instead, which no lookup can hit (the lookup needs key !== null), so every font is rebuilt from the same bytes into an identical font; the output never changes, only the time"
+  }
+]

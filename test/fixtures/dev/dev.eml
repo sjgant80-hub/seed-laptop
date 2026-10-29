@@ -1,0 +1,36 @@
+From: Baker Ann <ann@example.com>
+To: tom@example.org
+Subject: Rye loaf =?utf-8?b?4oCU?= Friday
+Date: Fri, 30 Oct 2026 08:00:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8376120945269712136=="
+
+--===============8376120945269712136==
+Content-Type: multipart/alternative;
+ boundary="===============2381908068675669669=="
+
+--===============2381908068675669669==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+The rye sold out.
+More on Friday.
+
+--===============2381908068675669669==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+
+<p>The rye sold out.</p>
+
+--===============2381908068675669669==--
+
+--===============8376120945269712136==
+Content-Type: text/csv
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="stock.csv"
+MIME-Version: 1.0
+
+ZmxvdXIsMTIKcnllLDQK
+
+--===============8376120945269712136==--

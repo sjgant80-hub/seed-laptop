@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "imports": {
+    "#zip": "./zip.mjs",
+    "#xml": "./xml.mjs",
+    "#office": "./office.mjs",
+    "#pdf": "./pdf.mjs",
+    "#mail": "./mail.mjs",
+    "#text": "./text.mjs",
+    "#image": "./image.mjs",
+    "#index": "./index.mjs"
+  }
+}

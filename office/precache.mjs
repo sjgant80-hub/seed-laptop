@@ -1,5 +1,5 @@
 // office/precache.mjs — written by tools/build-office.mjs: every file the office needs offline, with its SHA-256.
-export const VERSION = "cc1984fd45dd";
+export const VERSION = "7053a9ea8806";
 export const FILES = [
  {
   "path": "index.html",
@@ -11,7 +11,7 @@ export const FILES = [
  },
  {
   "path": "edges.mjs",
-  "sha256": "94123acaf65be1d4b1b3583800c7c98894422b1fe8ddefd364296643feced8f9"
+  "sha256": "5fe2d2106d69e8733721f55fda344e82d04774de31a58733a5c7476e52af8a0a"
  },
  {
   "path": "keep.mjs",
@@ -51,7 +51,7 @@ export const FILES = [
  },
  {
   "path": "../src/edge-in.mjs",
-  "sha256": "893da44a56bde3c30e485a96acd70197b3d8baa242b5fe3c4676541f45449c95"
+  "sha256": "27581766ad0efaa0077830ce20854533e8e65f2dc35acf35002cacd58e7dcb43"
  },
  {
   "path": "../src/edge-out.mjs",
@@ -66,8 +66,12 @@ export const FILES = [
   "sha256": "552d533da3a9a47274eb8e6fdd813c8372dde5aa8fee7cddd56e9e4798302b68"
  },
  {
+  "path": "../src/imap.mjs",
+  "sha256": "1ad8f468b2baba94bb71fad135a4fa1395c6c29b7be1e4e12cd7812fb4a771e9"
+ },
+ {
   "path": "../src/immune.mjs",
-  "sha256": "6c96389a158debfa670a68c4fa59e3ba1164ea8866a827dafcb8be65f9186058"
+  "sha256": "423618ab3e794ba443838f24c482899db1c2b5acde7f38db7c084cdfcf71169d"
  },
  {
   "path": "../src/kar.mjs",
@@ -75,7 +79,7 @@ export const FILES = [
  },
  {
   "path": "../src/leak.mjs",
-  "sha256": "cb60cff9a21ad126be847e67febedc417dbb9fd83fb5758be02e0664f82a15fa"
+  "sha256": "ef112c1c122d83b962c871e371535e64923b65e70c4bb5a40dfccb17c8d8106f"
  },
  {
   "path": "../src/office.mjs",
@@ -95,7 +99,7 @@ export const FILES = [
  },
  {
   "path": "../src/parse/office.mjs",
-  "sha256": "4f13999d52e393b3e714afc5f6d087df8ce32d4b54bbd3cb01d227156de22611"
+  "sha256": "cd922ec0ebf2cc8ab788c291f19a08a747de34d4680509b50a0be53e93c8752f"
  },
  {
   "path": "../src/parse/pdf.mjs",
@@ -111,11 +115,11 @@ export const FILES = [
  },
  {
   "path": "../src/parse/xml.mjs",
-  "sha256": "406b44dd5ff460062ed686fb1547a46b538bcd1c0b64b58dd2d987a3ee362720"
+  "sha256": "09b26042f87beae88ef266482042767c1b785c9f766f1c3a34062eb2c5fd3260"
  },
  {
   "path": "../src/parse/zip.mjs",
-  "sha256": "d7bd78298e82b575b80865de9d29d222b4888d5899ffe18b19f7858f04d5b4f9"
+  "sha256": "9e77d5cf3a22d0770a5c0db56561f2cc2bcb747ed03de0fec909a62510fad6a0"
  },
  {
   "path": "../src/prologue.mjs",
