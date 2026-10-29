@@ -7,6 +7,8 @@
 //   node measure/l6.mjs ci <outdir>    (a) read the capture taken from below on GitHub's runner (measure/netns-day.sh)
 //                                          → receipts/l6-ci.json
 //   node measure/l6.mjs judge          all three → receipts/l6.json
+//   node measure/l6.mjs ci-b <outdir>  claim L6b (measure/claims-b.json): the capture of what the guest sends only, read the
+//                                      same way → receipts/l6b-ci.json; judge-b → receipts/l6b.json
 //
 // A send's window runs from the user's send action to 2 s after the message was accepted: the connection's own closing
 // packets fall inside it (seal 2). The day's plan is tools/day.mjs planDay: the same actions in all three.
@@ -81,6 +83,14 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   if (mode === 'local') { const f = await local(); write('l6-local.json', { part: 'b', facts: f }); console.log(JSON.stringify({ actions: f.actions, receipts: f.receipts, allowed: f.allowed, stopped: f.stopped, sends: f.sends, messages: f.messages })); }
   else if (mode === 'tab') { const f = await (await import('./l6-tab.mjs')).dayInTab(); write('l6-tab.json', { part: 'c', facts: f }); console.log(JSON.stringify({ actions: f.actions, left: f.left, refused: f.refused })); }
   else if (mode === 'ci') { const f = ci(process.argv[3]); write('l6-ci.json', { part: 'a', facts: f }); console.log(JSON.stringify(f)); }
+  else if (mode === 'ci-b') { const f = ci(process.argv[3]); write('l6b-ci.json', { part: 'a, outbound only', facts: f }); console.log(JSON.stringify(f)); }
+  else if (mode === 'judge-b') {
+    const r = existsSync(join(ROOT, 'receipts', 'l6b-ci.json')) ? JSON.parse(readFileSync(join(ROOT, 'receipts', 'l6b-ci.json'), 'utf8')).facts : null;
+    const facts = { L6b: { ci: r } };
+    const verdicts = judge(JSON.parse(readFileSync(join(ROOT, 'measure', 'claims-b.json'), 'utf8')).claims, facts);
+    for (const v of verdicts) console.log(v.verdict.padEnd(10) + v.id + '  ' + v.says);
+    writeFileSync(join(ROOT, 'receipts', 'l6b.json'), JSON.stringify({ kind: 'seed-laptop.receipt', v: 1, claims: 'L6b', commit: git('rev-parse', 'HEAD'), facts, verdicts }, null, 1) + String.fromCharCode(10));
+  }
   else if (mode === 'judge') {
     const read = (n) => (existsSync(join(ROOT, 'receipts', n)) ? JSON.parse(readFileSync(join(ROOT, 'receipts', n), 'utf8')).facts : null);
     const facts = { L6: { ci: read('l6-ci.json'), local: read('l6-local.json'), tab: read('l6-tab.json') } };
@@ -88,5 +98,5 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     const verdicts = judge(claims, facts);
     for (const v of verdicts) console.log(v.verdict.padEnd(10) + v.id + '  ' + v.says);
     writeFileSync(join(ROOT, 'receipts', 'l6.json'), JSON.stringify({ kind: 'seed-laptop.receipt', v: 1, claims: 'L6', commit: git('rev-parse', 'HEAD'), facts, verdicts }, null, 1) + '\n');
-  } else { console.log('usage: node measure/l6.mjs local | tab | ci <dir> | judge'); process.exit(2); }
+  } else { console.log('usage: node measure/l6.mjs local | tab | ci <dir> | judge | ci-b <dir> | judge-b'); process.exit(2); }
 }

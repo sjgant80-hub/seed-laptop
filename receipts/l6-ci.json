@@ -1,0 +1,24 @@
+{
+ "kind": "seed-laptop.l6-part",
+ "v": 1,
+ "commit": "a126bc95de0e03eaacdfc52103ea2547e2655cef",
+ "machine": {
+  "os": "linux 7.0.0-1017-azure",
+  "node": "v25.9.0"
+ },
+ "part": "a",
+ "facts": {
+  "packets": 52,
+  "egress": 22,
+  "egressTo": [
+   "10.9.9.2"
+  ],
+  "toSink": 20,
+  "outsideWindows": 0,
+  "sends": 2,
+  "sentOk": 2,
+  "actions": 303,
+  "receipts": 303,
+  "attempts": 2
+ }
+}

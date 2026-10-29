@@ -1,0 +1,17 @@
+{
+ "kind": "seed-laptop.claims",
+ "v": 1,
+ "seal": "1b",
+ "sealed": "2026-10-29",
+ "sealed_before": "the run that measures it: this file, the capture change and the reading are committed before the workflow that takes the capture is dispatched",
+ "why": "L6 (a), as sealed, read every packet on the link by its destination. Its one run (GitHub run 40943679324) counted 22 packets to an undeclared destination; every one was addressed to 10.9.9.2, the guest's own address: the mail stand-in's replies coming IN, read as if they went out. L6 stays FAILED as measured. L6b is the fix, sealed before its own fresh run.",
+ "claims": [
+  {
+   "id": "L6b",
+   "organ": "devices",
+   "says": "Read from below, the device sends nothing to anyone but the mail provider it was told to use, and only when the user sends.",
+   "held_if": "The same sealed day (tools/day.mjs planDay, seed 20261029) runs again on GitHub's runner as a guest in the locked network namespace of measure/netns-day.sh, captured from below on the host end of the guest's link in the direction the guest sends only (tcpdump -Q in on the host veth: every packet the guest puts on the wire, none it receives), and read by airgap-prover's egress kernel unchanged. HELD if the guest sends 0 packets to any undeclared destination, every packet it sends to the declared sink falls inside one of the 2 send windows (from the send action to 2 s after the message is accepted, as in seal 2), both sends are accepted, and receipts = actions with at least 300 actions. Parts (b) and (c) of L6 are L6's own and are not re-run.",
+   "bound": { "egress_undeclared": 0, "user_sends": 2, "actions_min": 300 }
+  }
+ ]
+}

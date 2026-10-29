@@ -5,7 +5,7 @@
 # tries to send is emitted where tcpdump on the HOST side records it; the host does not forward, so nothing reaches the
 # internet. The one declared peer is the owner's mail provider's stand-in (a sink on the host end of the veth).
 #
-#   sudo ./measure/netns-day.sh <outdir>
+#   sudo ./measure/netns-day.sh <outdir> [outbound]     outbound: claim L6b, only what the guest sends (measure/claims-b.json)
 set -euo pipefail
 OUT="${1:?usage: netns-day.sh <outdir>}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -27,7 +27,9 @@ ip netns exec "$NS" ip link set lo up
 ip netns exec "$NS" ip route add default via "$HOST_IP"
 node "$REPO/tools/smtp-sink-run.mjs" "$HOST_IP" 2525 > "$OUT/sink.json" &
 SINK_PID=$!
-tcpdump -i "$HOST_VETH" -w "$OUT/day.pcap" -U -n '(ip or ip6)' >/dev/null 2>&1 &
+# L6 took both directions; L6b (measure/claims-b.json) takes only what the guest sends: -Q in on the host end of its link
+if [ "${2:-}" = "outbound" ]; then DIR=(-Q in); else DIR=(); fi
+tcpdump -i "$HOST_VETH" "${DIR[@]}" -w "$OUT/day.pcap" -U -n '(ip or ip6)' >/dev/null 2>&1 &
 TCPDUMP_PID=$!
 sleep 1
 mkdir -p "$OUT/home"

@@ -1,9 +1,17 @@
 name: measure
-# The two measurements that must happen on GitHub's runner, run by hand once per seal; their receipts are downloaded and
+# The measurements that must happen on GitHub's runner, each dispatched by hand once (job: l3, l6 or l6b); their receipts are downloaded and
 # committed exactly as they came (claim L3's mainstream readers, claim L6's capture from below).
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      job:
+        description: 'which measurement to run (each is run once): l3, l6 or l6b'
+        required: true
+        type: choice
+        options: [l3, l6, l6b]
 jobs:
   l3-readers:
+    if: inputs.job == 'l3'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +32,7 @@ jobs:
           path: receipts/l3-ci.json
           if-no-files-found: error
   l6-netns:
+    if: inputs.job == 'l6'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,6 +52,31 @@ jobs:
           name: l6-ci
           path: |
             receipts/l6-ci.json
+            out/day.pcap
+            out/day.json
+          if-no-files-found: error
+  l6b-netns:
+    # claim L6b (measure/claims-b.json): the same day, captured from below in the direction the guest sends only
+    if: inputs.job == 'l6b'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+      - name: tcpdump and iproute2
+        run: sudo apt-get update && sudo apt-get install -y tcpdump iproute2
+      - name: the sealed day inside a locked network namespace, only what the guest sends captured from below
+        run: |
+          sudo env "PATH=$PATH" bash measure/netns-day.sh out outbound
+          sudo chown -R "$(id -u):$(id -g)" out
+      - name: read the capture (airgap-prover's egress kernel) against the day's send windows
+        run: node measure/l6.mjs ci-b out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: l6b-ci
+          path: |
+            receipts/l6b-ci.json
             out/day.pcap
             out/day.json
           if-no-files-found: error

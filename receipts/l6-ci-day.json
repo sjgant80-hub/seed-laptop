@@ -1,0 +1,48 @@
+{
+ "actions": 303,
+ "receipts": 303,
+ "plan": 303,
+ "attempts": [
+  {
+   "kind": "tcp",
+   "host": "10.9.9.1",
+   "port": 2525,
+   "at": 1793303447820,
+   "allowed": true
+  },
+  {
+   "kind": "tcp",
+   "host": "10.9.9.1",
+   "port": 2525,
+   "at": 1793303447875,
+   "allowed": true
+  }
+ ],
+ "sends": [
+  {
+   "n": 1,
+   "start": 1793303447820,
+   "end": 1793303447825,
+   "ok": true
+  },
+  {
+   "n": 2,
+   "start": 1793303447874,
+   "end": 1793303447876,
+   "ok": true
+  }
+ ],
+ "kinds": {
+  "grew": 1,
+  "opened": 21,
+  "saved": 203,
+  "asked": 40,
+  "imported": 20,
+  "refused at magic": 2,
+  "exported": 14,
+  "refused at shape": 2,
+  "refused at immune": 1
+ },
+ "digest": "af051c1d47e035ae43bc7fa3f68048c6522cb63443c0c89277c84eab6cb089ad",
+ "sink": "10.9.9.1:2525"
+}
