@@ -1,0 +1,11 @@
+{
+ "name": "Seed Office",
+ "short_name": "Seed Office",
+ "description": "Your office, grown from a seed on this device.",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#f6f5f1",
+ "theme_color": "#2f6b4f",
+ "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

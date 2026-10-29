@@ -28,6 +28,46 @@ const RULES = {
     facts: { what: name, stage: name, why: (s) => typeof s === 'string' && s.length >= 1 && s.length <= 240 },
     says: (f) => 'I refused ' + f.what + ' at the ' + f.stage + ' check: ' + f.why,
   },
+  opened: {
+    facts: { block: name },
+    says: (f) => 'You opened ' + f.block + '. It runs in a sandbox with no network; what it keeps stays in your office.',
+  },
+  saved: {
+    facts: { block: name, changes: count },
+    says: (f) => f.block + ' saved ' + plural(f.changes, 'change', 'changes') + ' into your office.',
+  },
+  asked: {
+    facts: { asked: (s) => typeof s === 'string' && s.length >= 1 && s.length <= 400, said: (s) => typeof s === 'string' && s.length >= 1 && s.length <= 600 },
+    says: (f) => 'You asked: "' + f.asked + '". ' + f.said,
+  },
+  imported: {
+    facts: { file: name, type: name, sha: hexid },
+    says: (f) => 'You brought in ' + f.file + ' (' + f.type + '). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (' + short(f.sha) + ').',
+  },
+  quarantined: {
+    facts: { file: name, why: (s) => typeof s === 'string' && s.length >= 1 && s.length <= 240 },
+    says: (f) => 'I kept ' + f.file + ' out of your office: ' + f.why + '. Nothing in it was read outside the sandbox.',
+  },
+  'backed-up': {
+    facts: { bytes: count, ref: hexid },
+    says: (f) => 'You saved your vault (' + plural(f.bytes, 'byte', 'bytes') + ', ' + short(f.ref) + '). Only your phrase opens it; keep a copy off this machine.',
+  },
+  regrown: {
+    facts: { keys: count, owner: hexid },
+    says: (f) => 'Your office grew back from your vault: ' + plural(f.keys, 'thing', 'things') + ' restored, byte for byte, for ' + short(f.owner) + '. This device has a key of its own, and your behaviour watch starts fresh, refusing nothing while it learns.',
+  },
+  synced: {
+    facts: { changes: count },
+    says: (f) => plural(f.changes, 'change', 'changes') + ' arrived from your other device, each checked before it was read.',
+  },
+  paired: {
+    facts: { device: hexid },
+    says: (f) => 'A new device (' + short(f.device) + ') is on your list of devices, signed with your phrase.',
+  },
+  exported: {
+    facts: { file: name, format: name, bytes: count },
+    says: (f) => 'You saved ' + f.file + ' (' + f.format + ', ' + plural(f.bytes, 'byte', 'bytes') + ') to this device. It carries nothing of your office\'s keys or internals.',
+  },
 };
 
 export const KINDS = Object.freeze(Object.fromEntries(Object.entries(RULES).map(([k, r]) => [k, Object.freeze(Object.keys(r.facts))])));

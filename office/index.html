@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Seed Office</title>
+<meta name="description" content="Your office, grown from a seed on this device: documents, sheets, contacts, notes, accounts, PDF, design, and Kar. Nothing leaves this device unless you send it.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="office.css">
+<script type="module" src="shell.mjs"></script>
+</head>
+<body>
+<header class="bar">
+  <span class="mark" aria-hidden="true">◊</span>
+  <strong>Seed Office</strong>
+  <span id="who" class="who"></span>
+  <span id="net" class="net" title="What this office can reach"></span>
+</header>
+
+<main id="plant" class="plant" hidden>
+  <h1>Plant your seed</h1>
+  <p>Your office grows here, on this device, from one signed seed. Every block is checked against the seed's pins before it runs. Nothing leaves this device unless you send it.</p>
+  <ol class="steps">
+    <li><label for="phrase">Choose your phrase.</label> It is the only key to your office: write it down and keep it safe. Nobody else holds it, so nobody else can recover it. At least 16 characters.</li>
+  </ol>
+  <input id="phrase" type="password" autocomplete="new-password" minlength="16" placeholder="your phrase (16 characters or more)">
+  <input id="phrase2" type="password" autocomplete="new-password" placeholder="the same phrase again">
+  <div class="choose">
+    <button id="plant-stock" class="primary">Plant the stock seed</button>
+    <label class="file">Plant a seed file… <input id="seed-file" type="file" accept=".full,application/octet-stream"></label>
+    <button id="plant-light">Plant the light seed (from this site's mirror)</button>
+  </div>
+  <h2>Or regrow your office</h2>
+  <p>Lost a machine, or moving to a new one? Plant the seed again and open your vault with your phrase: everything comes back, byte for byte. This device gets a new key of its own, and your behaviour watch starts fresh in observe-only, so it can never lock you out.</p>
+  <label class="file">Regrow from my vault… <input id="vault-file" type="file" accept=".slv,application/octet-stream"></label>
+  <p id="plant-says" class="says" role="status" aria-live="polite"></p>
+  <p id="runtime" class="runtime"></p>
+</main>
+
+<div id="office" class="office" hidden>
+  <nav id="rail" class="rail" aria-label="Your office"></nav>
+  <section id="stage" class="stage">
+    <section id="kar" class="kar panel" aria-label="Kar">
+      <h2>Kar</h2>
+      <ol id="said" class="said" aria-live="polite"></ol>
+      <form id="ask" class="ask"><input id="ask-text" autocomplete="off" placeholder="Ask Kar: help · list · open crm · find invoice · recent" aria-label="Ask Kar"><button>Ask</button></form>
+    </section>
+    <section id="files" class="files panel" hidden aria-label="Files">
+      <h2>Files</h2>
+      <p>Bring files in from the old world: PDF, Word (DOCX), Excel (XLSX), CSV, email (EML), calendars (ICS), contacts (VCF), images and zip archives. Each file's bytes are checked before anything reads them; it is then read in a sandbox with no network, and its original is kept unchanged. A file that fails is kept out, and you are told why. Office macros are always refused.</p>
+      <label class="file primary-file">Bring files in… <input id="file-in" type="file" multiple></label>
+      <p id="file-says" class="says" role="status" aria-live="polite"></p>
+      <p id="file-immune" class="says"></p>
+      <table class="file-list"><thead><tr><th>File</th><th>Kind</th><th>Size</th><th>What happened</th><th></th></tr></thead><tbody id="file-rows"></tbody></table>
+      <section id="file-view" class="file-view" hidden aria-label="The file's reading"><h3 id="file-view-name"></h3><div class="exports" id="file-exports"></div><pre id="file-view-text"></pre></section>
+    </section>
+    <section id="write" class="write panel" hidden aria-label="Write out">
+      <h2>Write out</h2>
+      <p>Save something in the formats the old world reads. Every file is checked before you get it: it carries nothing of your office's keys or internals.</p>
+      <fieldset><legend>A letter or a note</legend>
+        <input id="w-title" placeholder="Title (the file's name)" aria-label="Title">
+        <textarea id="w-body" rows="7" placeholder="Write here. A blank line starts a new paragraph." aria-label="Text"></textarea>
+        <div class="exports"><button data-out="pdf">Save as PDF</button><button data-out="docx">Save as Word (DOCX)</button></div>
+      </fieldset>
+      <fieldset><legend>An email (for your own mail provider to send)</legend>
+        <input id="w-from" placeholder="From (you@example.com)" aria-label="From"><input id="w-to" placeholder="To" aria-label="To"><input id="w-subject" placeholder="Subject" aria-label="Subject">
+        <textarea id="w-mail" rows="5" placeholder="Message" aria-label="Message"></textarea>
+        <div class="exports"><button data-out="eml">Save as email (EML)</button></div>
+      </fieldset>
+      <fieldset><legend>An event</legend>
+        <input id="w-event" placeholder="What" aria-label="What"><input id="w-place" placeholder="Where" aria-label="Where">
+        <label>Starts <input id="w-start" type="datetime-local"></label><label>Ends <input id="w-end" type="datetime-local"></label>
+        <div class="exports"><button data-out="ics">Save as calendar (ICS)</button></div>
+      </fieldset>
+      <fieldset><legend>A table</legend>
+        <textarea id="w-table" rows="5" placeholder="One row per line, cells separated by commas" aria-label="Table"></textarea>
+        <div class="exports"><button data-out="xlsx">Save as Excel (XLSX)</button><button data-out="csv">Save as CSV</button></div>
+      </fieldset>
+      <p id="write-says" class="says" role="status" aria-live="polite"></p>
+    </section>
+    <section id="backup" class="backup panel" hidden aria-label="Backup">
+      <h2>Your vault</h2>
+      <p>One encrypted file holds everything this office keeps. Only your phrase opens it: the vault holds no key, and nobody else holds your phrase, so nobody else can open it, or recover it for you. Keep a copy somewhere safe, off this machine.</p>
+      <input id="backup-phrase" type="password" autocomplete="current-password" placeholder="Your phrase" aria-label="Your phrase">
+      <div class="exports"><button id="backup-save" class="primary">Save my vault</button></div>
+      <p id="backup-says" class="says" role="status" aria-live="polite"></p>
+      <p id="bes-says" class="runtime"></p>
+    </section>
+    <section id="devices" class="devices panel" hidden aria-label="Devices">
+      <h2>Your devices</h2>
+      <p>One identity, many devices. Each device has a key of its own; your phrase signs the list of your devices, and every change that passes between them is a signed packet checked before it is read. Pairing uses codes you copy from one device to the other: no server, and no address on the internet is ever asked for.</p>
+      <p id="dev-me" class="runtime"></p>
+      <fieldset><legend>Pair a new device</legend>
+        <input id="dev-phrase" type="password" autocomplete="current-password" placeholder="Your phrase (it signs the new device in)" aria-label="Your phrase">
+        <div class="exports"><button id="dev-offer">Make a pairing code</button><button id="dev-join">Join with a code</button></div>
+        <textarea id="dev-code" rows="4" placeholder="The code from the other device goes here" aria-label="Pairing code"></textarea>
+        <div class="exports"><button id="dev-accept">Use this code</button></div>
+        <textarea id="dev-mine" rows="4" readonly aria-label="This device's code: copy it to the other device"></textarea>
+      </fieldset>
+      <p id="dev-says" class="says" role="status" aria-live="polite"></p>
+    </section>
+    <section id="receipts" class="receipts panel" hidden aria-label="Receipts">
+      <h2>Receipts</h2>
+      <p>Everything the office did, in plain words, newest first.</p>
+      <ol id="receipt-list"></ol>
+    </section>
+    <div id="frames"></div>
+  </section>
+</div>
+</body>
+</html>

@@ -18,6 +18,8 @@ test('refused: what, at which check, why', () => {
   assert.notEqual(receipt('refused', { what: 'the seed', stage: 'genome', why: 'x'.repeat(240) }, AT), null);
   assert.equal(receipt('refused', { what: 'the seed', stage: 'genome', why: '' }, AT), null);
   assert.equal(receipt('refused', { what: 'x', stage: 'y', why: 'z' }, AT).says, 'I refused x at the y check: z', 'one-character facts fit');
+  assert.notEqual(receipt('quarantined', { file: 'x', why: 'z' }, AT), null, 'a one-character reason fits a quarantine too');
+  assert.equal(receipt('quarantined', { file: 'x', why: '' }, AT), null);
 });
 
 test('facts are checked by type before a sentence is made', () => {
@@ -45,8 +47,45 @@ test('the time is an ISO instant in UTC', () => {
   for (const t of ['2026-10-29', '2026-10-29T12:00:00', '2026-10-29T12:00:00+01:00', 5, null, 'x2026-10-29T12:00:00Z', '2026-10-29T12:00:00Zx']) assert.equal(receipt('grew', grew, t), null, String(t));
 });
 
+test("opened, saved, asked: the office's everyday receipts", () => {
+  assert.equal(receipt('opened', { block: 'Accounts' }, AT).says, 'You opened Accounts. It runs in a sandbox with no network; what it keeps stays in your office.');
+  assert.equal(receipt('saved', { block: 'Accounts', changes: 3 }, AT).says, 'Accounts saved 3 changes into your office.');
+  assert.equal(receipt('saved', { block: 'Accounts', changes: 1 }, AT).says, 'Accounts saved 1 change into your office.');
+  assert.equal(receipt('saved', { block: 'Accounts', changes: -1 }, AT), null);
+  assert.equal(receipt('asked', { asked: 'list', said: 'Your office has 7 blocks.' }, AT).says, 'You asked: "list". Your office has 7 blocks.');
+  assert.notEqual(receipt('asked', { asked: 'x', said: 'y' }, AT), null, 'one character each');
+  assert.notEqual(receipt('asked', { asked: 'x'.repeat(400), said: 'y'.repeat(600) }, AT), null, 'at the limits');
+  assert.equal(receipt('asked', { asked: 'x'.repeat(401), said: 'y' }, AT), null);
+  assert.equal(receipt('asked', { asked: 'x', said: 'y'.repeat(601) }, AT), null);
+  assert.equal(receipt('asked', { asked: '', said: 'y' }, AT), null);
+  assert.equal(receipt('asked', { asked: 'x', said: '' }, AT), null);
+  assert.equal(receipt('opened', { block: '' }, AT), null);
+});
+
 test('KINDS lists each kind and its facts', () => {
   assert.deepEqual(KINDS.grew, ['seed', 'genome', 'blocks', 'files', 'owner']);
   assert.deepEqual(KINDS.refused, ['what', 'stage', 'why']);
   assert.equal(Object.isFrozen(KINDS), true);
+});
+
+test('imported, quarantined, exported: the edges leave receipts', () => {
+  const sha = 'ab'.repeat(32);
+  assert.equal(receipt('imported', { file: 'letter.docx', type: 'docx', sha }, AT).says, 'You brought in letter.docx (docx). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (abababab).');
+  assert.equal(receipt('imported', { file: 'x', type: 'y', sha: 'z' }, AT), null, 'a sha is hex');
+  assert.equal(receipt('quarantined', { file: 'a.pdf', why: 'a PDF ends with %%EOF' }, AT).says, 'I kept a.pdf out of your office: a PDF ends with %%EOF. Nothing in it was read outside the sandbox.');
+  assert.equal(receipt('quarantined', { file: 'a.pdf', why: 'w'.repeat(240) }, AT).facts.why.length, 240);
+  assert.equal(receipt('quarantined', { file: 'a.pdf', why: 'w'.repeat(241) }, AT), null);
+  assert.equal(receipt('quarantined', { file: 'a.pdf', why: '' }, AT), null);
+  assert.equal(receipt('exported', { file: 'quote.pdf', format: 'pdf', bytes: 1 }, AT).says, "You saved quote.pdf (pdf, 1 byte) to this device. It carries nothing of your office's keys or internals.");
+  assert.equal(receipt('exported', { file: 'quote.pdf', format: 'pdf', bytes: 2048 }, AT).says.includes('2048 bytes'), true);
+  assert.deepEqual(Object.keys(KINDS), ['grew', 'refused', 'opened', 'saved', 'asked', 'imported', 'quarantined', 'backed-up', 'regrown', 'synced', 'paired', 'exported']);
+});
+
+test('backed-up, regrown, synced, paired', () => {
+  const h = 'ab'.repeat(32);
+  assert.equal(receipt('backed-up', { bytes: 2048, ref: h }, AT).says, 'You saved your vault (2048 bytes, abababab). Only your phrase opens it; keep a copy off this machine.');
+  assert.equal(receipt('regrown', { keys: 1, owner: h }, AT).says, 'Your office grew back from your vault: 1 thing restored, byte for byte, for abababab. This device has a key of its own, and your behaviour watch starts fresh, refusing nothing while it learns.');
+  assert.equal(receipt('synced', { changes: 3 }, AT).says, '3 changes arrived from your other device, each checked before it was read.');
+  assert.equal(receipt('paired', { device: h }, AT).says, 'A new device (abababab) is on your list of devices, signed with your phrase.');
+  assert.equal(receipt('paired', { device: 'zz' }, AT), null);
 });

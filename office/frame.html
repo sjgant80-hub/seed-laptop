@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>block</title></head>
+<body><script>
+// The frame a block runs in. The office's service worker serves this page with the frame policy
+// (src/compose.mjs FRAME_POLICY): a sandbox with an opaque origin and no network. If it is ever opened without that
+// policy, its origin is not opaque and it runs nothing. Otherwise it asks the office for its block, and writes it.
+(function () {
+  if (self.origin !== 'null') { document.body.textContent = 'This frame is not sandboxed, so no block runs in it.'; return; }
+  var id = new URLSearchParams(location.search).get('b');
+  addEventListener('message', function (e) {
+    if (e.source !== parent || !e.data || e.data.t !== 'doc' || typeof e.data.html !== 'string') return;
+    document.open(); document.write(e.data.html); document.close();
+  });
+  parent.postMessage({ t: 'host', b: id }, '*');
+})();
+</script></body></html>

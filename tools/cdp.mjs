@@ -63,7 +63,7 @@ export async function launch(opts = {}) {
   let port;
   for (let i = 0; i < 200 && !port; i++) {
     const f = join(profile, 'DevToolsActivePort');
-    if (existsSync(f)) port = readFileSync(f, 'utf8').split('\n')[0].trim();
+    if (existsSync(f)) { try { port = readFileSync(f, 'utf8').split('\n')[0].trim(); } catch { port = undefined; } }   // Windows: Chrome may still hold the file (EBUSY)
     if (!port) await wait(50);
   }
   if (!port) { proc.kill(); throw new Error('Chrome did not open its DevTools port'); }
