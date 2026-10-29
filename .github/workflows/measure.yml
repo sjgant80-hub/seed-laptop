@@ -1,14 +1,14 @@
 name: measure
-# The measurements that must happen on GitHub's runner, each dispatched by hand once (job: l3, l6 or l6b); their receipts are downloaded and
+# The measurements that must happen on GitHub's runner, each dispatched by hand once (job: l3, l6, l6b or l3b); their receipts are downloaded and
 # committed exactly as they came (claim L3's mainstream readers, claim L6's capture from below).
 on:
   workflow_dispatch:
     inputs:
       job:
-        description: 'which measurement to run (each is run once): l3, l6 or l6b'
+        description: 'which measurement to run (each is run once): l3, l6, l6b or l3b'
         required: true
         type: choice
-        options: [l3, l6, l6b]
+        options: [l3, l6, l6b, l3b]
 jobs:
   l3-readers:
     if: inputs.job == 'l3'
@@ -79,4 +79,26 @@ jobs:
             receipts/l6b-ci.json
             out/day.pcap
             out/day.json
+          if-no-files-found: error
+  l3b-readers:
+    # claim L3b (measure/claims-e.json): L3 again, read with its two corrections
+    if: inputs.job == 'l3b'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+      - name: the tested readers (LibreOffice and poppler from Ubuntu; the Python readers from PyPI)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libreoffice-writer libreoffice-calc poppler-utils
+          python3 -m pip install --quiet pymupdf pypdf python-docx openpyxl icalendar
+          soffice --version; pdftotext -v 2>&1 | head -1
+      - name: write the six files, scan them, open them in every reader
+        run: node measure/l3.mjs ci-b
+      - uses: actions/upload-artifact@v4
+        with:
+          name: l3b-ci
+          path: receipts/l3b-ci.json
           if-no-files-found: error

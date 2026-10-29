@@ -70,6 +70,36 @@ export function matches(reader, file, content) {
   } catch { return false; }
 }
 
+// ── claim L3b (measure/claims-e.json): L3's two corrections, sealed before its runs ──
+// 1. The PDF's expected text: the writer splits each paragraph at its line breaks before WinAnsi; L3 ran WinAnsi over
+//    whole paragraphs, which turned a line break into '?'. 2. LibreOffice's CSV: a doubled quote inside a quoted cell
+//    is one quote character (RFC 4180); L3's parser closed and reopened the quote and dropped it.
+export function expectedB(file) {
+  if (file.endsWith('.pdf')) return norm(C.letter.paragraphs.flatMap((p) => p.split('\n')).map(WINANSI).join(' '));
+  return expected(file);
+}
+export function parseCsv(t) {
+  const rows = [];
+  let row = [], cell = '', q = false;
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i];
+    if (q) { if (ch === '"') { if (t[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(cell); cell = ''; }
+    else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += ch;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+export function matchesB(reader, file, content) {
+  try {
+    if (file.endsWith('.pdf')) return norm(content) === expectedB(file);
+    if (reader === 'LibreOffice (CSV)') return JSON.stringify(parseCsv(String(content).replace(/\r\n/g, '\n'))) === JSON.stringify(expected(file));
+    return matches(reader, file, content);
+  } catch { return false; }
+}
+
 async function officeContext() {
   const pinned = JSON.parse(readFileSync(join(ROOT, 'seeds', 'publisher.json'), 'utf8')).pinned;
   const g = await germinate({ full: new Uint8Array(readFileSync(join(ROOT, 'seeds', 'stock.full'))) }, { pinned, phrase: PHRASE, at: '2026-10-29T12:00:00Z' });
@@ -81,7 +111,7 @@ async function officeContext() {
   };
 }
 
-async function measure(where) {
+async function measure(where, match = matches) {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
   const files = written();
@@ -98,7 +128,7 @@ async function measure(where) {
   for (const [reader, perFile] of Object.entries(readers)) {
     if (perFile && perFile.missing) { results[reader] = { missing: perFile.missing }; continue; }
     results[reader] = {};
-    for (const [file, r] of Object.entries(perFile || {})) results[reader][file] = { opened: Boolean(r && r.opened), equal: Boolean(r && r.opened && matches(reader, file, r.content)), ...(r && r.opened ? {} : { error: r && r.error }) };
+    for (const [file, r] of Object.entries(perFile || {})) results[reader][file] = { opened: Boolean(r && r.opened), equal: Boolean(r && r.opened && match(reader, file, r.content)), ...(r && r.opened ? {} : { error: r && r.error }) };
   }
   const markersCounted = list.length;
   return { where, machine: { os: platform() + ' ' + release(), node: process.version }, files: Object.fromEntries(Object.entries(files).map(([n, b]) => [n, b.length])), readers: results, leaks, markers: markersCounted };
@@ -119,5 +149,18 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     const verdicts = judge(claims, facts);
     for (const v of verdicts) console.log(v.verdict.padEnd(10) + v.id + '  ' + v.says);
     writeFileSync(join(ROOT, 'receipts', 'l3.json'), JSON.stringify({ kind: 'seed-laptop.receipt', v: 1, claims: 'L3', commit: git('rev-parse', 'HEAD'), facts, verdicts }, null, 1) + '\n');
-  } else { console.log('usage: node measure/l3.mjs local | ci | judge'); process.exit(2); }
+  } else if (mode === 'local-b' || mode === 'ci-b') {   // claim L3b: fresh runs, read with the corrections
+    const where = mode.slice(0, -2);
+    const f = await measure(where, matchesB);
+    mkdirSync(join(ROOT, 'receipts'), { recursive: true });
+    writeFileSync(join(ROOT, 'receipts', 'l3b-' + where + '.json'), JSON.stringify({ kind: 'seed-laptop.l3-readers', v: 1, claim: 'L3b', commit: git('rev-parse', 'HEAD'), ...f }, null, 1) + '\n');
+    for (const [r, x] of Object.entries(f.readers)) console.log(r.padEnd(22) + (x.missing ? 'MISSING ' + x.missing : Object.entries(x).map(([file, y]) => file + (y.equal ? ' ✓' : y.opened ? ' ≠' : ' ✗')).join('  ')));
+    console.log('leaks: ' + Object.values(f.leaks).flat().length + ' over ' + f.markers + ' markers');
+  } else if (mode === 'judge-b') {
+    const read = (w) => (existsSync(join(ROOT, 'receipts', 'l3b-' + w + '.json')) ? JSON.parse(readFileSync(join(ROOT, 'receipts', 'l3b-' + w + '.json'), 'utf8')) : null);
+    const facts = { L3b: { ci: read('ci'), local: read('local') } };
+    const verdicts = judge(JSON.parse(readFileSync(join(ROOT, 'measure', 'claims-e.json'), 'utf8')).claims, facts);
+    for (const v of verdicts) console.log(v.verdict.padEnd(10) + v.id + '  ' + v.says);
+    writeFileSync(join(ROOT, 'receipts', 'l3b.json'), JSON.stringify({ kind: 'seed-laptop.receipt', v: 1, claims: 'L3b', commit: git('rev-parse', 'HEAD'), facts, verdicts }, null, 1) + '\n');
+  } else { console.log('usage: node measure/l3.mjs local | ci | judge | local-b | ci-b | judge-b'); process.exit(2); }
 }

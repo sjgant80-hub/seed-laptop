@@ -1,0 +1,17 @@
+{
+ "kind": "seed-laptop.claims",
+ "v": 1,
+ "seal": "1e",
+ "sealed": "2026-10-29",
+ "sealed_before": "its runs: this file and L3b's reading (measure/l3.mjs local-b, ci-b, judge-b) are committed before either run",
+ "why": "L3, as measured (receipts/l3.json), found every written file opened by every reader and 0 internal markers, but judged the PDF not equal in PyMuPDF, pypdf and poppler, and the CSV not equal in LibreOffice. Diagnosed after the measurement: L3's expected PDF text ran WinAnsi over whole paragraphs, which turned the line break in 'With best wishes,\\nNora Quaye' into '?', while the writer (and every reader) keeps it as a line break; and L3's parser for LibreOffice's CSV dropped the quote character from a doubled quote inside a quoted cell. Both are the instrument's, not the files'. L3 stays FAILED as measured. L3b is the fix, sealed before its own fresh runs.",
+ "claims": [
+  {
+   "id": "L3b",
+   "organ": "edges",
+   "says": "Files the office writes open in mainstream readers, read back exactly, and carry nothing of its internals (read with L3's two corrections).",
+   "held_if": "L3's measurement unchanged (the six files written from measure/out-content.json, the same readers on GitHub's runner and on this laptop, the same leak markers), run again on both, with two corrections to the reading: the expected PDF text is each paragraph split at its line breaks, each line through WinAnsi, joined, whitespace normalised; LibreOffice's CSV is parsed by RFC 4180 (a doubled quote in a quoted cell is one quote). HELD if every file opens in every reader listed for its format without error, the content each gives back equals the content written, and 0 internal markers are found in any file or zip entry.",
+   "bound": { "leaks": 0 }
+  }
+ ]
+}
