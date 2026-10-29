@@ -1,0 +1,4 @@
+✓ receipt      39/39   killed · 57s
+✓ regrow       25/25   killed · 57s
+
+WITNESS CLEAN — 64/64 mutants killed across 2 kernel(s)
