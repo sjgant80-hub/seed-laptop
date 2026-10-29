@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Seed Laptop</title>
+<meta name="description" content="Plant one signed seed and a whole office grows on your own machine, offline: documents, sheets, contacts, accounts, PDF, notes, images, layout and Kar the conductor. Old formats only at the edges. One encrypted vault whose key is yours.">
+<link rel="icon" href="office/icon.svg">
+<link rel="stylesheet" href="page/page.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <strong>The Seed Laptop</strong>
+  <nav aria-label="Sections">
+    <a href="#what">What it is</a><a href="#start">Start here</a><a href="#how">How it works</a><a href="#demo">Demo</a><a href="#blueprint">Blueprint</a>
+    <a href="#results">Results</a><a href="#business">For your business</a><a href="#cost">Cost case</a><a href="#security">Security</a>
+    <a href="#rollout">Roll-out</a><a href="#risks">Risks</a><a href="#board">Board case</a><a href="#paper">White paper</a><a href="#faq">FAQ</a>
+  </nav>
+</div></header>
+
+<main>
+<section class="hero" id="what"><div class="wrap">
+  <div class="kicker">Stage 1 · the sovereign laptop</div>
+  <h1>Plant one seed. A whole office grows on your own machine.</h1>
+  <p class="lede">The Seed Laptop is an office you own outright. One small signed file, the seed, grows documents, spreadsheets, slides, a calendar, notes and tasks, contacts and deals, double-entry accounts, a PDF writer, a knowledge notebook, an image editor and page layout, with Kar, the conductor, to find and open anything. It runs on the computer you already have, with no network at all. Files from the old world (PDF, Word, Excel, email, calendars, contacts, CSV, images, zip) are translated only at the edges. Everything you make is backed up to one encrypted vault that only your phrase opens.</p>
+  <div class="cta">
+    <a class="btn primary" href="office/">Open the office</a>
+    <a class="btn" href="seeds/stock.full" download>Download the stock seed</a>
+    <a class="btn" href="#results">See every result</a>
+  </div>
+  <p class="note" id="tally" aria-live="polite">Reading the receipts…</p>
+</div></section>
+
+<section id="start"><div class="wrap">
+  <div class="kicker">Start here</div>
+  <h2>Your first ten minutes</h2>
+  <ol class="steps">
+    <li><strong>Open the office.</strong> <a href="office/">Open it here</a>. The first visit stores the office in your browser; after that it opens with the network unplugged.</li>
+    <li><strong>Plant the stock seed.</strong> Type a phrase of at least 16 characters twice and press <em>Plant the stock seed</em>. The phrase is your key: it makes your owner identity and it is the only thing that opens your vault. Write it down and keep it somewhere safe. Nobody can recover it for you, by design.</li>
+    <li><strong>Meet Kar.</strong> Kar opens with its first receipt: what grew, from which seed, every block checked against its pin. Ask Kar <code>help</code>, <code>list</code>, <code>open crm</code>, <code>find invoice</code> or <code>recent</code>.</li>
+    <li><strong>Open a block from the left.</strong> Words, Sheets, Slides, Calendar, Notes and Tasks are in <em>Office</em>; contacts and deals in <em>CRM</em>; books in <em>Accounts</em>. Each block runs in its own sandbox with no network; what it saves stays in your office.</li>
+    <li><strong>Bring files in.</strong> In <em>Files in</em>, choose any PDF, DOCX, XLSX, CSV, EML, ICS, VCF, image or zip. Each file's bytes are checked before anything reads them, read in a sandbox, and kept unchanged. A damaged or disguised file is kept out and you are told why.</li>
+    <li><strong>Write out.</strong> In <em>Write out</em>, save a letter as PDF or Word, an email as EML for your own mail provider, an event as ICS, a table as CSV or Excel. Every file is checked on its way out: it carries nothing of your keys or internals.</li>
+    <li><strong>Save your vault.</strong> In <em>Your vault</em>, enter your phrase and save. Keep the vault file off this machine (a USB stick, your own cloud folder). On any new machine: open the office, choose <em>Regrow</em>, give the seed, the vault and your phrase, and everything comes back byte for byte.</li>
+    <li><strong>Add a device.</strong> In <em>Your devices</em>, pair a second machine by copying a code from one to the other and back. Both keep working offline and agree again when they meet; losing one loses nothing it had shared.</li>
+    <li><strong>Read your receipts.</strong> Every action leaves one sentence you can read in <em>Receipts</em>: what was done, to what, and what was checked.</li>
+  </ol>
+  <p>On a machine with Node 25 you can also plant from the command line: <code>node tools/plant.mjs --seed seeds/stock.full --home &lt;folder&gt;</code>. It runs under Node's permission model with no network permission.</p>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <div class="kicker">How it works</div>
+  <h2>From one file to a working office</h2>
+  <figure>
+    <svg viewBox="0 0 960 230" role="img" aria-labelledby="g1t">
+      <title id="g1t">Germination: the seed is verified, every block is checked against its pin, the office is composed, the owner identity is made from the phrase, and Kar writes the first receipt.</title>
+      <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/></marker></defs>
+      <g font-size="14" fill="var(--ink)" font-family="system-ui, sans-serif">
+        <rect x="10" y="70" width="140" height="80" rx="12" fill="var(--panel)" stroke="var(--line)"/><text x="80" y="102" text-anchor="middle" font-weight="700">The seed</text><text x="80" y="124" text-anchor="middle" fill="var(--dim)" font-size="12">signed genome</text><text x="80" y="140" text-anchor="middle" fill="var(--dim)" font-size="12">+ every block</text>
+        <rect x="200" y="70" width="140" height="80" rx="12" fill="var(--soft)" stroke="var(--accent)"/><text x="270" y="102" text-anchor="middle" font-weight="700">Verify</text><text x="270" y="124" text-anchor="middle" fill="var(--dim)" font-size="12">publisher signature</text><text x="270" y="140" text-anchor="middle" fill="var(--dim)" font-size="12">one changed bit = no</text>
+        <rect x="390" y="70" width="140" height="80" rx="12" fill="var(--soft)" stroke="var(--accent)"/><text x="460" y="102" text-anchor="middle" font-weight="700">Every pin</text><text x="460" y="124" text-anchor="middle" fill="var(--dim)" font-size="12">each block file's</text><text x="460" y="140" text-anchor="middle" fill="var(--dim)" font-size="12">SHA-256 checked</text>
+        <rect x="580" y="70" width="140" height="80" rx="12" fill="var(--panel)" stroke="var(--line)"/><text x="650" y="102" text-anchor="middle" font-weight="700">Compose</text><text x="650" y="124" text-anchor="middle" fill="var(--dim)" font-size="12">7 blocks, each in</text><text x="650" y="140" text-anchor="middle" fill="var(--dim)" font-size="12">its own sandbox</text>
+        <rect x="770" y="70" width="180" height="80" rx="12" fill="var(--panel)" stroke="var(--line)"/><text x="860" y="102" text-anchor="middle" font-weight="700">You, and Kar</text><text x="860" y="124" text-anchor="middle" fill="var(--dim)" font-size="12">identity from your phrase</text><text x="860" y="140" text-anchor="middle" fill="var(--dim)" font-size="12">Kar's first receipt</text>
+        <path d="M150 110 H196" stroke="var(--dim)" marker-end="url(#ar)"/><path d="M340 110 H386" stroke="var(--dim)" marker-end="url(#ar)"/><path d="M530 110 H576" stroke="var(--dim)" marker-end="url(#ar)"/><path d="M720 110 H766" stroke="var(--dim)" marker-end="url(#ar)"/>
+        <text x="270" y="190" text-anchor="middle" fill="var(--bad)" font-size="12">refused: nothing grows</text><path d="M270 150 V172" stroke="var(--bad)" marker-end="url(#ar)"/>
+        <text x="460" y="190" text-anchor="middle" fill="var(--bad)" font-size="12">refused: nothing grows</text><path d="M460 150 V172" stroke="var(--bad)" marker-end="url(#ar)"/>
+        <text x="480" y="40" text-anchor="middle" fill="var(--dim)" font-size="13">no network at any step · a light seed fetches the same blocks from your own mirror, checked the same way</text>
+      </g>
+    </svg>
+    <figcaption>Germination. The full seed carries the genome and every block in one compressed file; a light seed carries only the genome and fetches each block from a mirror you choose. Either way, a block whose bytes differ from its pin is refused.</figcaption>
+  </figure>
+
+  <h3>The edges: the only place old formats touch</h3>
+  <figure>
+    <svg viewBox="0 0 960 250" role="img" aria-labelledby="g2t">
+      <title id="g2t">Files in: the raw bytes are checked for type, size, magic and shape; only then a sandboxed reader with no network reads them; a file that fails either step is kept out; the original is kept unchanged. Files out: written in standard form with no metadata, then scanned for internal markers.</title>
+      <g font-size="14" fill="var(--ink)" font-family="system-ui, sans-serif">
+        <text x="10" y="30" font-weight="700">In</text>
+        <rect x="10" y="45" width="130" height="64" rx="10" fill="var(--panel)" stroke="var(--line)"/><text x="75" y="73" text-anchor="middle">A file</text><text x="75" y="93" text-anchor="middle" fill="var(--dim)" font-size="12">PDF, DOCX, EML…</text>
+        <rect x="180" y="45" width="150" height="64" rx="10" fill="var(--soft)" stroke="var(--accent)"/><text x="255" y="70" text-anchor="middle">Immune memory</text><text x="255" y="90" text-anchor="middle" fill="var(--dim)" font-size="12">kept out before? refuse</text>
+        <rect x="370" y="45" width="170" height="64" rx="10" fill="var(--soft)" stroke="var(--accent)"/><text x="455" y="70" text-anchor="middle">Verify the raw bytes</text><text x="455" y="90" text-anchor="middle" fill="var(--dim)" font-size="12">type · size · magic · shape</text>
+        <rect x="580" y="45" width="170" height="64" rx="10" fill="var(--soft)" stroke="var(--accent)"/><text x="665" y="70" text-anchor="middle">Sandboxed reader</text><text x="665" y="90" text-anchor="middle" fill="var(--dim)" font-size="12">no network · capped</text>
+        <rect x="790" y="45" width="160" height="64" rx="10" fill="var(--panel)" stroke="var(--line)"/><text x="870" y="70" text-anchor="middle">Your office</text><text x="870" y="90" text-anchor="middle" fill="var(--dim)" font-size="12">reading + original</text>
+        <path d="M140 77 H176" stroke="var(--dim)" marker-end="url(#ar)"/><path d="M330 77 H366" stroke="var(--dim)" marker-end="url(#ar)"/><path d="M540 77 H576" stroke="var(--dim)" marker-end="url(#ar)"/><path d="M750 77 H786" stroke="var(--dim)" marker-end="url(#ar)"/>
+        <path d="M455 109 V140 H665 V109" fill="none" stroke="var(--bad)"/><path d="M255 109 V140 H455" fill="none" stroke="var(--bad)"/>
+        <text x="460" y="160" text-anchor="middle" fill="var(--bad)" font-size="12">kept out, with the reason, and remembered</text>
+        <text x="10" y="200" font-weight="700">Out</text>
+        <rect x="60" y="180" width="240" height="50" rx="10" fill="var(--panel)" stroke="var(--line)"/><text x="180" y="210" text-anchor="middle">Written in standard form, no metadata</text>
+        <rect x="350" y="180" width="250" height="50" rx="10" fill="var(--soft)" stroke="var(--accent)"/><text x="475" y="210" text-anchor="middle">Scanned for your keys and internals</text>
+        <rect x="650" y="180" width="300" height="50" rx="10" fill="var(--panel)" stroke="var(--line)"/><text x="800" y="210" text-anchor="middle">To you, or your own mail provider</text>
+        <path d="M300 205 H346" stroke="var(--dim)" marker-end="url(#ar)"/><path d="M600 205 H646" stroke="var(--dim)" marker-end="url(#ar)"/>
+      </g>
+    </svg>
+    <figcaption>Accept anything at the edge, trust nothing past it. Nothing in an incoming file is decoded until its raw bytes pass; the reader that decodes it runs in a sandbox (on a laptop, a separate Node process with no network, no write and a memory and time cap; in a browser, a sandboxed frame with no network). Office macros are refused as a rule, whatever they hold.</figcaption>
+  </figure>
+
+  <h3>The vault and regrowing</h3>
+  <p>Saving your vault packs everything the office holds into one LIGHT stream, then encrypts it with AES-256-GCM under a key stretched from your phrase (PBKDF2-SHA256, 600,000 rounds). The vault's header is authenticated with the body, so one changed bit anywhere refuses the whole file: a damaged vault restores nothing, never something else. To regrow, a fresh machine needs three things: the seed, the vault and your phrase. No server, no account, no estate service. The regrown machine makes a key of its own, and the behaviour watch (BES) starts on it in observe-only, refusing nothing while it learns how you work, so you can never be locked out of your own office.</p>
+
+  <h3>Your devices</h3>
+  <p>Every device has its own random key, and your phrase signs the roster of devices allowed to sync. A change travels as a signed packet that the receiving device checks at its door before reading a byte of it; the relay between them reads no body. Two devices edited apart agree as soon as they meet, and two edits to the same thing are both kept (one as a conflict copy), never silently dropped. In a browser, two devices join directly over WebRTC with a pairing code you copy from one to the other and back; no outside server is involved.</p>
+
+  <h3>Traced from a real run</h3>
+  <p>The timings below are the measured run's own, read from <a href="receipts/l1.json">receipts/l1.json</a>: Chrome with the network off, the stock seed chosen, then each block opened in turn.</p>
+  <div id="trace" class="tablewrap" aria-live="polite"><p style="padding:.8rem">Reading the run…</p></div>
+</div></section>
+
+<section id="demo"><div class="wrap">
+  <div class="kicker">The demo</div>
+  <h2>Watch it, step by step, as recorded</h2>
+  <p>The real office in Chrome with the network off, driven the way a person would, then a second machine regrown from the vault. Each step shows the screen as it was and the receipts the office itself wrote, word for word, from <a href="receipts/demo.json">receipts/demo.json</a>.</p>
+  <div id="demo-steps" aria-live="polite"><p>Reading the demo…</p></div>
+</div></section>
+
+<section id="blueprint"><div class="wrap">
+  <div class="kicker">Blueprint</div>
+  <h2>How it is built, layer by layer</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Layer</th><th>What it is here</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td>L0 metal</td><td>The computer you have.</td><td>—</td></tr>
+      <tr><td>L1 minimal base</td><td>Stage 1 runs on the operating system already there (host mode). For a clean machine, a reproducible base image is defined: Node 25 on Alpine pinned by digest, package managers removed, every file listed from inside.</td><td><code>base/Containerfile</code>, <code>tools/base-manifest.mjs</code></td></tr>
+      <tr><td>L2 runtime</td><td>A browser (the office as an installable offline app) or Node 25 under its permission model. The runtime kernel separates what the office needs from optional extras.</td><td><code>src/runtime.mjs</code>, <code>tools/probe.mjs</code></td></tr>
+      <tr><td>L3 the foundation</td><td>fall-kit core, vendored at a pinned commit: LIGHT codec and packets, Ed25519 identity, the door, the relay, the roster, the CRDT store, the immune exchange. BES from bes-inward. The egress kernel from airgap-prover.</td><td><code>vendor/fall-kit-core</code>, <code>vendor/bes-inward</code>, <code>vendor/airgap-prover</code></td></tr>
+      <tr><td>L4 the grown office</td><td>Seven blocks of existing estate gear, each pinned by hash: falloffice (Words, Sheets, Slides, Calendar, Notes, Tasks), fallcrm, fallledger, fallpdf, seedmind, fallmage, fallpage. Each runs in a sandboxed frame; a bridge keeps what it saves in your one store.</td><td><code>blocks/</code>, <code>src/compose.mjs</code>, <code>src/prologue.mjs</code>, <code>src/store.mjs</code>, <code>src/office.mjs</code></td></tr>
+      <tr><td>L5 Kar</td><td>The conductor: a closed list of things it can do (help, list, open, find, recent), each leaving a receipt. It needs no model; a local model, if you add one, may only pick from the list.</td><td><code>src/kar.mjs</code>, <code>src/receipt.mjs</code></td></tr>
+      <tr><td>L6 the edges</td><td>In: verify-before-parse, the sandboxed readers, the immune memory. Out: the writers and the leak scan. Mail out through your own provider (STARTTLS, your account, never stored).</td><td><code>src/edge-in.mjs</code>, <code>src/parse/</code>, <code>src/immune.mjs</code>, <code>src/edge-out.mjs</code>, <code>src/leak.mjs</code>, <code>tools/smtp.mjs</code></td></tr>
+      <tr><td>The vault</td><td>The encrypted backup and regrowing from it.</td><td><code>src/vault.mjs</code>, <code>src/regrow.mjs</code></td></tr>
+      <tr><td>Devices</td><td>The roster, the packets, the relay, WebRTC pairing.</td><td><code>src/sync.mjs</code>, <code>office/devices.mjs</code></td></tr>
+    </tbody>
+  </table></div>
+  <h3>Built in order, each organ proven before the next</h3>
+  <p>Seven organs, in the order the spec set: base and runtime; seed and germination; the office; the edges; the vault; devices; the cost case and the demo. Every claim was sealed in writing before the code that measures it (<a href="measure/claims.json">seal 1</a>, then <a href="measure/seal2.md">seal 2</a> fixing the instruments, the seed and the corpus before any measured run). A claim that fails stays failed, with its numbers.</p>
+  <div id="gate" class="tablewrap" aria-live="polite"><p style="padding:.8rem">Reading the mutation gate…</p></div>
+  <p>Every pure kernel passes the witness mutation gate: each comparison, operator and constant in it is changed one at a time, and the tests must catch every change. Each kernel also takes 2,000 hostile inputs per function without throwing.</p>
+</div></section>
+
+<section id="results"><div class="wrap">
+  <div class="kicker">Results</div>
+  <h2>Every sealed claim, as measured</h2>
+  <p>Read straight from the committed receipts in <a href="receipts/">receipts/</a>. Each links the commit it was measured at.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Claim</th><th>Sealed as</th><th>Verdict</th><th>Measured</th></tr></thead>
+    <tbody id="receipt-rows"><tr><td colspan="4">Reading the receipts…</td></tr></tbody>
+  </table></div>
+  <h3>What failed, and why</h3>
+  <p>A failed claim stays failed. Where the fault was the instrument's, the fix is a new claim, sealed in writing before its own fresh run, shown beside the original.</p>
+  <div id="failures" class="note" aria-live="polite"><p>Reading the receipts…</p></div>
+  <h3>Which formats come in exactly, and which are best effort</h3>
+  <div id="compat" class="tablewrap" aria-live="polite"><p style="padding:.8rem">Reading the fidelity results…</p></div>
+</div></section>
+
+<section id="business"><div class="wrap">
+  <div class="kicker">For your business</div>
+  <h2>What it does for each person who signs it off</h2>
+  <div class="grid">
+    <div class="card"><h3>Chief executive</h3><p>The office your people use every day becomes an asset you own, not a rent you pay. It runs where your data already is, keeps working when the internet does not, and leaves a readable receipt for every action.</p></div>
+    <div class="card"><h3>Finance</h3><p>No per-seat licence: the software is MIT and runs on the machines you already own. The cost case below takes your own subscription list and shows, line by line, what the grown office covers, what it covers in part, and what it does not.</p></div>
+    <div class="card"><h3>Operations</h3><p>A new starter's whole office grows from one file in seconds. A lost or broken laptop is a new machine plus the seed, the vault and the phrase. Work goes on offline and merges when devices meet.</p></div>
+    <div class="card"><h3>Technology and security</h3><p>Every block is pinned by hash and the seed is signed, so the software that runs is the software you approved. Inbound files are checked on their raw bytes and read only in a sandbox. Nothing leaves the device except the emails a person chooses to send, and that is measured from below the network, not asserted.</p></div>
+    <div class="card"><h3>Data protection</h3><p>There is no processor: the office has no server and sends nothing out, so your people's and your clients' data stays on your devices and in vaults you hold. Encryption keys never leave the owner.</p></div>
+    <div class="card"><h3>The people who use it</h3><p>One place for letters, sheets, contacts, accounts and notes, with Kar to find anything by asking. Files from customers and suppliers come in as they are; files sent out are plain standard PDF, Word, Excel, email, calendar and CSV, checked in the mainstream readers listed in Results (claim L3).</p></div>
+  </div>
+</div></section>
+
+<section id="cost"><div class="wrap">
+  <div class="kicker">Cost case</div>
+  <h2>Your own subscriptions, set against what grows</h2>
+  <p>Type what you pay now, as you pay it. The office's own cost kernel (<code>src/cost.mjs</code>, the same code the measurement runs) classes every line as covered, partly covered or not covered, says why, and adds it up in whole pence. Nothing here is typed in by us: the amounts are yours, and the office itself carries no licence fee (MIT).</p>
+  <form id="calc" class="calc" autocomplete="off">
+    <div class="row" aria-hidden="true"><strong>Service</strong><strong>Amount (£)</strong><strong>Per</strong><strong>Seats</strong></div>
+    <div id="calc-rows"></div>
+    <div class="cta"><button type="button" class="btn" id="calc-add">Add a line</button><button type="submit" class="btn primary">Work it out</button></div>
+  </form>
+  <div id="calc-out" class="tablewrap" aria-live="polite" hidden></div>
+  <h3>A worked example from sourced list prices</h3>
+  <div id="example" aria-live="polite"><p>Reading the sourced prices…</p></div>
+  <p class="note">Every price used here is copied verbatim from the estate's price registry, with its source and the date it was checked (<a href="page/prices.lock.json">page/prices.lock.json</a>). What the office does not cover (email hosting, video calls, bank feeds, filing to the tax office, e-signing other people's PDFs) is named, never counted as saved.</p>
+</div></section>
+
+<section id="security"><div class="wrap">
+  <div class="kicker">Security, compliance, data protection</div>
+  <h2>Private by construction</h2>
+  <div class="grid">
+    <div class="card"><h3>Nothing leaves</h3><p>Measured three ways over a sealed day of more than 300 actions: from below the network on GitHub's runner (a packet capture on the host side of a locked namespace), with every network call trapped on a laptop, and in a Chrome tab. The only traffic allowed is the two emails the user chooses to send, to their own provider; claims L6, L6b and L6c2 in Results give the counts.</p></div>
+    <div class="card"><h3>The software is what you approved</h3><p>The seed is signed by its publisher; every block file is pinned by SHA-256. One changed bit in the genome, or in any block, and nothing grows. A light seed fetches blocks from your own mirror and checks every one the same way.</p></div>
+    <div class="card"><h3>Hostile files stay out</h3><p>Every incoming file is checked on its raw bytes (type, size, magic, shape) before any reader sees it, and read only in a sandbox with no network and capped memory and time. A file glued to another, padded past its cap, whose bytes are another kind than its name, or carrying an Office macro is kept out; a cut-short file is kept out wherever its format can tell (PDF, Word, Excel, zip, images, multipart mail, calendars, cards). A file kept out once is refused on sight after that. What can still come in is a damaged file the format itself cannot tell from a good one (a flipped bit in plain text or in an image's pixels): it is read only in the sandbox, never by the office's core. Claim L2b counts all of it.</p></div>
+    <div class="card"><h3>Keys stay with the owner</h3><p>Your identity comes from your phrase; each device has its own key; your vault opens only with your phrase. The estate holds nothing of yours, so there is nothing of yours to breach.</p></div>
+    <div class="card"><h3>An audit trail by default</h3><p>Every action leaves a receipt in plain words, kept in the store and the vault: what was done, to what, and what was checked.</p></div>
+    <div class="card"><h3>GDPR by design</h3><p>No server, no processor, no transfer: personal data is processed only on the controller's own devices, encrypted at rest in the vault, and exportable in standard formats at any time.</p></div>
+  </div>
+</div></section>
+
+<section id="rollout"><div class="wrap">
+  <div class="kicker">Deployment and roll-out</div>
+  <h2>From one team to the whole company</h2>
+  <ol class="steps">
+    <li><strong>Week 1, a pilot team.</strong> Five people plant the stock seed on their own laptops, bring in a week of real files, and save vaults. Their receipts show exactly what came in, what was kept out and why.</li>
+    <li><strong>Week 2, your own seed.</strong> Your blocks and settings in a seed your company signs, served from your own mirror (any static hosting) for light seeds, or handed out as one full file.</li>
+    <li><strong>Week 3, devices and recovery.</strong> Each person pairs a second device; a regrow drill on a wiped machine proves the vault and the phrase bring everything back.</li>
+    <li><strong>Week 4 onward, team by team.</strong> Each team moves the lines the cost case marks as covered; lines marked partly or not covered stay where they are until something better grows.</li>
+  </ol>
+  <h3>Support and ownership</h3>
+  <p>Supplied by <a href="https://www.ai-nativesolutions.com">AI Native Solutions</a>; start a conversation through the site. Support, service levels, warranty and liability are agreed per deployment, in each deployment's agreement. The software is MIT, with no licence fee, and keeps running without us: you hold the seed, the code and your data. To leave, write your files out in standard formats; nothing is locked in.</p>
+</div></section>
+
+<section id="risks"><div class="wrap">
+  <div class="kicker">Risks, answered straight</div>
+  <h2>What to know before you plant</h2>
+  <details><summary>If someone forgets their phrase, is the vault gone?</summary><p>Yes. The phrase is the only key, by design, so no one (including us) can open a vault without it. That is what keeps it private. Keep the phrase written down somewhere safe, or in your company's password manager; the office never locks out a person who has it.</p></details>
+  <details><summary>What does it not replace?</summary><p>Email hosting and video calls, bank feeds, filing to the tax office, e-signing other people's PDFs, vector drawing and team design libraries. The cost case marks each of these and counts none of them as saved.</p></details>
+  <details><summary>Is it a new operating system?</summary><p>No. Stage 1 runs on the operating system already there. A minimal base image is defined for clean machines; the office itself is the same either way.</p></details>
+  <details><summary>Do files come back exactly?</summary><p>Structured formats (Word, Excel, email, calendars, contacts, CSV, images, zip) are measured field by field; PDF text by word. The table in <a href="#results">Results</a> says which formats were exact in the measured run and which are best effort, from the run's own numbers.</p></details>
+  <details><summary>What failed?</summary><p>Every sealed claim that did not hold is shown in Results as FAILED, with what was measured and why. Failures are kept, never re-run until they pass. Three failed because of a fault in the measuring instrument; each has a fix claim sealed before its own run. Two are about the office itself: damaged files that carry nothing a format can check are still read (in the sandbox), and the tab day left more receipts than actions.</p></details>
+</div></section>
+
+<section id="board"><div class="wrap">
+  <div class="kicker">The case for the board</div>
+  <h2>One page</h2>
+  <div class="card">
+    <p><strong>The decision.</strong> Run the daily office on software the company owns, on machines it already has, instead of renting it per seat.</p>
+    <p><strong>What changes.</strong> The office grows from one signed file, works offline, keeps every byte on company devices and in vaults the company holds, and leaves a receipt for every action.</p>
+    <p><strong>The evidence.</strong> Each claim was sealed before it was built and measured once; the receipts are public and re-runnable. The software that runs is pinned by hash; the network traffic is measured from below; every kernel is mutation-gated.</p>
+    <p><strong>The money.</strong> No licence fee. The covered lines of the cost case come off the subscription bill; the partly and not covered lines stay, named.</p>
+    <p><strong>The risk.</strong> A forgotten phrase loses that person's vault; the answer is the company's own password manager. Roll-out is team by team, so nothing is switched off before what replaces it has proved itself.</p>
+  </div>
+</div></section>
+
+<section id="paper"><div class="wrap">
+  <div class="kicker">White paper</div>
+  <h2>The seed laptop, explained</h2>
+  <h3>1. The idea</h3>
+  <p>A computer's useful life is the software and the data on it, and most of both is now rented: an office suite per seat, a CRM per seat, accounts per company, storage per terabyte, each with its own copy of your data. The seed laptop turns that around. One signed file names the blocks of an office and pins each by its hash; planting it grows the whole office locally, offline, in seconds; one encrypted vault holds everything made since. The machine stops mattering: any machine with a browser, the seed, the vault and the phrase is the same office.</p>
+  <h3>2. The seed</h3>
+  <p>The genome is canonical JSON, signed with Ed25519 by its publisher: the blocks to grow, the SHA-256 of every file in each, the office's settings. The full seed packs the genome and every block's files into one LIGHT vault (the stock seed: seven blocks, eight files, 798 KB as files, 101 KB packed). Germination checks the signature, then every pin, then composes the blocks into the office, makes the owner's identity from the phrase, and writes Kar's first receipt. A change to any bit of the genome, or to any block file, refuses the seed.</p>
+  <h3>3. The office</h3>
+  <p>Each block is existing estate gear, unchanged: a single-page app that already worked on its own. It runs in a sandboxed frame served by the office's own service worker, with a content policy that allows it no network at all. A small bridge, loaded before the block's own code, gives it local storage and an IndexedDB that write into one shared store, a multi-value CRDT in which concurrent edits are both kept and nothing is lost silently. The block never knows it is part of an office.</p>
+  <h3>4. The edges</h3>
+  <p>Old formats are translated only at the edges. Incoming bytes are checked before any parsing: the declared type, a size cap per type, the format's magic bytes, and its shape at the end (a PDF's %%EOF, a zip's end record, an image's trailer), which is what catches a file glued to another. Only then does a reader decode it, and only in a sandbox: on a laptop a separate Node process under the permission model (no network, no writes, no child processes, reads limited to the reader's own files, a 64 MB heap and a 5 s limit); in a browser a sandboxed frame. The readers check what each format can check about itself (every zip CRC, every PNG chunk CRC, JPEG, GIF and WebP structure, every PDF stream, a multipart message's closing boundary, a calendar's and a card's END). A file that fails is quarantined with its reason and remembered, so the same bytes are refused on sight next time (only refusals the bytes alone decide are remembered, and only under the same version of the edge, so there is never a false immunity). Files going out are written in plain standard form with no producer, author or application metadata, then scanned for anything of the office's internals: keys, the vault reference, block hashes, the product's names, the home folder, the user's name.</p>
+  <h3>5. The vault</h3>
+  <p>The vault is a LIGHT stream of the store, encrypted with AES-256-GCM under a key from the owner's phrase (PBKDF2-SHA256, 600,000 rounds); its 37-byte header is the cipher's additional data. Regrowing on a fresh machine needs only the seed, the vault and the phrase. The regrown device makes its own random key (it must never reuse the old device's write counters), and the behaviour watch starts in observe-only: BES, the behavioural entropy layer after Gary W. Floyd's method, learns the owner's habits before it may refuse anything, so the documented recovery path is never blocked by it.</p>
+  <h3>6. Devices</h3>
+  <p>The owner's phrase signs a roster of devices. Every change is a signed LIGHT packet, refused at the receiving door unless it comes from a device on the roster, is correctly signed, is newer than the last from that device, and is addressed to the receiver. The relay that carries packets between devices reads no body. In a browser, devices pair directly over a WebRTC data channel, with the connection details exchanged by hand as a code; no STUN or signalling server is used.</p>
+  <h3>7. Proof</h3>
+  <p>Every claim on this page was written down before the code that measures it, and its instruments, data and bounds were fixed before the first measured run. Each claim was then measured once. The receipts name the commit and the machine. A claim that fails is reported as failed, with its numbers, and kept.</p>
+  <h3>8. Honest scope</h3>
+  <p class="note scope">Stage 1 is the sovereign laptop on the operating system already there: "no operating system" is not a Stage 1 claim, and bare metal is a research path only. The minimal base is a reproducible image definition. The readers are JavaScript in a sandbox, not WebAssembly. Mail goes out through the owner's own provider and comes in as message files; the owner connects their own accounts. Stages 2 (one organism across devices, interfaces grown on demand) and 3 (a living extension that learns, works ahead, defends itself and federates) come only after Stage 1 is proven, each as its own sealed organ.</p>
+</div></section>
+
+<section id="faq"><div class="wrap">
+  <div class="kicker">FAQ</div>
+  <h2>Questions</h2>
+  <details><summary>Does it need the internet?</summary><p>Only to fetch the office page the first time, or a light seed's blocks from your mirror. After that, nothing it does needs a network, and nothing it does sends anything, except an email you choose to send through your own provider.</p></details>
+  <details><summary>Where is my data?</summary><p>In your browser's storage on your machine, and in the vault file you save, wherever you keep it. Nowhere else.</p></details>
+  <details><summary>Can I bring my old files?</summary><p>Yes: PDF, Word, Excel, CSV, email (EML), calendars (ICS), contacts (VCF), PNG, JPEG, GIF, WebP and zip. The original is always kept unchanged next to its reading.</p></details>
+  <details><summary>Can my files go back out?</summary><p>Yes: PDF, Word, Excel, CSV, email and calendar files, in plain standard form. Claim L3 opens every one in mainstream readers (LibreOffice, poppler, PyMuPDF, pypdf, python-docx, openpyxl, Python's email, icalendar and csv) and checks the content comes back.</p></details>
+  <details><summary>Why are macros refused?</summary><p>An Office macro is a program inside a document. The office never runs one and never reads a file that carries one: it is refused as a rule, whatever the macro holds.</p></details>
+  <details><summary>What is Kar?</summary><p>The conductor: it lists, opens and finds anything in your office, shows what was done most recently, and writes the receipts. It works with no AI model at all; if you add a local one, it can only choose from what Kar already does.</p></details>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Powered by the Konomi architecture, created by Thomas Frumkin.</p>
+  <p>The behaviour watch (BES) follows Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service LLC — "GEP-Based Security: Behavioral Entropy Signatures for Cybersecurity and DevOps," 2025 (CC BY 4.0).</p>
+  <p>The office is grown from the estate's own gear: fall-kit core, falloffice, fallcrm, fallledger, fallpdf, seedmind, fallmage, fallpage, bes-inward, airgap-prover and witness. Supplied by <a href="https://www.ai-nativesolutions.com">AI Native Solutions</a>. MIT, no licence fee. Source: <a href="https://github.com/sjgant80-hub/seed-laptop">github.com/sjgant80-hub/seed-laptop</a>.</p>
+</div></footer>
+<script type="module" src="page/page.mjs"></script>
+</body>
+</html>

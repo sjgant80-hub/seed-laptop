@@ -1,0 +1,96 @@
+{
+ "kind": "seed-laptop.l3-readers",
+ "v": 1,
+ "claim": "L3b",
+ "commit": "e140bcc63221c6b58aa791a3c8080f829a1b4570",
+ "where": "ci",
+ "machine": {
+  "os": "linux 7.0.0-1017-azure",
+  "node": "v25.9.0"
+ },
+ "files": {
+  "letter.pdf": 961,
+  "letter.docx": 2758,
+  "quote.xlsx": 3952,
+  "message.eml": 447,
+  "diary.ics": 559,
+  "people.csv": 139
+ },
+ "readers": {
+  "PyMuPDF": {
+   "letter.pdf": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "pypdf": {
+   "letter.pdf": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "Python email": {
+   "message.eml": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "Python csv": {
+   "people.csv": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "poppler pdftotext": {
+   "letter.pdf": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "python-docx": {
+   "letter.docx": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "openpyxl": {
+   "quote.xlsx": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "icalendar": {
+   "diary.ics": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "LibreOffice (DOCX)": {
+   "letter.docx": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "LibreOffice (XLSX)": {
+   "quote.xlsx": {
+    "opened": true,
+    "equal": true
+   }
+  },
+  "LibreOffice (CSV)": {
+   "people.csv": {
+    "opened": true,
+    "equal": true
+   }
+  }
+ },
+ "leaks": {
+  "letter.pdf": [],
+  "letter.docx": [],
+  "quote.xlsx": [],
+  "message.eml": [],
+  "diary.ics": [],
+  "people.csv": []
+ },
+ "markers": 37
+}

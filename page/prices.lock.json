@@ -1,0 +1,25 @@
+{
+ "kind": "seed-laptop.prices",
+ "v": 1,
+ "registry": "sjgant80-hub/fallstack (registry/prices.json)",
+ "registryCommit": "bc3e63a4acd1112d502b1f69d2d15eb60f104cd6",
+ "pulled": "2026-10-29",
+ "why": "every price the page reads, copied verbatim from the estate registry with its source and the date it was checked; the page reads nothing else",
+ "entries": [
+  {
+   "id": "salesforce-pro-suite",
+   "kind": "saas",
+   "vendor": "Salesforce",
+   "product": "Salesforce Pro Suite",
+   "function": "crm",
+   "price": 80,
+   "currency": "GBP",
+   "per": "user / month, billed annually",
+   "vat": "not stated",
+   "quote": "£ 80 GBP/User/Month (Billed annually)",
+   "note": "The flexible CRM suite across sales, service, marketing and commerce; the cheapest paid suite above the small-team Starter.",
+   "source": "https://www.salesforce.com/uk/sales/pricing/",
+   "checked": "2026-09-30"
+  }
+ ]
+}

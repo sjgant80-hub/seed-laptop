@@ -1,0 +1,223 @@
+{
+ "kind": "seed-laptop.demo",
+ "v": 1,
+ "commit": "d09cf13d4aea3f5963a2379414f14807617e5ba7",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "node": "v25.7.0",
+  "chrome": "Chrome/155.0.8059.85"
+ },
+ "phrase": "a public test phrase",
+ "downloads": [
+  "Thank you.docx",
+  "Thank you.pdf",
+  "office-2026-10-29.slv"
+ ],
+ "kept": {
+  "machineOne": 83,
+  "machineTwo": 83
+ },
+ "steps": [
+  {
+   "n": 1,
+   "did": "Plant the stock seed, with the network off, and meet Kar",
+   "ms": 1786,
+   "receipts": [
+    "Your office grew from the seed \"stock office\" (9b3cf788): 7 blocks, 8 files, every one checked against its pin. You are b1b8fccf. I am Kar, your conductor: ask me about anything in your office."
+   ],
+   "screenshot": "page/demo/01.png"
+  },
+  {
+   "n": 2,
+   "did": "Open the office block from the rail",
+   "ms": 931,
+   "receipts": [
+    "You opened Words, Sheets, Slides, Calendar, Notes, Tasks. It runs in a sandbox with no network; what it keeps stays in your office."
+   ],
+   "screenshot": "page/demo/02.png"
+  },
+  {
+   "n": 3,
+   "did": "Open the crm block from the rail",
+   "ms": 1004,
+   "receipts": [
+    "You opened Contacts and deals. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Words, Sheets, Slides, Calendar, Notes, Tasks saved 1 change into your office."
+   ],
+   "screenshot": "page/demo/03.png"
+  },
+  {
+   "n": 4,
+   "did": "Open the ledger block from the rail",
+   "ms": 932,
+   "receipts": [
+    "You opened Accounts. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Contacts and deals saved 12 changes into your office."
+   ],
+   "screenshot": "page/demo/04.png"
+  },
+  {
+   "n": 5,
+   "did": "Open the pdf block from the rail",
+   "ms": 1032,
+   "receipts": [
+    "You opened PDF writer. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Accounts saved 39 changes into your office."
+   ],
+   "screenshot": "page/demo/05.png"
+  },
+  {
+   "n": 6,
+   "did": "Open the mind block from the rail",
+   "ms": 1035,
+   "receipts": [
+    "You opened Knowledge notebook. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "PDF writer saved 3 changes into your office."
+   ],
+   "screenshot": "page/demo/06.png"
+  },
+  {
+   "n": 7,
+   "did": "Open the image block from the rail",
+   "ms": 938,
+   "receipts": [
+    "You opened Image editor. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Knowledge notebook saved 1 change into your office."
+   ],
+   "screenshot": "page/demo/07.png"
+  },
+  {
+   "n": 8,
+   "did": "Open the layout block from the rail",
+   "ms": 945,
+   "receipts": [
+    "You opened Page layout. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Image editor saved 1 change into your office."
+   ],
+   "screenshot": "page/demo/08.png"
+  },
+  {
+   "n": 9,
+   "did": "Bring in real files from the old world, and three hostile ones",
+   "ms": 885,
+   "receipts": [
+    "Page layout saved 1 change into your office.",
+    "You brought in letter-reportlab.pdf (pdf). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (99625e66).",
+    "You brought in letter-libreoffice.docx (docx). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (6b974839).",
+    "You brought in orders-openpyxl.xlsx (xlsx). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (82f9610d).",
+    "You brought in mail-1.eml (eml). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (ee492219).",
+    "You brought in diary.ics (ics). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (80d12bf4).",
+    "You brought in contacts.vcf (vcf). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (3882dd90).",
+    "You brought in orders-python.csv (csv). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (e20e8aa3).",
+    "You brought in photo.jpg (jpeg). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (0b67bfbb).",
+    "I refused letter-cut.pdf at the shape check: a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)",
+    "I refused letter-renamed.docx at the magic check: the name says docx but the bytes are pdf"
+   ],
+   "screenshot": "page/demo/09.png"
+  },
+  {
+   "n": 10,
+   "did": "Bring the cut-short PDF in again: the edge remembers it",
+   "ms": 835,
+   "receipts": [
+    "I refused letter-cut.pdf at the immune check: these exact bytes were refused here before (cut short, or glued to another file), so nothing read them again"
+   ],
+   "screenshot": "page/demo/10.png"
+  },
+  {
+   "n": 11,
+   "did": "Open the letter: its reading, beside the original kept unchanged",
+   "ms": 608,
+   "receipts": [],
+   "screenshot": "page/demo/11.png"
+  },
+  {
+   "n": 12,
+   "did": "Write a letter out as PDF and as Word",
+   "ms": 1750,
+   "receipts": [
+    "You saved Thank you.pdf (pdf, 756 bytes) to this device. It carries nothing of your office's keys or internals.",
+    "You saved Thank you.docx (docx, 1673 bytes) to this device. It carries nothing of your office's keys or internals."
+   ],
+   "screenshot": "page/demo/12.png"
+  },
+  {
+   "n": 13,
+   "did": "Ask Kar to find something",
+   "ms": 738,
+   "receipts": [
+    "You asked: \"find Okafor\". Found okafor in 6 places: files."
+   ],
+   "screenshot": "page/demo/13.png"
+  },
+  {
+   "n": 14,
+   "did": "Save the vault, encrypted with the phrase",
+   "ms": 2126,
+   "receipts": [
+    "You saved your vault (21521 bytes, 40119408). Only your phrase opens it; keep a copy off this machine."
+   ],
+   "screenshot": "page/demo/14.png"
+  },
+  {
+   "n": 15,
+   "did": "Read the receipts: one plain sentence for every action",
+   "ms": 530,
+   "receipts": [],
+   "screenshot": "page/demo/15.png"
+  },
+  {
+   "n": 16,
+   "did": "On a new machine: regrow from the seed, the vault and the phrase",
+   "ms": 2568,
+   "receipts": [
+    "Your office grew from the seed \"stock office\" (9b3cf788): 7 blocks, 8 files, every one checked against its pin. You are b1b8fccf. I am Kar, your conductor: ask me about anything in your office.",
+    "You opened Words, Sheets, Slides, Calendar, Notes, Tasks. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "You opened Contacts and deals. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Words, Sheets, Slides, Calendar, Notes, Tasks saved 1 change into your office.",
+    "You opened Accounts. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Contacts and deals saved 12 changes into your office.",
+    "You opened PDF writer. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Accounts saved 39 changes into your office.",
+    "You opened Knowledge notebook. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "PDF writer saved 3 changes into your office.",
+    "You opened Image editor. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Knowledge notebook saved 1 change into your office.",
+    "You opened Page layout. It runs in a sandbox with no network; what it keeps stays in your office.",
+    "Image editor saved 1 change into your office.",
+    "Page layout saved 1 change into your office.",
+    "You brought in letter-reportlab.pdf (pdf). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (99625e66).",
+    "You brought in letter-libreoffice.docx (docx). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (6b974839).",
+    "You brought in orders-openpyxl.xlsx (xlsx). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (82f9610d).",
+    "You brought in mail-1.eml (eml). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (ee492219).",
+    "You brought in diary.ics (ics). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (80d12bf4).",
+    "You brought in contacts.vcf (vcf). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (3882dd90).",
+    "You brought in orders-python.csv (csv). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (e20e8aa3).",
+    "You brought in photo.jpg (jpeg). Its bytes were checked before anything read them, it was read in a sandbox with no network, and the original is kept unchanged (0b67bfbb).",
+    "I refused letter-cut.pdf at the shape check: a PDF ends with %%EOF in its last 1 KB (this one does not: cut short, or something glued after it)",
+    "I refused letter-renamed.docx at the magic check: the name says docx but the bytes are pdf",
+    "I refused letter-cut.pdf at the immune check: these exact bytes were refused here before (cut short, or glued to another file), so nothing read them again",
+    "You saved Thank you.pdf (pdf, 756 bytes) to this device. It carries nothing of your office's keys or internals.",
+    "You saved Thank you.docx (docx, 1673 bytes) to this device. It carries nothing of your office's keys or internals.",
+    "You asked: \"find Okafor\". Found okafor in 6 places: files.",
+    "Your office grew from the seed \"stock office\" (9b3cf788): 7 blocks, 8 files, every one checked against its pin. You are b1b8fccf. I am Kar, your conductor: ask me about anything in your office.",
+    "Your office grew back from your vault: 112 things restored, byte for byte, for b1b8fccf. This device has a key of its own, and your behaviour watch starts fresh, refusing nothing while it learns."
+   ],
+   "screenshot": "page/demo/16.png"
+  },
+  {
+   "n": 17,
+   "did": "Everything is back: the files, their readings, the originals",
+   "ms": 637,
+   "receipts": [],
+   "screenshot": "page/demo/17.png"
+  },
+  {
+   "n": 18,
+   "did": "The behaviour watch on the new machine: observe-only while it learns",
+   "ms": 387,
+   "receipts": [],
+   "screenshot": "page/demo/18.png"
+  }
+ ]
+}
