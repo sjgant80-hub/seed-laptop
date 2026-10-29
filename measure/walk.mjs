@@ -8,6 +8,7 @@
 // model on this machine (Ollama, qwen2.5:7b): nothing about the page or the build leaves the laptop. Writes
 // receipts/walks.json (the personas' words, verbatim) for the gaps to be answered on the page before "done".
 import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import http from 'node:http';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -27,10 +28,16 @@ const PERSONAS = [
 const ASK = 'Walk this product page as a sceptical buyer who has never heard of it. Answer in four numbered lists, quoting the page where you can:\n'
   + '1. What confused you or was unclear.\n2. Objections the page does not answer.\n3. Claims you could not find evidence for on the page.\n4. What would stop you signing, and what would make you sign.\nBe specific and short. Do not invent facts about the product.';
 
-async function ask(prompt, system) {
-  const r = await fetch(OLLAMA, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ model: MODEL, prompt, system, stream: false, options: { temperature: 0.2, num_ctx: 16384 } }) });
-  if (!r.ok) throw new Error('the local model answered ' + r.status);
-  return (await r.json()).response;
+// node:http with no timeout: a CPU model reads a long page for minutes before it answers (fetch gives up at 5)
+function ask(prompt, system) {
+  const body = JSON.stringify({ model: MODEL, prompt, system, stream: false, options: { temperature: 0.2, num_ctx: 16384 } });
+  return new Promise((ok, no) => {
+    const req = http.request(OLLAMA, { method: 'POST', headers: { 'content-type': 'application/json', 'content-length': Buffer.byteLength(body) } }, (res) => {
+      let t = ''; res.setEncoding('utf8'); res.on('data', (d) => { t += d; });
+      res.on('end', () => { if (res.statusCode !== 200) return no(new Error('the local model answered ' + res.statusCode)); try { ok(JSON.parse(t).response); } catch (e) { no(e); } });
+    });
+    req.setTimeout(0); req.on('error', no); req.end(body);
+  });
 }
 
 const profile = join(ROOT, '.out', 'walk');
@@ -53,7 +60,7 @@ for (const href of [...new Set(links)]) {
 const walks = [];
 for (const [who, brief] of PERSONAS) {
   const t0 = Date.now();
-  const said = await ask('THE PAGE, as rendered:\n\n' + text.slice(0, 48000) + '\n\n' + ASK, 'You are the ' + who + '. ' + brief);
+  const said = await ask('THE PAGE, as rendered:\n\n' + text.slice(0, 48000) + '\n\nYOU ARE the ' + who + '. ' + brief + '\n\n' + ASK, 'You read product pages as the buyer you are told you are.');
   walks.push({ who, ms: Date.now() - t0, said });
   console.log('— ' + who + ' (' + Math.round((Date.now() - t0) / 1000) + ' s)');
 }
