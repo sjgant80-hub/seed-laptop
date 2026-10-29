@@ -10,7 +10,9 @@
 // action leaves a receipt in the store. Writes the facts: actions, receipts, every network call the trap saw, and
 // each send's window.
 import { installTrap, attempts, openWindow, closeWindow } from './trap.mjs';
-installTrap();
+import { pathToFileURL as urlOfPath } from 'node:url';
+// Only the day's own process is trapped: a measure that imports planDay (measure/l6-tab.mjs) keeps its own network.
+if (process.argv[1] && import.meta.url === urlOfPath(process.argv[1]).href) installTrap();
 
 const { readFileSync, writeFileSync, mkdirSync, readdirSync } = await import('node:fs');
 const { join, dirname, resolve } = await import('node:path');

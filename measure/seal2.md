@@ -82,6 +82,12 @@ dropped.
   step, before the day started: the script's opening clean-up ran `kill ${SINK_PID:-0}`, and with no sink yet that is
   `kill 0`, which signals the whole process group, the runner's step included. Nothing was measured. The clean-up now
   kills the sink only once it exists. What is measured, and how, is unchanged.
+- **L6 (c), `tools/day.mjs`.** Its first run stopped before the tab opened: importing the day's plan installed the
+  network trap in the measuring process itself, which then refused its own loopback server. Nothing was measured. The
+  trap is now installed only when the day runs as its own process (as in (a) and (b)); what is measured is unchanged.
+- **L1b's probe, and L1b2.** L1b read 0 elements in all seven block frames: its probe named each frame by the URL it
+  had when DevTools attached, before an isolated sandboxed frame has one. L1b stays FAILED as measured;
+  `measure/claims-c.json` seals L1b2, the same steps with the frames named after loading (`measure/l1b2.mjs`).
 - **L3's runner part ran twice.** The workflow then ran both runner jobs on every dispatch, so the re-dispatch for
   L6 (a) (run 40943679324) also ran the L3 readers again. L3's measurement is the first run's (40941980946),
   committed as it came; the workflow now runs only the job it is asked for.

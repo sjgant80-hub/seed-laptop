@@ -1,0 +1,17 @@
+{
+ "kind": "seed-laptop.claims",
+ "v": 1,
+ "seal": "1c",
+ "sealed": "2026-10-29",
+ "sealed_before": "the run that measures it: this file and measure/l1b2.mjs are committed before l1b2.mjs ever runs",
+ "why": "L1b, as measured (receipts/l1.json), found every block loaded, the office digest equal to the planted one, 0 requests leaving and Kar open in 3.15 s, but read 0 elements in all seven block frames: its probe named a frame by the URL it had when DevTools attached, and Chrome attaches to an isolated sandboxed frame before that URL exists, so no frame was named. The same flaw would have filed any exception inside a block under no block. L1b stays FAILED as measured. L1b2 is the fix, sealed before its own fresh run.",
+ "claims": [
+  {
+   "id": "L1b2",
+   "organ": "seed",
+   "says": "The same seed grows the same office in a browser tab with the network off; every block starts and runs (read inside each block's own frame).",
+   "held_if": "L1b's steps, unchanged (Chrome headless with its own throwaway profile, the office page from the owner's own origin, the network emulated offline before the seed is chosen, the full seed planted, every block opened from the rail as soon as the one before reported loaded, 1.5 s left for late errors), with the frames named at the end by asking Chrome for every frame target and its URL then. HELD if: the office's digest equals the full seed's planted in Node; every one of the genome's blocks has its frame found, loaded, with more than 0 elements in its own body read over that frame's own session, and 0 uncaught exceptions (those Chrome reports for that frame's target, plus those the bridge caught); no exception is left unnamed; no request leaves the page's own origin unless the browser refused it before sending; Kar opens; all within 20 s of the seed being chosen.",
+   "bound": { "seconds": 20 }
+  }
+ ]
+}
