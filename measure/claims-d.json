@@ -1,0 +1,17 @@
+{
+ "kind": "seed-laptop.claims",
+ "v": 1,
+ "seal": "1d",
+ "sealed": "2026-10-29",
+ "sealed_before": "the run that measures it: this file and measure/l6-tab2.mjs are committed before l6-tab2.mjs ever runs",
+ "why": "L6 (c), as measured (receipts/l6-tab.json), saw 0 requests leave the tab (10 refused inside the browser) but 128 receipts for 303 actions: its instrument found each block's frame by the URL it had when DevTools attached, before an isolated sandboxed frame has one, so none of the day's 200 in-block edits was made, and each was still counted as an action. L6 stays FAILED as measured. L6c2 is the fix for part (c), sealed before its own fresh run.",
+ "claims": [
+  {
+   "id": "L6c2",
+   "organ": "devices",
+   "says": "In a browser tab, a sealed day of normal use sends nothing anywhere, and every action leaves a receipt.",
+   "held_if": "The sealed day (tools/day.mjs planDay, seed 20261029) driven through the real office in a Chrome tab as in L6 (c), with each block's frame found after it opens (Chrome's frame targets and their URLs then), and an edit counted as an action only when it was made inside that frame and read back. HELD if every planned action was made (0 unmade, at least 300 actions), every action left a receipt (receipts = actions), and 0 requests went to any origin other than the office's own unless the browser refused them before sending.",
+   "bound": { "actions_min": 300 }
+  }
+ ]
+}
