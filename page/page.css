@@ -72,3 +72,7 @@ footer { padding: 2rem 0 3rem; color: var(--dim); font-size: .9rem; border-top: 
   .tablewrap td:first-child { font-weight: 700; }
   .calc .row[aria-hidden] { display: none; }
 }
+.glossary { display: grid; grid-template-columns: minmax(8rem, 12rem) 1fr; gap: .5rem 1rem; margin: 0; }
+.glossary dt { font-weight: 700; }
+.glossary dd { margin: 0; color: var(--ink); }
+@media (max-width: 640px) { .glossary { grid-template-columns: 1fr; } .glossary dd { margin-bottom: .6rem; } }

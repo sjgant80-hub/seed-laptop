@@ -14,13 +14,13 @@
   <nav aria-label="Sections">
     <a href="#what">What it is</a><a href="#start">Start here</a><a href="#how">How it works</a><a href="#demo">Demo</a><a href="#blueprint">Blueprint</a>
     <a href="#results">Results</a><a href="#business">For your business</a><a href="#cost">Cost case</a><a href="#security">Security</a>
-    <a href="#rollout">Roll-out</a><a href="#risks">Risks</a><a href="#board">Board case</a><a href="#paper">White paper</a><a href="#faq">FAQ</a>
+    <a href="#rollout">Roll-out</a><a href="#risks">Risks</a><a href="#board">Board case</a><a href="#paper">White paper</a><a href="#words">Glossary</a><a href="#faq">FAQ</a>
   </nav>
 </div></header>
 
 <main>
 <section class="hero" id="what"><div class="wrap">
-  <div class="kicker">Stage 1 · the sovereign laptop</div>
+  <div class="kicker">Stage 1 of 3 · the sovereign laptop</div>
   <h1>Plant one seed. A whole office grows on your own machine.</h1>
   <p class="lede">The Seed Laptop is an office you own outright. One small signed file, the seed, grows documents, spreadsheets, slides, a calendar, notes and tasks, contacts and deals, double-entry accounts, a PDF writer, a knowledge notebook, an image editor and page layout, with Kar, the conductor, to find and open anything. It runs on the computer you already have, with no network at all. Files from the old world (PDF, Word, Excel, email, calendars, contacts, CSV, images, zip) are translated only at the edges. Everything you make is backed up to one encrypted vault that only your phrase opens.</p>
   <div class="cta">
@@ -28,6 +28,7 @@
     <a class="btn" href="seeds/stock.full" download>Download the stock seed</a>
     <a class="btn" href="#results">See every result</a>
   </div>
+  <p>This is <strong>Stage 1</strong> of three: the office on one person's own machines, on the operating system already there. Stage 2 is one office across many devices and people; Stage 3 an office that learns and defends itself. Each stage is built and proven before the next.</p>
   <p class="note" id="tally" aria-live="polite">Reading the receipts…</p>
 </div></section>
 
@@ -138,7 +139,7 @@
 <section id="results"><div class="wrap">
   <div class="kicker">Results</div>
   <h2>Every sealed claim, as measured</h2>
-  <p>Read straight from the committed receipts in <a href="receipts/">receipts/</a>. Each links the commit it was measured at.</p>
+  <p>Read straight from the committed receipts in <a href="https://github.com/sjgant80-hub/seed-laptop/tree/main/receipts">receipts/</a>. Each links the commit it was measured at.</p>
   <div class="tablewrap"><table>
     <thead><tr><th>Claim</th><th>Sealed as</th><th>Verdict</th><th>Measured</th></tr></thead>
     <tbody id="receipt-rows"><tr><td colspan="4">Reading the receipts…</td></tr></tbody>
@@ -182,10 +183,10 @@
   <div class="kicker">Security, compliance, data protection</div>
   <h2>Private by construction</h2>
   <div class="grid">
-    <div class="card"><h3>Nothing leaves</h3><p>Measured three ways over a sealed day of more than 300 actions: from below the network on GitHub's runner (a packet capture on the host side of a locked namespace), with every network call trapped on a laptop, and in a Chrome tab. The only traffic allowed is the two emails the user chooses to send, to their own provider; claims L6, L6b and L6c2 in Results give the counts.</p></div>
-    <div class="card"><h3>The software is what you approved</h3><p>The seed is signed by its publisher; every block file is pinned by SHA-256. One changed bit in the genome, or in any block, and nothing grows. A light seed fetches blocks from your own mirror and checks every one the same way.</p></div>
+    <div class="card"><h3>Nothing leaves</h3><p>Measured three ways over a sealed day of more than 300 actions: from below the network on GitHub's runner (a packet capture on the host side of a locked namespace), with every network call trapped on a laptop, and in a Chrome tab. The only traffic allowed is the two emails the user chooses to send, to their own provider; claims L6, L6b and L6c2 in Results give the counts (<a href="receipts/l6b.json">the capture from below</a>, <a href="receipts/l6c2.json">the tab</a>).</p></div>
+    <div class="card"><h3>The software is what you approved</h3><p>The seed is signed by its publisher; every block file is pinned by SHA-256. One changed bit in the genome, or in any block, and nothing grows: every one of the genome's 16,856 bits and 448 bits across the blocks was changed in turn, and every change was refused (<a href="receipts/l1.json">claim L1c</a>). A light seed fetches blocks from your own mirror and checks every one the same way.</p></div>
     <div class="card"><h3>Hostile files stay out</h3><p>Every incoming file is checked on its raw bytes (type, size, magic, shape) before any reader sees it, and read only in a sandbox with no network and capped memory and time. A file glued to another, padded past its cap, whose bytes are another kind than its name, or carrying an Office macro is kept out; a cut-short file is kept out wherever its format can tell (PDF, Word, Excel, zip, images, multipart mail, calendars, cards). A file kept out once is refused on sight after that. What can still come in is a damaged file the format itself cannot tell from a good one (a flipped bit in plain text or in an image's pixels): it is read only in the sandbox, never by the office's core. Claim L2b counts all of it.</p></div>
-    <div class="card"><h3>Keys stay with the owner</h3><p>Your identity comes from your phrase; each device has its own key; your vault opens only with your phrase. The estate holds nothing of yours, so there is nothing of yours to breach.</p></div>
+    <div class="card"><h3>Keys stay with the owner</h3><p>Your identity comes from your phrase; each device has its own key; your vault opens only with your phrase. The estate holds nothing of yours, so there is nothing of yours to breach. A wrong phrase restores nothing, and every one of 4,392 single-bit changes to a vault was refused (<a href="receipts/l4.json">claim L4</a>).</p></div>
     <div class="card"><h3>An audit trail by default</h3><p>Every action leaves a receipt in plain words, kept in the store and the vault: what was done, to what, and what was checked.</p></div>
     <div class="card"><h3>GDPR by design</h3><p>No server, no processor, no transfer: personal data is processed only on the controller's own devices, encrypted at rest in the vault, and exportable in standard formats at any time.</p></div>
   </div>
@@ -247,14 +248,42 @@
   <p class="note scope">Stage 1 is the sovereign laptop on the operating system already there: "no operating system" is not a Stage 1 claim, and bare metal is a research path only. The minimal base is a reproducible image definition. The readers are JavaScript in a sandbox, not WebAssembly. Mail goes out through the owner's own provider and comes in as message files; the owner connects their own accounts. Stages 2 (one organism across devices, interfaces grown on demand) and 3 (a living extension that learns, works ahead, defends itself and federates) come only after Stage 1 is proven, each as its own sealed organ.</p>
 </div></section>
 
+<section id="words"><div class="wrap">
+  <div class="kicker">Words used here</div>
+  <h2>A short glossary</h2>
+  <dl class="glossary">
+    <dt>Seed</dt><dd>One file that describes an office: which blocks grow, each pinned by the SHA-256 of its files, signed by its publisher. A <strong>full seed</strong> carries the blocks inside it (one file, works with no network); a <strong>light seed</strong> carries only the description and fetches each block from a mirror you choose, checking every one.</dd>
+    <dt>Block</dt><dd>One existing estate app (the office suite, the CRM, the accounts…) that grows into your office unchanged, in a sandbox of its own.</dd>
+    <dt>Pin</dt><dd>The SHA-256 of a file, written in the seed. A file whose bytes differ from its pin is refused.</dd>
+    <dt>Phrase</dt><dd>Your key: the words you choose when you plant. Your identity is made from it, and only it opens your vault.</dd>
+    <dt>Vault</dt><dd>One encrypted file holding everything your office keeps, for backup, a new machine, or an update.</dd>
+    <dt>Kar</dt><dd>The office's conductor: you ask it to list, open or find anything, and it writes a plain-English receipt for every action.</dd>
+    <dt>Receipt</dt><dd>One readable sentence saying what was done, to what, and what was checked. Kept in your office and your vault.</dd>
+    <dt>The edges</dt><dd>The only place old formats (PDF, Word, Excel, email…) touch the office: checked on the way in, written plainly on the way out.</dd>
+    <dt>Sandbox</dt><dd>A walled-off place where a block runs or a file is read, with no network and no way out.</dd>
+    <dt>Immune memory</dt><dd>The edge remembering a file it kept out, so the same bytes are refused on sight next time.</dd>
+    <dt>LIGHT</dt><dd>The estate's compact format for data and messages (from fall-kit core): the vault and the packets between your devices are written in it.</dd>
+    <dt>CRDT</dt><dd>A way of storing data so that two devices edited apart always agree when they meet, keeping both of two edits to the same thing rather than losing one.</dd>
+    <dt>BES</dt><dd>The behaviour watch: it learns how you work over 14 days, refusing nothing while it learns, and afterwards asks before an action that does not look like you (after Gary W. Floyd's method).</dd>
+    <dt>Mutation gate</dt><dd>A test of the tests: every comparison and operator in the code is changed one at a time, and the tests must catch every change.</dd>
+    <dt>Sealed claim</dt><dd>A promise written down and committed before the code or the run that measures it, measured once, and kept if it fails.</dd>
+  </dl>
+</div></section>
+
 <section id="faq"><div class="wrap">
   <div class="kicker">FAQ</div>
   <h2>Questions</h2>
+  <p>Five buyer personas (a CFO, a CTO and CISO, a COO, an owner-manager and a public-sector procurement lead, each played by a local model on our own machine) read this page cold and listed everything unclear or unanswered; the answers are below and in the glossary. Their notes, word for word: <a href="receipts/walks.json">receipts/walks.json</a>.</p>
   <details><summary>Does it need the internet?</summary><p>Only to fetch the office page the first time, or a light seed's blocks from your mirror. After that, nothing it does needs a network, and nothing it does sends anything, except an email you choose to send through your own provider.</p></details>
   <details><summary>Where is my data?</summary><p>In your browser's storage on your machine, and in the vault file you save, wherever you keep it. Nowhere else.</p></details>
   <details><summary>Can I bring my old files?</summary><p>Yes: PDF, Word, Excel, CSV, email (EML), calendars (ICS), contacts (VCF), PNG, JPEG, GIF, WebP and zip. The original is always kept unchanged next to its reading.</p></details>
   <details><summary>Can my files go back out?</summary><p>Yes: PDF, Word, Excel, CSV, email and calendar files, in plain standard form. Claim L3 opens every one in mainstream readers (LibreOffice, poppler, PyMuPDF, pypdf, python-docx, openpyxl, Python's email, icalendar and csv) and checks the content comes back.</p></details>
   <details><summary>Why are macros refused?</summary><p>An Office macro is a program inside a document. The office never runs one and never reads a file that carries one: it is refused as a rule, whatever the macro holds.</p></details>
+  <details><summary>How big can a file be, and what happens to one the office cannot read?</summary><p>Each kind has a cap, checked before anything reads the file: PDF 50 MB, Word and Excel 25 MB, zip 100 MB, email 25 MB, calendars and contacts 5 MB, CSV 20 MB, images 25 MB. Each reading has 5 seconds (and, on a laptop, 64 MB of memory); a file that needs more is stopped and kept out, with the reason. A kind the office does not read (a video, an executable) is refused at the first check and nothing reads it. A refused file never touches your office, and you are told why.</p></details>
+  <details><summary>What support and training is there?</summary><p>The office explains itself: the first-run steps on the planting screen, a plain sentence on every panel, Kar's <code>help</code>, and a receipt for every action. For a company, support, service levels and training are agreed per deployment with <a href="https://www.ai-nativesolutions.com">AI Native Solutions</a>, in each deployment's agreement.</p></details>
+  <details><summary>How does it scale to 200 people?</summary><p>There is no central server to scale: each person's office runs on their own machine, so 200 people are 200 offices, each as fast as the first. A person's devices sync with each other through a relay that reads no body. Roll-out goes team by team (see <a href="#rollout">Roll-out</a>).</p></details>
+  <details><summary>Which standards does it meet?</summary><p>It is built for UK GDPR and GDPR by design: personal data is processed only on the controller's own devices, encrypted at rest in the vault with keys only the owner holds, never sent to a processor, and exportable in standard formats at any time; every action leaves an audit receipt. The facts an auditor asks for are measured and published as receipts.</p></details>
+  <details><summary>What if a phrase is stolen, not lost?</summary><p>A phrase is the master key to your office: whoever holds it can act as you, open any copy of your vault and sign a device of theirs onto your list. Keep it as you would the master key to the business, in your company's password manager, and keep vault copies only where you alone can reach them. On your devices, the behaviour watch, once formed, asks before an action that does not look like you, even when the key is valid.</p></details>
   <details><summary>How do updates arrive?</summary><p>As a new seed, signed by its publisher. You plant it when you choose; then, in <em>Your vault</em>, you bring your office across from a vault saved under the earlier seed: everything in it is merged in and nothing is lost, and a block the new seed no longer grows keeps its data. Only your phrase can do it, and it leaves a receipt. Until you choose, the seed you have keeps working. Every block in a new seed is checked against its pin exactly as the first one was, so an update can never slip in a block nobody signed.</p></details>
   <details><summary>Can colleagues share one office?</summary><p>Not in Stage 1. An office belongs to one owner and syncs across that owner's own devices; each colleague plants their own. Files move between people the way they do today: written out in a standard format and brought in at the other end. One organism shared across people and devices is Stage 2.</p></details>
   <details><summary>Which browsers?</summary><p>The measured runs used Chrome (claims L1b2, L5 and L6c2). The office uses only standard web features (service worker, sandboxed frames, IndexedDB, WebCrypto, WebRTC); other browsers have not been measured, so this page does not claim them.</p></details>

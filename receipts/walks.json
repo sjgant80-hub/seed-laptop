@@ -1,0 +1,154 @@
+{
+ "kind": "seed-laptop.walks",
+ "v": 1,
+ "url": "https://sjgant80-hub.github.io/seed-laptop/",
+ "model": "qwen2.5:7b",
+ "commit": "7869ff07aa906e29adacf918259dab9f826acb00",
+ "at": "2026-10-29T22:23:37.164Z",
+ "pageChars": 38721,
+ "links": [
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#what",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#start",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#how",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#demo",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#blueprint",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#results",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#business",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#cost",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#security",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#rollout",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#risks",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#board",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#paper",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/#faq",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/office/",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/seeds/stock.full",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/l1.json",
+   "status": 200
+  },
+  {
+   "href": "https://github.com/sjgant80-hub/seed-laptop/commit/7f03325588d124c35c3cb11663a8ada4d655695a",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/demo.json",
+   "status": 200
+  },
+  {
+   "href": "https://github.com/sjgant80-hub/seed-laptop/commit/d09cf13d4aea3f5963a2379414f14807617e5ba7",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/measure/claims.json",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/measure/seal2.md",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/",
+   "status": 404
+  },
+  {
+   "href": "https://github.com/sjgant80-hub/seed-laptop/commit/22be1436e2e84512429a4d26c2d8456e611d8d04",
+   "status": 200
+  },
+  {
+   "href": "https://github.com/sjgant80-hub/seed-laptop/commit/f46ffc2e3b722efdcf563c10bb416e4437d2a345",
+   "status": 200
+  },
+  {
+   "href": "https://github.com/sjgant80-hub/seed-laptop/commit/e140bcc63221c6b58aa791a3c8080f829a1b4570",
+   "status": 200
+  },
+  {
+   "href": "https://sjgant80-hub.github.io/seed-laptop/page/prices.lock.json",
+   "status": 200
+  },
+  {
+   "href": "https://www.ai-nativesolutions.com/",
+   "status": 200
+  },
+  {
+   "href": "https://github.com/sjgant80-hub/seed-laptop",
+   "status": 200
+  }
+ ],
+ "walks": [
+  {
+   "who": "CFO of a 60-person professional-services firm",
+   "ms": 2271934,
+   "said": "1. **What confused you or was unclear:**\n   - The page mentions \"Stage 1\" as the sovereign laptop, but it does not clearly explain what \"no operating system\" means or how it differs from a bare-metal setup. (See \"STAGE 1 · THE SOVEREIGN LAPTOP\")\n   - The term \"light seed\" is used, but its exact purpose and how it differs from the full seed is not clearly explained. (See \"STAGE 1 · THE SOVEREIGN LAPTOP\")\n\n2. **Objections the page does not answer:**\n   - How does the software handle data breaches or unauthorized access to the vault if the phrase is lost or stolen? (See \"SECURITY, COMPLIANCE, DATA PROTECTION\")\n   - What happens if the company's own password manager fails or is compromised? (See \"SECURITY, COMPLIANCE, DATA PROTECTION\")\n   - How does the software handle large-scale rollouts and ensure that all devices are properly synchronized? (See \"DEPLOYMENT AND ROLL-OUT\")\n\n3. **Claims you could not find evidence for on the page:**\n   - The page claims that the software is \"MIT and runs on the machines you already own,\" but there is no detailed cost analysis or comparison with existing software subscriptions. (See \"FINANCE\")\n   - The page states that \"nothing leaves the device except the sends the user starts,\" but there is no clear explanation of how this is enforced or measured. (See \"SECURITY, COMPLIANCE, DATA PROTECTION\")\n\n4. **What would stop you signing, and what would make you sign:**\n   - **Would stop you signing:** The lack of clear evidence for claims such as the software running on existing machines and the security measures being robust. The page does not provide a detailed cost comparison or a clear risk management plan. (See \"FINANCE\" and \"SECURITY, COMPLIANCE, DATA PROTECTION\")\n   - **Would make you sign:** If the page provided a detailed cost analysis showing significant savings compared to existing software subscriptions, and if there was a clear and robust security plan addressing potential risks, such as data breaches and unauthorized access. Additionally, if the company could provide a pilot program to test the software before full deployment. (See \"FINANCE\" and \"SECURITY, COMPLIANCE, DATA PROTECTION\")"
+  },
+  {
+   "who": "CTO and CISO of a 200-person company",
+   "ms": 976917,
+   "said": "1. **What confused you or was unclear:**\n   - **Obfuscation of terms:** The page uses terms like \"LIGHT codec,\" \"CRDT store,\" and \"behavioural entropy layer\" without clear definitions, which could be confusing for a non-technical reader.\n   - **Complexity of setup:** The detailed steps for setting up and regrowing the office might be overwhelming for a non-technical user. For example, the phrase \"plant the stock seed\" and \"Regrow\" are mentioned, but the exact steps are not fully detailed.\n   - **Security claims:** The phrase \"Nothing leaves the device except the sends the user starts\" is ambiguous. It's not clear what \"sends the user starts\" means in the context of network traffic.\n\n2. **Objections the page does not answer:**\n   - **User support and training:** The page does not mention any user support or training resources, which would be crucial for a company of 200 people.\n   - **Scalability:** There is no information on how the system scales with more users or devices.\n   - **Compliance with industry standards:** The page does not specify which industry standards (e.g., GDPR, HIPAA) the system complies with.\n   - **Performance under heavy load:** There is no mention of how the system performs under heavy usage, such as multiple users editing documents simultaneously.\n\n3. **Claims you could not find evidence for on the page:**\n   - **Claim L3:** The page states that files the office writes open in mainstream readers and carry nothing of its internals, but there is no evidence or proof provided for this claim.\n   - **Claim L6:** The page claims that nothing leaves the device during a sealed day of normal use, except the sends the user starts, but there is no evidence or proof provided for this claim.\n   - **Claim L7:** The cost case is not measured yet, and there is no evidence or proof provided for this claim.\n\n4. **What would stop you signing, and what would make you sign:**\n   - **What would stop you signing:**\n     - **Lack of user support and training resources:** Without clear support and training, the implementation could be challenging.\n     - **No evidence for key claims:** Without proof for claims like L3 and L6, the security and functionality of the system are questionable.\n     - **No scalability information:** The system's ability to handle a larger number of users and devices is not addressed.\n     - **No compliance with industry standards:** The system's compliance with relevant industry standards is not specified.\n   - **What would make you sign:**\n     - **Clear documentation and support:** Detailed documentation and robust user support would be crucial.\n     - **Evidence for key claims:** Providing proof or evidence for claims like L3 and L6 would increase confidence in the system.\n     - **Scalability and performance data:** Information on how the system scales and performs under heavy load would be beneficial.\n     - **Compliance with industry standards:** Explicit mention of compliance with relevant industry standards would be important."
+  },
+  {
+   "who": "COO of a 40-person firm with two offices",
+   "ms": 767538,
+   "said": "1. **What confused you or was unclear:**\n   - The phrase \"Stage 1 · THE SOVEREIGN LAPTOP\" is confusing because it is not clear what \"Stage 1\" refers to or how it relates to the \"THE SOVEREIGN LAPTOP\" product.\n   - The term \"LIGHT\" used in \"LIGHT stream\" and \"LIGHT codec\" is not defined, making it unclear what these terms mean in the context of the product.\n\n2. **Objections the page does not answer:**\n   - How does the system handle updates and new versions of the software? The page does not mention any update mechanism.\n   - What happens if the user's phrase is lost or forgotten? The page mentions a password manager as a solution, but does not provide details on how this is integrated or managed.\n   - How does the system handle large files, such as videos or large documents, which might exceed the sandbox memory and time limits?\n\n3. **Claims you could not find evidence for on the page:**\n   - The claim that \"The cost case, from a real user's own subscription list\" is not measured yet. There is no evidence or data provided to support this claim.\n   - The claim that \"The office grows from one signed file, works offline, keeps every byte on company devices and in vaults the company holds, and leaves a receipt for every action\" is not substantiated by specific evidence or examples.\n\n4. **What would stop you signing, and what would make you sign:**\n   - **Would stop you signing:**\n     - The lack of a clear update mechanism for the software.\n     - Uncertainty about how the system handles large files.\n     - The reliance on a password manager for recovery, which introduces an additional layer of complexity.\n     - The absence of a detailed plan for handling updates and new versions of the software.\n   - **Would make you sign:**\n     - A detailed and transparent update mechanism.\n     - Clear instructions and support for managing the phrase and integrating with a password manager.\n     - Evidence of the system's performance and reliability through extensive testing and real-world usage data.\n     - A clear plan for handling large files and ensuring they are processed correctly."
+  },
+  {
+   "who": "owner-manager of a 12-person accountancy practice",
+   "ms": 726404,
+   "said": "1. **What confused you or was unclear:**\n   - **Objection:** The page mentions \"Kar, the conductor\" but does not explain what Kar does or how it interacts with the office. (See \"Open the office\" section)\n   - **Objection:** The term \"LIGHT stream\" and \"LIGHT codec\" are used but not defined. (See \"The vault\" section)\n\n2. **Objections the page does not answer:**\n   - **Objection:** How does the software handle updates or new versions of the office blocks? (See \"The office\" section)\n   - **Objection:** What happens if a user's phrase is compromised or lost? (See \"What failed?\" section)\n   - **Objection:** How does the software handle large files, such as videos or high-resolution images? (See \"The edges\" section)\n\n3. **Claims you could not find evidence for on the page:**\n   - **Claim:** The page states that \"no server, no processor, no transfer\" but does not provide evidence or proof of this claim. (See \"SECURITY, COMPLIANCE, DATA PROTECTION\" section)\n   - **Claim:** The page claims that \"every block is pinned by hash and the seed is signed\" but does not provide any evidence or proof of this. (See \"The seed\" section)\n\n4. **What would stop you signing, and what would make you sign:**\n   - **What would stop you signing:** \n     - The lack of clear information on how updates and new versions are handled.\n     - Uncertainty about the security and recovery mechanisms if a user's phrase is lost or compromised.\n     - The absence of evidence for claims about no servers, processors, or transfers.\n   - **What would make you sign:**\n     - Clear and detailed documentation on how Kar functions and interacts with the office.\n     - Evidence or proof that the software can handle large files without issues.\n     - Assurance that the software can be updated and new versions can be installed without requiring a network connection."
+  },
+  {
+   "who": "procurement lead at a public body",
+   "ms": 759545,
+   "said": "1. **What confused you or was unclear:**\n   - **Objection 1:** The page mentions \"Stage 1\" as the sovereign laptop, but it is not clear what \"no operating system\" means or how it differs from bare metal. (STAGE 1 · THE SOVEREIGN LAPTOP)\n   - **Objection 2:** The term \"LIGHT stream\" and \"LIGHT codec\" are used without a clear definition. (L3 the foundation)\n   - **Objection 3:** The phrase \"immunity\" in the context of file handling is not clearly explained. (L6 the edges)\n\n2. **Objections the page does not answer:**\n   - **Objection 1:** How does the system handle large files or files that exceed the sandbox memory and time limits? (L6c2)\n   - **Objection 2:** What happens if a user tries to open a file that is not supported by the sandboxed reader? (L6c2)\n   - **Objection 3:** How does the system handle files that are partially corrupted or have missing parts? (L2b)\n\n3. **Claims you could not find evidence for on the page:**\n   - **Claim 1:** The claim that \"every kernel is mutation-gated clean and never throws on garbage\" (G1) is not supported by any evidence or measurement results. (G1)\n   - **Claim 2:** The claim that \"no server, no processor, no transfer\" (SECURITY, COMPLIANCE, DATA PROTECTION) is not backed by any specific evidence or measurement. (SECURITY, COMPLIANCE, DATA PROTECTION)\n\n4. **What would stop you signing, and what would make you sign:**\n   - **What would stop you signing:**\n     - The lack of clear definitions for terms like \"LIGHT stream\" and \"LIGHT codec\" (3).\n     - Unclear handling of large or unsupported files (2).\n     - No evidence for claims about kernel mutation gates and garbage handling (3).\n   - **What would make you sign:**\n     - Detailed evidence and measurements for each claim, including the mutation gates and sandbox limits (4).\n     - Clear definitions and explanations for terms like \"LIGHT stream\" and \"LIGHT codec\" (3).\n     - Assurance that the system handles large and unsupported files appropriately (2)."
+  }
+ ]
+}
