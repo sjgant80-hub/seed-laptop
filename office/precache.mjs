@@ -1,5 +1,5 @@
 // office/precache.mjs — written by tools/build-office.mjs: every file the office needs offline, with its SHA-256.
-export const VERSION = "7053a9ea8806";
+export const VERSION = "e4e297688ce2";
 export const FILES = [
  {
   "path": "index.html",
@@ -91,7 +91,7 @@ export const FILES = [
  },
  {
   "path": "../src/parse/index.mjs",
-  "sha256": "58e1c93ebd6c3f272526bc7d9964444619ea943bb0560f20f50eacc6048eadb2"
+  "sha256": "8bc6317f07e45e979953ae7ada9fb6ace5fc675f865f10ac5d6414fc3c6621d4"
  },
  {
   "path": "../src/parse/mail.mjs",

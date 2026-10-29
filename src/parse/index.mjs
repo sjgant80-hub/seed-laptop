@@ -94,6 +94,11 @@ export async function parse(type, bytes, platform) {
       if (r.ok && r.damaged) return no(r.damaged + ' of the PDF\'s streams do not decode: it is damaged');
       return r.ok ? { ok: true, type, result: { pages: r.pages, text: r.text } } : r;
     }
+    if (type === 'docx' || type === 'xlsx') {   // every entry's size and CRC-32 first, not only the parts read
+      const z = entries(bytes);
+      if (!z.ok) return z;
+      for (const e of z.entries) { const r = await read(bytes, e, p.inflateRaw); if (!r.ok) return r; }
+    }
     if (type === 'docx') { const r = await docx(bytes, p.inflateRaw); return r.ok ? { ok: true, type, result: { paragraphs: r.paragraphs, tables: r.tables } } : r; }
     if (type === 'xlsx') { const r = await xlsx(bytes, p.inflateRaw); return r.ok ? { ok: true, type, result: { sheets: r.sheets } } : r; }
     if (type === 'zip') {

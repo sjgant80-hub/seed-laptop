@@ -644,6 +644,15 @@ test('the integrity walks at their edges, hand-made: PNG chunks, JPEG markers an
   assert.match((await parse('jpeg', fx('dev.jpg').slice(0, -2), platform)).why, /end marker/);
   assert.match((await parse('webp', Uint8Array.from([...fx('dev-lossy.webp'), 0, 0]), platform)).why, /add up/);
   assert.match((await parse('docx', writeDocx({ paragraphs: ['x'] }), { get inflateRaw() { throw new Error('boom'); } })).why, /^the reader stopped: boom$/, 'a reader that stops says why, in its own words');
+  for (const [type, make, main] of [['docx', () => writeDocx({ paragraphs: ['x'] }), 'word/document.xml'], ['xlsx', () => writeXlsx({ sheets: [{ name: 'S', rows: [[1]] }] }), 'xl/workbook.xml']]) {
+    const good = make();
+    const extra = zipStored([...await (async () => { const z = entries(good); const out = []; for (const e of z.entries) out.push({ name: e.name, bytes: (await read(good, e, platform.inflateRaw)).bytes }); return out; })(), { name: 'docProps/unread.xml', text: 'a part no reader opens' }]);
+    assert.equal((await parse(type, extra, platform)).ok, true, type + ' with an extra part');
+    const z = entries(extra), e = z.entries.find((x) => x.name === 'docProps/unread.xml');
+    const bent = extra.slice(); bent[e.offset + 30 + e.name.length + 2] ^= 1;
+    assert.match((await parse(type, bent, platform)).why, /CRC-32/, type + ': a damaged part that no reader opens still refuses the file');
+    void main;
+  }
   const cut = enc.encode('Subject: s\r\nContent-Type: multipart/mixed; boundary=B\r\n\r\n--B\r\nContent-Type: text/plain\r\n\r\ncut sho');
   assert.match((await eml(cut)).why, /no closing boundary/, 'a multipart message cut short');
 });
