@@ -1,0 +1,343 @@
+{
+ "letter-pythondocx.docx": {
+  "type": "docx",
+  "paragraphs": [
+   "Northgate Joinery Ltd",
+   "Unit 4, Tannery Yard, Example Lane",
+   "Dear Ms Okafor,",
+   "Thank you for confirming the order for twelve oak window frames. Our surveyor will measure the openings on Monday morning.",
+   "The frames will be made in our workshop over three weeks and fitted in two days, weather permitting.",
+   "A deposit of 30% is due before work begins; the balance falls due within fourteen days of fitting.",
+   "Please call Priya Shah if the access arrangements change.",
+   "Yours sincerely,",
+   "Tom Ellery, Director"
+  ],
+  "cells": [
+   "Item",
+   "Quantity",
+   "Unit price",
+   "Oak casement frame",
+   "12",
+   "485.00",
+   "Fitting (per day)",
+   "2",
+   "640.00",
+   "Survey visit",
+   "1",
+   "120.00"
+  ]
+ },
+ "letter-libreoffice.docx": {
+  "type": "docx",
+  "paragraphs": [
+   "Northgate Joinery Ltd",
+   "Unit 4, Tannery Yard, Example Lane",
+   "Dear Ms Okafor,",
+   "Thank you for confirming the order for twelve oak window frames. Our surveyor will measure the openings on Monday morning.",
+   "The frames will be made in our workshop over three weeks and fitted in two days, weather permitting.",
+   "A deposit of 30% is due before work begins; the balance falls due within fourteen days of fitting.",
+   "Please call Priya Shah if the access arrangements change.",
+   "Yours sincerely,",
+   "Tom Ellery, Director"
+  ],
+  "cells": [
+   "Item",
+   "Quantity",
+   "Unit price",
+   "Oak casement frame",
+   "12",
+   "485.00",
+   "Fitting (per day)",
+   "2",
+   "640.00",
+   "Survey visit",
+   "1",
+   "120.00"
+  ]
+ },
+ "orders-openpyxl.xlsx": {
+  "type": "xlsx",
+  "sheet": "Orders",
+  "cells": {
+   "A1": "Customer",
+   "B1": "Item",
+   "C1": "Quantity",
+   "D1": "Total",
+   "E1": "Paid",
+   "A2": "Okafor",
+   "B2": "Oak casement frame",
+   "C2": 12,
+   "D2": 5820,
+   "E2": true,
+   "A3": "Lindqvist",
+   "B3": "Sash window",
+   "C3": 4,
+   "D3": 2360.5,
+   "E3": false,
+   "A4": "Abara",
+   "B4": "Door frame",
+   "C4": 2,
+   "D4": 910,
+   "E4": true,
+   "A5": "Moreau",
+   "B5": "Skirting (metre)",
+   "C5": 48,
+   "D5": 432.75,
+   "E5": false
+  }
+ },
+ "orders-libreoffice.xlsx": {
+  "type": "xlsx",
+  "sheet": "Orders",
+  "cells": {
+   "A1": "Customer",
+   "B1": "Item",
+   "C1": "Quantity",
+   "D1": "Total",
+   "E1": "Paid",
+   "A2": "Okafor",
+   "B2": "Oak casement frame",
+   "C2": 12,
+   "D2": 5820,
+   "E2": true,
+   "A3": "Lindqvist",
+   "B3": "Sash window",
+   "C3": 4,
+   "D3": 2360.5,
+   "E3": false,
+   "A4": "Abara",
+   "B4": "Door frame",
+   "C4": 2,
+   "D4": 910,
+   "E4": true,
+   "A5": "Moreau",
+   "B5": "Skirting (metre)",
+   "C5": 48,
+   "D5": 432.75,
+   "E5": false
+  }
+ },
+ "letter-reportlab.pdf": {
+  "type": "pdf",
+  "text": "Northgate Joinery Ltd Unit 4, Tannery Yard, Example Lane Dear Ms Okafor, Thank you for confirming the order for twelve oak window frames. Our surveyor will measure the openings on Monday morning. The frames will be made in our workshop over three weeks and fitted in two days, weather permitting. A deposit of 30% is due before work begins; the balance falls due within fourteen days of fitting. Please call Priya Shah if the access arrangements change. Yours sincerely, Tom Ellery, Director"
+ },
+ "notes-pymupdf.pdf": {
+  "type": "pdf",
+  "text": "Site meeting notes for the Tannery Yard workshop extension Present: Tom Ellery, Priya Shah and the building inspector. The inspector approved the foundation depth and asked for a second fire exit on the east wall. Priya will order the steel lintels this week; delivery is expected before the end of the month. Open questions: drainage on the north side, and whether the old kiln chimney can stay."
+ },
+ "letter-libreoffice.pdf": {
+  "type": "pdf",
+  "text": "Northgate Joinery Ltd Unit 4, Tannery Yard, Example Lane Dear Ms Okafor, Thank you for confirming the order for twelve oak window frames. Our surveyor will measure the openings on Monday morning. The frames will be made in our workshop over three weeks and fitted in two days, weather permitting. A deposit of 30% is due before work begins; the balance falls due within fourteen days of fitting. Please call Priya Shah if the access arrangements change. Yours sincerely, Tom Ellery, Director Item Quantity Unit price Oak casement frame 12 485.00 Fitting (per day) 2 640.00 Survey visit 1 120.00"
+ },
+ "notes-chrome.pdf": {
+  "type": "pdf",
+  "text": "Site meeting notes for the Tannery Yard workshop extension Present: Tom Ellery, Priya Shah and the building inspector. The inspector approved the foundation depth and asked for a second fire exit on the east wall. Priya will order the steel lintels this week; delivery is expected before the end of the month. Open questions: drainage on the north side, and whether the old kiln chimney can stay."
+ },
+ "mail-1.eml": {
+  "type": "eml",
+  "subject": "Lintel order confirmed",
+  "from": "Priya Shah <priya.shah@example.com>",
+  "to": "Tom Ellery <tom.ellery@example.org>",
+  "date": "Mon, 02 Nov 2026 09:14:00 +0000",
+  "text": "Tom,\n\nThe steel lintels are ordered and due on the 24th.\nI have asked the yard to keep the east gate clear.\n\nPriya",
+  "attachments": []
+ },
+ "mail-2.eml": {
+  "type": "eml",
+  "subject": "Survey on Monday — café entrance",
+  "from": "Tom Ellery <tom.ellery@example.org>",
+  "to": "Amaka Okafor <amaka.okafor@example.com>",
+  "date": "Tue, 03 Nov 2026 16:40:00 +0000",
+  "text": "Dear Ms Okafor,\n\nOur surveyor will arrive at 9 am and use the café entrance.\nThe visit takes about an hour.\n\nTom",
+  "attachments": [
+   {
+    "name": "survey-checklist.txt",
+    "sha256": "4fe749111d9bf610149afe749ebd292bb679e38414ae9b51a401e27479013318"
+   }
+  ]
+ },
+ "mail-3.eml": {
+  "type": "eml",
+  "subject": "Sash window quote — question",
+  "from": "Lena Lindqvist <lena@example.com>",
+  "to": "Tom Ellery <tom.ellery@example.org>",
+  "date": "Wed, 04 Nov 2026 11:05:00 +0000",
+  "text": "Hello Tom,\n\nDoes the quote for the four sash windows include the glass?\nKind regards,\nLena",
+  "attachments": []
+ },
+ "diary.ics": {
+  "type": "ics",
+  "events": [
+   {
+    "uid": "survey-okafor@example.org",
+    "summary": "Survey: Okafor window openings",
+    "start": "20261109T090000Z",
+    "end": "20261109T100000Z",
+    "location": "14 Example Road"
+   },
+   {
+    "uid": "inspection-yard@example.org",
+    "summary": "Building inspection, Tannery Yard",
+    "start": "20261112T140000Z",
+    "end": "20261112T150000Z",
+    "location": "Unit 4, Tannery Yard"
+   },
+   {
+    "uid": "delivery-lintels@example.org",
+    "summary": "Steel lintel delivery",
+    "start": "20261124T080000Z",
+    "end": "20261124T090000Z",
+    "location": "East gate"
+   }
+  ]
+ },
+ "contacts.vcf": {
+  "type": "vcf",
+  "contacts": [
+   {
+    "fn": "Priya Shah",
+    "family": "Shah",
+    "given": "Priya",
+    "email": "priya.shah@example.com",
+    "tel": "+44 7700 900123",
+    "org": "Northgate Joinery Ltd",
+    "title": "Operations Manager"
+   },
+   {
+    "fn": "Amaka Okafor",
+    "family": "Okafor",
+    "given": "Amaka",
+    "email": "amaka.okafor@example.com",
+    "tel": "+44 7700 900456",
+    "org": "",
+    "title": ""
+   },
+   {
+    "fn": "Lena Lindqvist",
+    "family": "Lindqvist",
+    "given": "Lena",
+    "email": "lena@example.com",
+    "tel": "+44 7700 900789",
+    "org": "Lindqvist Interiors",
+    "title": "Designer"
+   }
+  ]
+ },
+ "orders-python.csv": {
+  "type": "csv",
+  "rows": [
+   [
+    "Customer",
+    "Item",
+    "Quantity",
+    "Total",
+    "Paid"
+   ],
+   [
+    "Okafor",
+    "Oak casement frame",
+    "12",
+    "5820",
+    "True"
+   ],
+   [
+    "Lindqvist",
+    "Sash window",
+    "4",
+    "2360.5",
+    "False"
+   ],
+   [
+    "Abara",
+    "Door frame",
+    "2",
+    "910",
+    "True"
+   ],
+   [
+    "Moreau",
+    "Skirting (metre)",
+    "48",
+    "432.75",
+    "False"
+   ]
+  ]
+ },
+ "orders-libreoffice.csv": {
+  "type": "csv",
+  "rows": [
+   [
+    "Customer",
+    "Item",
+    "Quantity",
+    "Total",
+    "Paid"
+   ],
+   [
+    "Okafor",
+    "Oak casement frame",
+    "12",
+    "5820",
+    "TRUE"
+   ],
+   [
+    "Lindqvist",
+    "Sash window",
+    "4",
+    "2360.5",
+    "FALSE"
+   ],
+   [
+    "Abara",
+    "Door frame",
+    "2",
+    "910",
+    "TRUE"
+   ],
+   [
+    "Moreau",
+    "Skirting (metre)",
+    "48",
+    "432.75",
+    "FALSE"
+   ]
+  ]
+ },
+ "logo.png": {
+  "type": "png",
+  "width": 320,
+  "height": 120
+ },
+ "logo.gif": {
+  "type": "gif",
+  "width": 320,
+  "height": 120
+ },
+ "photo.jpg": {
+  "type": "jpeg",
+  "width": 640,
+  "height": 480
+ },
+ "photo.webp": {
+  "type": "webp",
+  "width": 640,
+  "height": 480
+ },
+ "drawings.zip": {
+  "type": "zip",
+  "entries": [
+   {
+    "name": "readme.txt",
+    "size": 31
+   },
+   {
+    "name": "drawings/east-wall.txt",
+    "size": 43
+   },
+   {
+    "name": "drawings/lintels.txt",
+    "size": 44
+   }
+  ]
+ }
+}

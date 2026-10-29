@@ -1,0 +1,25 @@
+BEGIN:VCARD
+VERSION:3.0
+EMAIL;TYPE=INTERNET:priya.shah@example.com
+FN:Priya Shah
+N:Shah;Priya;;;
+ORG:Northgate Joinery Ltd
+TEL;TYPE=CELL:+44 7700 900123
+TITLE:Operations Manager
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+EMAIL;TYPE=INTERNET:amaka.okafor@example.com
+FN:Amaka Okafor
+N:Okafor;Amaka;;;
+TEL;TYPE=CELL:+44 7700 900456
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+EMAIL;TYPE=INTERNET:lena@example.com
+FN:Lena Lindqvist
+N:Lindqvist;Lena;;;
+ORG:Lindqvist Interiors
+TEL;TYPE=CELL:+44 7700 900789
+TITLE:Designer
+END:VCARD

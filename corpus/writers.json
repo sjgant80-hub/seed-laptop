@@ -1,0 +1,22 @@
+{
+ "letter-pythondocx.docx": "python-docx 1.2.0",
+ "letter-libreoffice.docx": "LibreOffice Writer (headless, from HTML)",
+ "orders-openpyxl.xlsx": "openpyxl 3.1.5",
+ "orders-libreoffice.xlsx": "LibreOffice Calc (headless, re-saved)",
+ "letter-reportlab.pdf": "ReportLab 5.1.0",
+ "notes-pymupdf.pdf": "PyMuPDF 2.0",
+ "letter-libreoffice.pdf": "LibreOffice Writer (headless, DOCX to PDF)",
+ "notes-chrome.pdf": "Google Chrome 156.0.8078.47",
+ "mail-1.eml": "Python email package (EmailMessage, policy.SMTP)",
+ "mail-2.eml": "Python email package (EmailMessage, policy.SMTP)",
+ "mail-3.eml": "Python email package (EmailMessage, policy.SMTP)",
+ "diary.ics": "icalendar 7.3.0",
+ "contacts.vcf": "vobject (vCard 3.0)",
+ "orders-python.csv": "Python csv",
+ "orders-libreoffice.csv": "LibreOffice Calc (headless, XLSX to CSV)",
+ "logo.png": "Pillow 13.0.0",
+ "logo.gif": "Pillow 13.0.0",
+ "photo.jpg": "Pillow 13.0.0",
+ "photo.webp": "Pillow 13.0.0",
+ "drawings.zip": "Python zipfile (deflate)"
+}

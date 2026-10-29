@@ -1,0 +1,29 @@
+From: Tom Ellery <tom.ellery@example.org>
+To: Amaka Okafor <amaka.okafor@example.com>
+Subject: Survey on Monday =?utf-8?b?4oCUIGNhZsOp?= entrance
+Date: Tue, 03 Nov 2026 16:40:00 +0000
+Message-ID: <corpus-2@example.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4765404713019842272=="
+
+--===============4765404713019842272==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+Dear Ms Okafor,
+
+Our surveyor will arrive at 9 am and use the café entrance.
+The visit takes about an hour.
+
+Tom
+
+--===============4765404713019842272==
+Content-Type: text/plain
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="survey-checklist.txt"
+MIME-Version: 1.0
+
+MS4gTWVhc3VyZSBldmVyeSBvcGVuaW5nCjIuIFBob3RvZ3JhcGggdGhlIHNpbGxzCjMuIE5vdGUg
+YW55IHJvdAo=
+
+--===============4765404713019842272==--

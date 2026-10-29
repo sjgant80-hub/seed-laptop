@@ -1,0 +1,45 @@
+{
+ "kind": "seed-laptop.params",
+ "v": 1,
+ "says": "Seal 2: every file the measurements read, pinned by SHA-256. A measurement refuses to run on any file that differs.",
+ "stock": {
+  "genome": "9b3cf78892fb118697c6c1d855aa34518a3efc916d0853cdfea637bba9fe0a78",
+  "full": "a468264ebbe30c31a2020b357e5c9b4abe34e2d4cd1ecace78f9263fd697e917",
+  "publisher": "b586b700a455d5d8953bd957005a60ba831549587803a4041608566820f29f9e"
+ },
+ "corpus": {
+  "contacts.vcf": "3882dd90820f1f9ac59d4fc95fc81ffb28ebeae8df96a2c687634dd3e713a24c",
+  "diary.ics": "80d12bf44f005b2f202afa58f1f1c623ecacd3704b47d8ff37bf0e7ffd2d84e6",
+  "drawings.zip": "7584ffe23ca6e5d137e6421bbde66e731db82f2e1dd131e93c5645be6a766561",
+  "letter-libreoffice.docx": "6b9748396db67da1c0f851c1a5099e10284b8c7616e2f6f952dca9c0cbf7ab39",
+  "letter-libreoffice.pdf": "603e49fcbfa65f84c6dac55270cddcfb15f7270e723c34710dbb9a1c28340e3e",
+  "letter-pythondocx.docx": "6d9e3e8eb1108566e5875fb1e1aa78d3db2d80d3fbe4b5bf07078185138a90f6",
+  "letter-reportlab.pdf": "99625e6665855d50a48c95d0a961701b961f7e326dbc932bb4d1f5554b2dcf5e",
+  "logo.gif": "73fe2ba58968b23526ac07dc4cad2b414adf52e7647af2a6a1b6448c0af069dd",
+  "logo.png": "21ba52dc798d30540c4390f33f793fa193faf0cfd39abf2ad05b75d1cfe431db",
+  "mail-1.eml": "ee492219a392c421f832aeacc83bddad356ebf36811ea67e9db2c9b5cd6128a6",
+  "mail-2.eml": "0587bf6b9606a27b1eee0db8b2768b2cde8fdc53667855e3ce7e21b1421a29a7",
+  "mail-3.eml": "11469f5d79949efc620cdb71e064c1f255d07eb73d088a2ea37b2448b988109e",
+  "notes-chrome.pdf": "4423376bf72dbdafc7f2c5dc29f314b07e97363c2e72d333dfc8cf5be404272b",
+  "notes-pymupdf.pdf": "d866b82faa6c58ca2613927e81b4579defe2285c1bb5e6cd76dac274a6d4096c",
+  "orders-libreoffice.csv": "92cc8f44064dd421af9546d00acba83c01334758d798f343e0a4f17a46814b17",
+  "orders-libreoffice.xlsx": "941669c0d0ee3896054989f74093296d90999770d63b2d0c5f684c0716a64502",
+  "orders-openpyxl.xlsx": "82f9610ded42f188ef55e28ef96b408be274c06910f830cf595527430d6d9d3a",
+  "orders-python.csv": "e20e8aa393c9cf50f356bf914f9d04e2c1ea7d1ffb78a68c16c40da50aca6cd1",
+  "photo.jpg": "0b67bfbbf1fcdecb31d38abf6a8de3bb45afbae2d4c49bf1e9d132a0d0524464",
+  "photo.webp": "df085f29a9f6dc562e4fc47e57ac996ef331ebc340d0f394e1d8226adacf828c",
+  "truth.json": "cddfea4679920a43d170650baa00ea83a0091f67ee1a478115b1d4f9c491c7fc",
+  "writers.json": "697015ab1d722606357a52a98379f9cddb82e5a64d2ee0751d84592fc2c966f2"
+ },
+ "outContent": "b67ff871ab841d847c5733d48c18fd4b58a797efc2daab50323ebf79d853b4dd",
+ "corpusRun": "https://github.com/sjgant80-hub/seed-laptop/actions/runs/40910728433",
+ "l1": {
+  "runs": 5,
+  "phrase": "the measured owner of the stock office, a public test phrase",
+  "chromeSeconds": 20
+ },
+ "sandbox": {
+  "heapMb": 64,
+  "ms": 5000
+ }
+}

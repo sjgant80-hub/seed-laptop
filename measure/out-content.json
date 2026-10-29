@@ -1,0 +1,20 @@
+{
+ "note": "Fixed, fictional content the office writes out for claim L3 (every name invented; example.com / example.org addresses only).",
+ "letter": {
+  "paragraphs": [
+   "Westbrook Garden Studio",
+   "Dear Mr Haldane,",
+   "Thank you for choosing us for the courtyard planting. We will start on Thursday at 8 am — the café side first.",
+   "The quote covers soil, forty shrubs and two days of work: £2,480 in all.",
+   "With best wishes,\nNora Quaye"
+  ],
+  "table": [["Item", "Count"], ["Shrubs", "40"], ["Days", "2"]]
+ },
+ "book": { "sheets": [{ "name": "Quote", "rows": [["Item", "Count", "Price", "Ordered"], ["Shrub", 40, 38.5, true], ["Soil (bag)", 12, 6.25, false], ["Labour (day)", 2, 320, true]] }] },
+ "mail": { "from": "Nora Quaye <nora@example.com>", "to": "Ian Haldane <ian.haldane@example.org>", "subject": "Courtyard planting — Thursday", "date": "Thu, 05 Nov 2026 10:30:00 +0000", "id": "courtyard-1105", "text": "Dear Mr Haldane,\n\nWe start on Thursday at 8 am, café side first.\nThe gate code you sent works.\n\nNora" },
+ "calendar": { "stamp": "20261105T103000Z", "events": [
+  { "uid": "courtyard-day1@example.com", "start": "20261112T080000Z", "end": "20261112T160000Z", "summary": "Courtyard planting, day 1", "location": "Haldane house, courtyard", "description": "Soil and the back border" },
+  { "uid": "courtyard-day2@example.com", "start": "20261113T080000Z", "end": "20261113T150000Z", "summary": "Courtyard planting, day 2; café side", "location": "Haldane house, courtyard" }
+ ] },
+ "rows": [["name", "role", "note"], ["Nora Quaye", "designer", "leads the work"], ["Sam Ortiz", "gardener", "says \"bring gloves\", then digs"], ["Ian Haldane", "client", "café owner"]]
+}
