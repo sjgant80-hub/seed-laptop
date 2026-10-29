@@ -1,0 +1,39 @@
+name: gate
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+      - name: unit and hostile-input suites (G1 fuzz included)
+        run: node --test test/*.test.mjs
+  witness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '25'
+      - name: mutation gate over every kernel, no unreviewed survivors, nothing capped (G1)
+        run: node witness-all.mjs
+  base:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build the minimal base from its pinned definition
+        run: docker build -f base/Containerfile -t seed-base .
+      - name: the runtime probe, inside the base, with no network at all
+        run: docker run --rm --network none --read-only seed-base node tools/probe.mjs --json | tee probe.json
+      - name: what is in the base, exactly (refused if it differs from base/MANIFEST.json)
+        run: |
+          docker run --rm --network none seed-base node tools/base-manifest.mjs > manifest.json
+          if [ -f base/MANIFEST.json ]; then diff base/MANIFEST.json manifest.json && echo "base matches its manifest"; else cat manifest.json; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: base-manifest
+          path: |
+            manifest.json
+            probe.json

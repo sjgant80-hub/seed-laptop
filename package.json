@@ -1,0 +1,13 @@
+{
+  "name": "seed-laptop",
+  "version": "1.0.0",
+  "description": "THE SEED LAPTOP, Stage 1: plant one signed seed on a minimal base and a whole owned office grows from the estate's own gear, offline; old formats only at the edges; an encrypted vault whose key stays with the owner.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "witness": "node witness-all.mjs",
+    "probe": "node tools/probe.mjs"
+  },
+  "engines": { "node": ">=25" }
+}

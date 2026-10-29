@@ -1,0 +1,23 @@
+# base/Containerfile — layer 1 of the seed laptop: the minimal base, as a reproducible image definition.
+#
+# Built and run on GitHub's runner only, never on the owner's laptop (which runs the host-OS mode instead).
+# What is in it is listed exactly in base/MANIFEST.json, written from inside the built image by
+# tools/base-manifest.mjs; CI rebuilds the image and refuses any difference.
+#
+# The base is Alpine Linux with Node, pinned by the digest of the image index (every architecture), so the same
+# definition always names the same bytes. The package managers are removed: nothing is installed after the base.
+FROM node:25-alpine@sha256:bdf2cca6fe3dabd014ea60163eca3f0f7015fbd5c7ee1b0e9ccb4ced6eb02ef4
+
+RUN rm -rf /usr/local/lib/node_modules /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
+           /usr/local/bin/yarn /usr/local/bin/yarnpkg /opt/yarn-* \
+ && mkdir -p /plant /home/node/office \
+ && chown node:node /home/node/office
+
+# The planting runtime: the kernels, the foundation they stand on, the tools, and the seeds. Copied read-only.
+COPY --chown=root:root src /plant/src
+COPY --chown=root:root tools /plant/tools
+COPY --chown=root:root package.json /plant/package.json
+
+USER node
+WORKDIR /plant
+CMD ["node", "tools/probe.mjs"]
