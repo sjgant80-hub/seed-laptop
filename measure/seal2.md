@@ -76,6 +76,13 @@ dropped.
     corpus's PDFs once, only to see that each still opens (yes, and how many characters); nothing was scored and
     nothing was changed because of it.
 
+## Amendments after this seal, each before the first run it touches
+
+- **L6 (a), `measure/netns-day.sh`.** Its first dispatch (run 40941980946) was cancelled 45 ms into the namespace
+  step, before the day started: the script's opening clean-up ran `kill ${SINK_PID:-0}`, and with no sink yet that is
+  `kill 0`, which signals the whole process group, the runner's step included. Nothing was measured. The clean-up now
+  kills the sink only once it exists. What is measured, and how, is unchanged.
+
 ## Design changes since seal 1, all made on dev data before this seal
 
 - **The inbound edge's immune memory (`src/immune.mjs`).** The spec reads files in "with the immune system watching":

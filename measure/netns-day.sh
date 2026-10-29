@@ -11,7 +11,8 @@ OUT="${1:?usage: netns-day.sh <outdir>}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 mkdir -p "$OUT"
 NS=sld; HOST_VETH=sld-host; NS_VETH=sld-ns; HOST_IP=10.9.9.1; NS_IP=10.9.9.2
-cleanup() { ip netns del "$NS" 2>/dev/null || true; ip link del "$HOST_VETH" 2>/dev/null || true; kill "${SINK_PID:-0}" 2>/dev/null || true; }
+# never `kill 0`: with no sink yet that signals this whole process group (the runner's own step with it)
+cleanup() { ip netns del "$NS" 2>/dev/null || true; ip link del "$HOST_VETH" 2>/dev/null || true; if [ -n "${SINK_PID:-}" ]; then kill "$SINK_PID" 2>/dev/null || true; fi; }
 trap cleanup EXIT
 cleanup
 sysctl -w net.ipv4.ip_forward=0 >/dev/null
