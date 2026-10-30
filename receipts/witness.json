@@ -1,0 +1,291 @@
+{
+ "kind": "seed-laptop.witness",
+ "v": 1,
+ "commit": "726b5da6c64ccd228d77ffbcbbd4ea69294a870e",
+ "node": "v25.7.0",
+ "clean": true,
+ "killed": 1433,
+ "total": 1435,
+ "kernels": [
+  {
+   "name": "runtime",
+   "src": "src/runtime.mjs",
+   "killed": 3,
+   "total": 3,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "genome",
+   "src": "src/genome.mjs",
+   "killed": 65,
+   "total": 65,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "bundle",
+   "src": "src/bundle.mjs",
+   "killed": 16,
+   "total": 16,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "receipt",
+   "src": "src/receipt.mjs",
+   "killed": 38,
+   "total": 38,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "germinate",
+   "src": "src/germinate.mjs",
+   "killed": 15,
+   "total": 15,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "prologue",
+   "src": "src/prologue.mjs",
+   "killed": 60,
+   "total": 60,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "value",
+   "src": "src/value.mjs",
+   "killed": 38,
+   "total": 38,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "compose",
+   "src": "src/compose.mjs",
+   "killed": 13,
+   "total": 13,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "store",
+   "src": "src/store.mjs",
+   "killed": 112,
+   "total": 112,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "office",
+   "src": "src/office.mjs",
+   "killed": 66,
+   "total": 66,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "kar",
+   "src": "src/kar.mjs",
+   "killed": 48,
+   "total": 48,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "edge-in",
+   "src": "src/edge-in.mjs",
+   "killed": 57,
+   "total": 57,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "edge-out",
+   "src": "src/edge-out.mjs",
+   "killed": 84,
+   "total": 84,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "leak",
+   "src": "src/leak.mjs",
+   "killed": 25,
+   "total": 25,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "immune",
+   "src": "src/immune.mjs",
+   "killed": 36,
+   "total": 36,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "imap",
+   "src": "src/imap.mjs",
+   "killed": 34,
+   "total": 34,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "zip",
+   "src": "src/parse/zip.mjs",
+   "killed": 56,
+   "total": 56,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "xml",
+   "src": "src/parse/xml.mjs",
+   "killed": 44,
+   "total": 44,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "office-read",
+   "src": "src/parse/office.mjs",
+   "killed": 42,
+   "total": 42,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "pdf",
+   "src": "src/parse/pdf.mjs",
+   "killed": 187,
+   "total": 189,
+   "ignored": 2,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "mail",
+   "src": "src/parse/mail.mjs",
+   "killed": 46,
+   "total": 46,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "text",
+   "src": "src/parse/text.mjs",
+   "killed": 76,
+   "total": 76,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "image",
+   "src": "src/parse/image.mjs",
+   "killed": 60,
+   "total": 60,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "read",
+   "src": "src/parse/index.mjs",
+   "killed": 78,
+   "total": 78,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "vault",
+   "src": "src/vault.mjs",
+   "killed": 30,
+   "total": 30,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "regrow",
+   "src": "src/regrow.mjs",
+   "killed": 18,
+   "total": 18,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "sync",
+   "src": "src/sync.mjs",
+   "killed": 57,
+   "total": 57,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "cost",
+   "src": "src/cost.mjs",
+   "killed": 29,
+   "total": 29,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  }
+ ]
+}
