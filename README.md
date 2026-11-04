@@ -21,7 +21,11 @@ measured run (`measure/seal2.md`, seal 2); each is measured once, and a failed c
 
 Layers: `base/` (the minimal base, defined), `src/runtime.mjs`, `vendor/fall-kit-core` (the foundation), `blocks/`
 (seven estate blocks, pinned), `src/` (the kernels: seed, office, store, Kar, edges, immune memory, vault, devices,
-cost), `office/` (the office in a browser), `tools/`, `measure/`, `receipts/`.
+cost, and the cost case over the years), `office/` (the office in a browser), `tools/`, `measure/`, `receipts/`.
+
+The page's cost case reads every external figure (UK CPI, vendors' list prices) from `vendor/sovereign-enterprise/data/basis.json`,
+copied byte for byte from the estate's sourced basis (commit and SHA-256 in its `SOURCES.json`); `src/rentcase.mjs` does the sums,
+gated like every other kernel. The amounts and choices are the reader's own; no price of ours appears anywhere.
 
 Powered by the Konomi architecture, created by Thomas Frumkin.
 

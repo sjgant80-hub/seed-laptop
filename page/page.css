@@ -51,12 +51,19 @@ figcaption { color: var(--dim); font-size: .88rem; margin-top: .4rem; }
 .note { border-left: 3px solid var(--accent); background: var(--soft); padding: .7rem 1rem; border-radius: 0 var(--radius) var(--radius) 0; }
 .scope { border-left-color: var(--warn); background: color-mix(in srgb, var(--warn) 9%, transparent); }
 .calc { display: grid; gap: .5rem; }
-.calc .row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: .4rem; }
+.calc .row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: .4rem; align-items: center; }
+.calc .row.five { grid-template-columns: 2fr 1fr 1fr .7fr auto; }
+.calc .row.ex { grid-template-columns: 3fr 1fr auto; }
+.calc .tick { display: inline-flex; gap: .35rem; align-items: center; white-space: nowrap; color: var(--dim); font-size: .92rem; }
+.calc .tick input { width: 1.05rem; height: 1.05rem; accent-color: var(--accent); }
+.calc .years { display: inline-flex; gap: .4rem; align-items: center; color: var(--dim); }
+.calc .years input { width: 3.5rem; }
+.dim { color: var(--dim); font-size: .9rem; }
 .calc input, .calc select { font: inherit; padding: .45rem .55rem; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); min-width: 0; }
 details { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: .7rem 1rem; margin: .5rem 0; }
 details summary { cursor: pointer; font-weight: 600; }
 footer { padding: 2rem 0 3rem; color: var(--dim); font-size: .9rem; border-top: 1px solid var(--line); }
-@media (max-width: 640px) { .calc .row { grid-template-columns: 1fr 1fr; } .hero { padding-top: 2rem; } }
+@media (max-width: 640px) { .calc .row, .calc .row.five { grid-template-columns: 1fr 1fr; } .calc .row.ex { grid-template-columns: 1fr auto; } .calc .row.ex > span { grid-column: 1 / -1; } .hero { padding-top: 2rem; } }
 .demo { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.2rem; counter-reset: d; }
 .demo > li { counter-increment: d; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: .8rem; }
 .demo figure { margin: 0; }

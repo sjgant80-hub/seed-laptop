@@ -28,4 +28,5 @@ export const KERNELS = [
   'src/regrow.mjs',
   'src/sync.mjs',
   'src/cost.mjs',
+  'src/rentcase.mjs',
 ];

@@ -28,6 +28,8 @@
 //   regrow    — what the vault keeps, whether a vault may be restored, the regrown device's fresh watch (organ 5)
 //   sync      — the owner's devices: the founder-signed roster, LIGHT packets through the door (organ 6)
 //   cost      — the cost case from the owner's own list, item by item, in whole pence (organ 7)
+//   rentcase  — the cost case over the years: the sourced basis (CPI, list prices), the sealed map's coverage, the
+//               reader's own lines and choices, in whole pence (the page's cost case, after liveware's mintcase)
 // NOT gated, each with its reason: tools/** (local I/O and orchestration, re-derived by each measure's --check);
 // office/** glue (browser I/O; its decisions live in the kernels above); vendor/** and blocks/** (gated in their own
 // repos, pinned byte-identical by their --check tools); .witness/** (the gate itself, pinned to witness v0.6).
@@ -70,6 +72,7 @@ export const PAIRS = [
   ['regrow', 'src/regrow.mjs', ['test/regrow.test.mjs', FUZZ]],
   ['sync', 'src/sync.mjs', ['test/sync.test.mjs', FUZZ]],
   ['cost', 'src/cost.mjs', ['test/cost.test.mjs', FUZZ]],
+  ['rentcase', 'src/rentcase.mjs', ['test/rentcase.test.mjs', FUZZ]],
 ];
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
@@ -97,6 +100,8 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   const k = rows.reduce((a, r) => a + r.killed, 0), n = rows.reduce((a, r) => a + r.total, 0);
   console.log(`\n${allClean ? 'WITNESS CLEAN' : 'WITNESS NOT CLEAN'} — ${k}/${n} mutants killed across ${rows.length} kernel(s)`);
   const commit = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: HERE, encoding: 'utf8' }).stdout.trim() || null;   // the code these mutants were made from
-  if (RECEIPT && !only.length) writeFileSync(join(HERE, 'receipts/witness.json'), JSON.stringify({ kind: 'seed-laptop.witness', v: 1, commit, node: process.version, clean: allClean, killed: k, total: n, kernels: rows }, null, 1) + '\n');
+  // on GitHub's runner the receipt also names its run, so the copy committed as receipts/witness-ci.json can be traced back
+  const e = process.env, ci = e.GITHUB_ACTIONS === 'true' && e.GITHUB_RUN_ID ? { run: e.GITHUB_RUN_ID, url: e.GITHUB_SERVER_URL + '/' + e.GITHUB_REPOSITORY + '/actions/runs/' + e.GITHUB_RUN_ID, runner: [e.RUNNER_OS, e.ImageOS].filter(Boolean).join(' ') } : undefined;
+  if (RECEIPT && !only.length) writeFileSync(join(HERE, 'receipts/witness.json'), JSON.stringify({ kind: 'seed-laptop.witness', v: 1, commit, node: process.version, ci, clean: allClean, killed: k, total: n, kernels: rows }, null, 1) + '\n');
   process.exit(allClean ? 0 : 1);
 }

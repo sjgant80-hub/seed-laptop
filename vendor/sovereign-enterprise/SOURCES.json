@@ -1,0 +1,15 @@
+{
+ "kind": "seed-laptop.vendor.sovereign-enterprise",
+ "v": 1,
+ "repo": "sjgant80-hub/sovereign-enterprise",
+ "commit": "003e44795bc0ef90c92b7ee6a53160f51be1be79",
+ "note": "Copied byte for byte: the sourced basis every external figure of the cost case is read from (src/rentcase.mjs). The same bytes as liveware's vendored copy (vendor/ai-first-company/vendor/sovereign-enterprise/data/basis.json). Never edit; re-vendor.",
+ "files": [
+  {
+   "path": "data/basis.json",
+   "src": "data/basis.json",
+   "bytes": 9801,
+   "sha256": "83e9c2effa2f81596dcfa7110f030940032c1910cdf928d27d628ae59d73bb42"
+  }
+ ]
+}

@@ -102,7 +102,7 @@
   <p>Every device has its own random key, and your phrase signs the roster of devices allowed to sync. A change travels as a signed packet that the receiving device checks at its door before reading a byte of it; the relay between them reads no body. Two devices edited apart agree as soon as they meet, and two edits to the same thing are both kept (one as a conflict copy), never silently dropped. In a browser, two devices join directly over WebRTC with a pairing code you copy from one to the other and back; no outside server is involved.</p>
 
   <h3>Traced from a real run</h3>
-  <p>The timings below are the measured run's own, read from <a href="receipts/l1.json">receipts/l1.json</a>: Chrome with the network off, the stock seed chosen, then each block opened in turn.</p>
+  <p>The timings below are the measured runs' own, read from <a href="receipts/l1.json">receipts/l1.json</a> (the plantings on a laptop) and <a href="receipts/l1b2.json">receipts/l1b2.json</a> (Chrome with the network off, the stock seed chosen, then each block opened in turn and read inside its own frame).</p>
   <div id="trace" class="tablewrap" aria-live="polite"><p style="padding:.8rem">Reading the run…</p></div>
 </div></section>
 
@@ -156,7 +156,7 @@
   <h2>What it does for each person who signs it off</h2>
   <div class="grid">
     <div class="card"><h3>Chief executive</h3><p>The office your people use every day becomes an asset you own, not a rent you pay. It runs where your data already is, keeps working when the internet does not, and leaves a readable receipt for every action.</p></div>
-    <div class="card"><h3>Finance</h3><p>No per-seat licence: the software is MIT and runs on the machines you already own. The cost case below takes your own subscription list and shows, line by line, what the grown office covers, what it covers in part, and what it does not.</p></div>
+    <div class="card"><h3>Finance</h3><p>No per-seat licence: the software is MIT and runs on the machines you already own. The cost case below takes your own subscription list, or three published list prices, and shows line by line what the grown office covers, what it covers in part and what it does not, carried over the years with UK CPI.</p></div>
     <div class="card"><h3>Operations</h3><p>A new starter's whole office grows from one file in seconds. A lost or broken laptop is a new machine plus the seed, the vault and the phrase. Work goes on offline and merges when devices meet.</p></div>
     <div class="card"><h3>Technology and security</h3><p>Every block is pinned by hash and the seed is signed, so the software that runs is the software you approved. Inbound files are checked on their raw bytes and read only in a sandbox. Nothing leaves the device except the emails a person chooses to send, and that is measured from below the network, not asserted.</p></div>
     <div class="card"><h3>Data protection</h3><p>There is no processor: the office has no server and sends nothing out, so your people's and your clients' data stays on your devices and in vaults you hold. Encryption keys never leave the owner.</p></div>
@@ -166,17 +166,27 @@
 
 <section id="cost"><div class="wrap">
   <div class="kicker">Cost case</div>
-  <h2>Your own subscriptions, set against what grows</h2>
-  <p>Type what you pay now, as you pay it. The office's own cost kernel (<code>src/cost.mjs</code>, the same code the measurement runs) classes every line as covered, partly covered or not covered, says why, and adds it up in whole pence. Nothing here is typed in by us: the amounts are yours, and the office itself carries no licence fee (MIT).</p>
+  <h2>What you rent now, set against what grows</h2>
+  <p>The office has no licence fee (MIT) and runs on the laptops you already have, so both sides of this case use the same machines: their cost and their power cancel out, and the office adds no server. What changes is the rent. Two of the office's own kernels do the sums, tested and mutation-gated like the rest: <code>src/cost.mjs</code> classes every line with the coverage map sealed before any measurement (covered, partly covered or not covered, and why), and <code>src/rentcase.mjs</code> carries each line over the years you choose, every year after the first rising by UK CPI from a sourced basis. A line moves to the office when the map covers it whole, or covers it in part and you tick it because the covered part is all that team uses; a line the office does not cover always stays. Nothing here is a price of ours: every amount is yours or a vendor's published list price.</p>
+  <h3>A worked example, from sourced list prices</h3>
+  <p>Three lines a company commonly rents, each at its published list price. Change the people on each, the years, or the ticks. The example ticks the CRM line (a sales team that uses only contacts, companies, deals and the pipeline) and leaves Finance unticked (a team that relies on bank feeds); nothing in the office does HR, so that line stays whatever is ticked.</p>
+  <form id="example-form" class="calc" autocomplete="off">
+    <div class="row ex" aria-hidden="true"><strong>Rented now</strong><strong>People</strong><strong>Move?</strong></div>
+    <div id="example-rows"></div>
+    <div class="cta"><label class="years">Over <input id="example-years" inputmode="numeric" size="2" aria-label="Years, 1 to 10"> years (1 to 10)</label><button type="submit" class="btn primary">Work it out</button></div>
+  </form>
+  <div id="example" aria-live="polite"><p>Reading the sourced prices…</p></div>
+  <h3>Your own subscriptions</h3>
+  <p>Type what you pay now, as you pay it, from your own invoices. Tick <em>move</em> on a line only if the part the office covers is all that team uses; the result says which lines are covered, partly covered or not covered, and why.</p>
   <form id="calc" class="calc" autocomplete="off">
-    <div class="row" aria-hidden="true"><strong>Service</strong><strong>Amount (£)</strong><strong>Per</strong><strong>Seats</strong></div>
+    <div class="row five" aria-hidden="true"><strong>Service</strong><strong>Amount (£)</strong><strong>Per</strong><strong>Seats</strong><strong>Move?</strong></div>
     <div id="calc-rows"></div>
-    <div class="cta"><button type="button" class="btn" id="calc-add">Add a line</button><button type="submit" class="btn primary">Work it out</button></div>
+    <div class="cta"><button type="button" class="btn" id="calc-add">Add a line</button><label class="years">Over <input id="calc-years" inputmode="numeric" size="2" aria-label="Years, 1 to 10"> years (1 to 10)</label><button type="submit" class="btn primary">Work it out</button></div>
   </form>
   <div id="calc-out" class="tablewrap" aria-live="polite" hidden></div>
-  <h3>A worked example from sourced list prices</h3>
-  <div id="example" aria-live="polite"><p>Reading the sourced prices…</p></div>
-  <p class="note">Every price used here is copied verbatim from the estate's price registry, with its source and the date it was checked (<a href="page/prices.lock.json">page/prices.lock.json</a>). What the office does not cover (email hosting, video calls, bank feeds, filing to the tax office, e-signing other people's PDFs) is named, never counted as saved.</p>
+  <h3>Where every figure comes from</h3>
+  <div id="sources" class="tablewrap" aria-live="polite"><p style="padding:.8rem">Reading the sourced basis…</p></div>
+  <p class="note">What the office does not cover (email hosting, video calls, bank feeds, filing to the tax office, e-signing other people's PDFs, service desks, marketing automation, HR) is named in every result and never counted as saved. Claim L7 runs this same kernel on a real owner's own list; it stays unmeasured until an owner gives one.</p>
 </div></section>
 
 <section id="security"><div class="wrap">
@@ -197,9 +207,9 @@
   <h2>From one team to the whole company</h2>
   <ol class="steps">
     <li><strong>Week 1, a pilot team.</strong> Five people plant the stock seed on their own laptops, bring in a week of real files, and save vaults. Their receipts show exactly what came in, what was kept out and why.</li>
-    <li><strong>Week 2, your own seed.</strong> Your blocks and settings in a seed your company signs, served from your own mirror (any static hosting) for light seeds, or handed out as one full file.</li>
+    <li><strong>Week 2, your own seed.</strong> Your company becomes its own publisher: it makes its key (<code>node tools/publisher.mjs</code>; the private half never leaves the machine that signs), pins the blocks it chooses, signs its seed (<code>node tools/make-seed.mjs</code>) and serves its own copy of the office, with its key pinned, from any static hosting. Hand the seed out as one full file, or as a light seed that fetches each block from that mirror.</li>
     <li><strong>Week 3, devices and recovery.</strong> Each person pairs a second device; a regrow drill on a wiped machine proves the vault and the phrase bring everything back.</li>
-    <li><strong>Week 4 onward, team by team.</strong> Each team moves the lines the cost case marks as covered; lines marked partly or not covered stay where they are until something better grows.</li>
+    <li><strong>Week 4 onward, team by team.</strong> Each team moves the lines the cost case marks as covered, and a partly covered line once that team confirms the covered part is all it uses; lines the office does not cover stay where they are.</li>
   </ol>
   <h3>Support and ownership</h3>
   <p>Supplied by <a href="https://www.ai-nativesolutions.com">AI Native Solutions</a>; start a conversation through the site. Support, service levels, warranty and liability are agreed per deployment, in each deployment's agreement. The software is MIT, with no licence fee, and keeps running without us: you hold the seed, the code and your data. To leave, write your files out in standard formats; nothing is locked in.</p>
@@ -222,7 +232,7 @@
     <p><strong>The decision.</strong> Run the daily office on software the company owns, on machines it already has, instead of renting it per seat.</p>
     <p><strong>What changes.</strong> The office grows from one signed file, works offline, keeps every byte on company devices and in vaults the company holds, and leaves a receipt for every action.</p>
     <p><strong>The evidence.</strong> Each claim was sealed before it was built and measured once; the receipts are public and re-runnable. The software that runs is pinned by hash; the network traffic is measured from below; every kernel is mutation-gated.</p>
-    <p><strong>The money.</strong> No licence fee. The covered lines of the cost case come off the subscription bill; the partly and not covered lines stay, named.</p>
+    <p><strong>The money.</strong> No licence fee, on the machines the company already has. The covered lines of the cost case come off the rent, and a partly covered line comes off once the team that uses it confirms the covered part is all it needs; the lines the office does not cover stay, named. The case carries every line over the years with UK CPI from a sourced basis, so the board sees the rent it stops paying, not one year of it.</p>
     <p><strong>The risk.</strong> A forgotten phrase loses that person's vault; the answer is the company's own password manager. Roll-out is team by team, so nothing is switched off before what replaces it has proved itself.</p>
   </div>
 </div></section>
@@ -290,12 +300,18 @@
   <details><summary>What about email?</summary><p>Your mail stays with your mail provider. The office reads messages you bring in (EML files from any mail program) and writes messages as EML for your mail program to send. On a laptop with Node, two small tools connect your own account directly: <code>tools/imap.mjs</code> fetches your mail read-only (it never marks or deletes anything) and <code>tools/smtp.mjs</code> sends through your provider, with your password used only inside TLS and never stored.</p></details>
   <details><summary>How often should we save the vault?</summary><p>As often as you would back up anything else: the vault holds everything since the last save. Saving takes a second; keep the latest copy off the machine. Saving is something you do, not something the office does behind your back.</p></details>
   <details><summary>What is Kar?</summary><p>The conductor: it lists, opens and finds anything in your office, shows what was done most recently, and writes the receipts. It works with no AI model at all; if you add a local one, it can only choose from what Kar already does.</p></details>
+  <details><summary>What does the office itself cost to run?</summary><p>No licence fee: the code is MIT. It runs in the browser already on your laptops (or under Node 25), with no server to host; a mirror for light seeds, if you use one, is any static hosting you already have. What a deployment adds is the support, service levels and training you agree with <a href="https://www.ai-nativesolutions.com">AI Native Solutions</a>, in that deployment's agreement.</p></details>
+  <details><summary>Is the working copy on a laptop encrypted?</summary><p>The office keeps its working copy in the browser's own storage on that device (IndexedDB, readable only by the office's own origin), so on the laptop it is protected the way everything else there is: the device's login and its disk encryption, which you keep switched on (BitLocker, FileVault). The copy that leaves the device, the vault, is always encrypted: AES-256-GCM under a key from your phrase.</p></details>
+  <details><summary>Who holds the key that signs the seed, and can we sign our own?</summary><p>The stock seed's publisher key lives on the publisher's machine and never in the repository; every office pins its public half (<a href="seeds/publisher.json">seeds/publisher.json</a>) and refuses a seed signed by any other key (claim L1c). Your company can be its own publisher: make a key with <code>node tools/publisher.mjs</code>, pin the blocks you choose, sign with <code>node tools/make-seed.mjs</code>, and serve your own copy of the office, which then pins your key, from any static hosting. Planting from the command line takes <code>--pinned</code> to name the file that lists your public key.</p></details>
+  <details><summary>What licences does it carry?</summary><p>Everything in it is MIT: this repository, the seven blocks (falloffice, fallcrm, fallledger, fallpdf, seedmind, fallmage, fallpage), fall-kit core, bes-inward, airgap-prover and the witness gate. The behaviour watch follows Gary W. Floyd's paper, published under CC BY 4.0, and the knowledge notebook dreams with his dream-cycle design; both are credited below. There is no licence fee and nothing to renew.</p></details>
+  <details><summary>Can we prove it on our own machines?</summary><p>Yes. On any machine with Node 25: the tests and the hostile-input fuzz (<code>node --test test/*.test.mjs</code>), the mutation gate (<code>node witness-all.mjs</code>) and each claim's measurement (<code>node measure/l1.mjs</code> to <code>node measure/l6.mjs local</code>, each refusing data that differs from seal 2). GitHub's runner runs the tests, the gate and a planting with no network at every commit, in the open.</p></details>
 </div></section>
 </main>
 
 <footer><div class="wrap">
   <p>Powered by the Konomi architecture, created by Thomas Frumkin.</p>
-  <p>The behaviour watch (BES) follows Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service LLC — "GEP-Based Security: Behavioral Entropy Signatures for Cybersecurity and DevOps," 2025 (CC BY 4.0).</p>
+  <p>The behaviour watch (BES) follows Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service, LLC — "GEP-Based Security: Behavioral Entropy Signatures for Cybersecurity and DevOps," 2025 (CC BY 4.0). The knowledge notebook (seedmind) dreams with Gary W. Floyd's dream-cycle design, from his Nexus system.</p>
+  <p>The cost case reads every external figure from the estate's sourced basis (UK CPI from the ONS; list prices from the vendors' own pricing pages), each cited beside its number.</p>
   <p>The office is grown from the estate's own gear: fall-kit core, falloffice, fallcrm, fallledger, fallpdf, seedmind, fallmage, fallpage, bes-inward, airgap-prover and witness. Supplied by <a href="https://www.ai-nativesolutions.com">AI Native Solutions</a>. MIT, no licence fee. Source: <a href="https://github.com/sjgant80-hub/seed-laptop">github.com/sjgant80-hub/seed-laptop</a>.</p>
 </div></footer>
 <script type="module" src="page/page.mjs"></script>
