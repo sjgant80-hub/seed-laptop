@@ -12,14 +12,18 @@ const FRAME = new URL('frame.html', self.location).pathname;
 
 self.addEventListener('install', (e) => e.waitUntil((async () => {
   const c = await caches.open(CACHE);
-  for (const f of FILES) {
-    const r = await fetch(new URL(f.path, self.location), { cache: 'no-store' });
+  // every file fetched at once (a first visit waits for the slowest, not for each in turn), every one checked before
+  // any is kept: one missing or changed file refuses the whole install
+  const got = await Promise.all(FILES.map(async (f) => {
+    const url = new URL(f.path, self.location);
+    const r = await fetch(url, { cache: 'no-store' });
     if (!r.ok) throw new Error(f.path + ' → ' + r.status);
     const bytes = new Uint8Array(await r.clone().arrayBuffer());
     const sha = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map((b) => b.toString(16).padStart(2, '0')).join('');
     if (sha !== f.sha256) throw new Error(f.path + ' is not the file this office was built with');
-    await c.put(new URL(f.path, self.location).href, r);
-  }
+    return [url.href, r];
+  }));
+  for (const [href, r] of got) await c.put(href, r);
   await self.skipWaiting();
 })()));
 

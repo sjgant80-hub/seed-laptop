@@ -89,9 +89,11 @@ async function probeTab() {
 
 // ── the service worker: the office stays on this device, and every block frame is served sandboxed ──
 async function serviceWorker() {
-  if (!('serviceWorker' in navigator)) return false;
-  await navigator.serviceWorker.register('sw.js', { type: 'module', scope: './' });
-  await navigator.serviceWorker.ready;
+  if (!('serviceWorker' in navigator)) { $('booting').textContent = 'This browser cannot store the office on this device, so it works online only.'; $('booting').dataset.kept = '1'; return false; }
+  const reg = await navigator.serviceWorker.register('sw.js', { type: 'module', scope: './' });
+  // an install that fails (a file missing, or not the bytes it was built with) never makes the worker ready: say so
+  const failed = new Promise((no) => { const w = reg.installing; if (w) w.addEventListener('statechange', () => { if (w.state === 'redundant' && !reg.active) no('failed'); }); });
+  if (await Promise.race([navigator.serviceWorker.ready, failed]) === 'failed') { $('booting').textContent = 'The office could not be stored on this device (a file did not arrive, or was not the one it was built with). Reload to try again.'; $('booting').dataset.kept = '1'; return false; }
   if (!navigator.serviceWorker.controller) await new Promise((ok) => { navigator.serviceWorker.addEventListener('controllerchange', ok, { once: true }); setTimeout(ok, 3000); });
   return Boolean(navigator.serviceWorker.controller);
 }
@@ -262,6 +264,7 @@ $('ask').addEventListener('submit', (e) => {
 // ── boot ──
 (async function boot() {
   const sw = await serviceWorker();
+  if (!$('booting').dataset.kept) $('booting').hidden = true;   // what stays is only a reason the office could not be stored
   const rt = await probeTab();
   $('runtime').textContent = rt.says;
   $('net').textContent = sw ? 'offline-ready · no network for blocks' : 'online only';

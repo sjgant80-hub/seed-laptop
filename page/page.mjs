@@ -84,7 +84,7 @@ function trace(l1, l1b2) {
   const a = f.L1a;
   const rows = [];
   if (a && Array.isArray(a.runs)) rows.push(['On a laptop, no network permission', 'planted the stock seed ' + a.runs.length + ' times', a.runs.map((r) => secs(r.ms)).join(' · ')]);
-  rows.push(['Chrome ' + esc(b.chrome || ''), 'network off, then the seed chosen; every block opened in turn', secs(b.ms || 0) + ' to the last block loaded']);
+  rows.push([esc(String(b.chrome || 'Chrome').replace('/', ' ')), 'network off, then the seed chosen; every block opened in turn', secs(b.ms || 0) + ' to the last block loaded']);
   for (const x of b.blocks) rows.push(['&nbsp;&nbsp;block <code>' + esc(x.id) + '</code>', (x.loaded ? 'started' : 'did NOT start') + ' in its sandbox · ' + x.elements + ' elements drawn · ' + x.exceptions + ' exceptions', '']);
   rows.push(['Requests to other origins', (b.left === 0 ? 'none left the page' : b.left + ' LEFT the page') + '; ' + b.refused + ' refused by the browser before sending' + (b.refusedHosts && b.refusedHosts.length ? ' (' + b.refusedHosts.map(esc).join(', ') + ')' : ''), '']);
   const where = (r) => esc((r && r.machine && r.machine.os) || 'the machine named in the receipt');
@@ -232,23 +232,33 @@ function example() {
   run();
 }
 
+// what each figure does in this case (the basis describes each in its own words, for the estate's wider use; both shown)
+const USED = {
+  cpi: 'every rented line, each year after the first',
+  'seat.crm': 'the worked example\'s CRM line, per person',
+  'seat.finance': 'the worked example\'s finance line, per person',
+  'seat.hr': 'the worked example\'s HR line, per person',
+};
 function sources() {
   const el = $('sources');
   if (!basis) { el.innerHTML = '<p style="padding:.8rem">The sourced basis did not load.</p>'; return; }
   const fmt = (s) => (s.key === 'cpi' ? (100 * s.value).toFixed(1) + '% a year' : pounds(Math.round(s.value * 100)) + ' a user a month');
-  el.innerHTML = table(['Figure', 'Value', 'Source'], sourcesOf(basis).map((s) => [esc(s.what), fmt(s), '<a href="' + esc(s.source) + '">' + esc(new URL(s.source).hostname) + '</a>' + (s.via ? ' · ' + esc(s.via) : '')]))
+  // "estate basis 2026-09-30": the day the figure was sourced into the estate's price registry (the basis's own note)
+  const when = (v) => { const m = /^estate basis (\d{4}-\d{2}-\d{2})$/.exec(String(v || '')); return m ? 'sourced ' + m[1] : String(v || ''); };
+  el.innerHTML = table(['Figure, in the basis\'s own words', 'Value', 'Used here for', 'Source'], sourcesOf(basis).map((s) => [esc(s.what), fmt(s), esc(USED[s.key] || ''), '<a href="' + esc(s.source) + '">' + esc(new URL(s.source).hostname) + '</a>' + (s.via ? ' · ' + esc(when(s.via)) : '')]))
     + '<p style="padding:0 .8rem .8rem;color:var(--dim)">All amounts in ' + esc(String(basis.currency || 'GBP').split(' (')[0]) + ', as the basis states. Read from <a href="vendor/sovereign-enterprise/data/basis.json">vendor/sovereign-enterprise/data/basis.json</a>, copied byte for byte from the estate\'s sourced basis (<a href="vendor/sovereign-enterprise/SOURCES.json">its commit and SHA-256</a>).</p>';
 }
 
 (async () => {
-  const files = {};
-  for (const f of FILES) files[f] = await get('receipts/' + f + '.json');
-  basis = await get('vendor/sovereign-enterprise/data/basis.json');
+  // every file at once: a cold load waits for the slowest one, not for all of them in turn
+  const [got, b, d] = await Promise.all([Promise.all(FILES.map((f) => get('receipts/' + f + '.json'))), get('vendor/sovereign-enterprise/data/basis.json'), get('receipts/demo.json')]);
+  const files = Object.fromEntries(FILES.map((f, k) => [f, got[k]]));
+  basis = b;
   if (basis && cpiOf(basis) === null) basis = null;
   const rows = receipts(files);
   const fixed = rows.find((r) => r.id === 'L1b2');
   if (fixed && fixed.verdict === 'HELD') working = heldBlocks(files.l1b2);
-  trace(files.l1, files.l1b2); failures(files); gate(files.witness, files['witness-ci']); compat(files.l2); demo(await get('receipts/demo.json'));
+  trace(files.l1, files.l1b2); failures(files); gate(files.witness, files['witness-ci']); compat(files.l2); demo(d);
   calc(); example(); sources();
   window.__page = { rows, coverage: COVERAGE.length, working };
 })();

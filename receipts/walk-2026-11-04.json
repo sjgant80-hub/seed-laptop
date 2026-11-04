@@ -1,0 +1,435 @@
+{
+ "kind": "seed-laptop.walk",
+ "v": 1,
+ "url": "https://sjgant80-hub.github.io/seed-laptop/",
+ "commitWalked": "235176177f9b364f682210808197684d86a73696",
+ "at": "2026-11-04T19:03:43.447Z",
+ "walker": "Kar, as Claude Opus 5.5 (a frontier model, not a local one), reading the served page as four buyers in turn. The persona findings are its reading; the record is what headless Chrome saw.",
+ "how": "measure/walk-served.mjs (the record came from its scratch copy, which differed only in where it wrote its files and in scrolling smoothly before its screenshots) on the served page, cold, in headless Chrome/156.0.8078.79 with a throwaway profile: every section read after the receipts loaded; every button of the cost case pressed with good and bad inputs; every question opened; every link fetched; then at 375 px phone width, in the dark scheme, and the office opened from the hero button. Its first two runs stopped on faults of the script itself (a name declared twice; a fixed wait that read the page before it had loaded, since replaced by waiting for the page to say it is ready); the record is its third run.",
+ "record": {
+  "readyMs": {
+   "desktop": 3727,
+   "phoneReload": 23204,
+   "note": "ms from navigation until the page had read every receipt and drawn every section (window.__page set); one sample each"
+  },
+  "console": [
+   "log: Failed to load resource: the server responded with a status of 404 () https://sjgant80-hub.github.io/seed-laptop/receipts/l7.json",
+   "log: Failed to load resource: the server responded with a status of 404 () https://sjgant80-hub.github.io/seed-laptop/receipts/witness-ci.json",
+   "log: Failed to load resource: the server responded with a status of 404 () https://sjgant80-hub.github.io/seed-laptop/receipts/l7.json",
+   "log: Failed to load resource: the server responded with a status of 404 () https://sjgant80-hub.github.io/seed-laptop/receipts/witness-ci.json",
+   "log: Failed to load resource: the server responded with a status of 404 () https://sjgant80-hub.github.io/favicon.ico"
+  ],
+  "failedRequests": [
+   "404 https://sjgant80-hub.github.io/seed-laptop/receipts/l7.json",
+   "404 https://sjgant80-hub.github.io/seed-laptop/receipts/witness-ci.json",
+   "404 https://sjgant80-hub.github.io/seed-laptop/receipts/l7.json",
+   "404 https://sjgant80-hub.github.io/seed-laptop/receipts/witness-ci.json",
+   "404 https://sjgant80-hub.github.io/favicon.ico"
+  ],
+  "claimRows": [
+   "L1a:HELD",
+   "L1b:FAILED",
+   "L1b2:HELD",
+   "L1c:HELD",
+   "L1d:HELD",
+   "L2a:HELD",
+   "L2b:FAILED",
+   "L2c:HELD",
+   "L3:FAILED",
+   "L3b:HELD",
+   "L4:HELD",
+   "L5:HELD",
+   "L6:FAILED",
+   "L6b:HELD",
+   "L6c2:FAILED",
+   "L7:UNMEASURED",
+   "G1:HELD"
+  ],
+  "workingBlocks": [
+   "office",
+   "crm",
+   "ledger",
+   "pdf",
+   "mind",
+   "image",
+   "layout"
+  ],
+  "actions": [
+   {
+    "label": "example as loaded",
+    "result": "Service\tA year now\tOver 3 years\tThe grown office\tWhy\nSalesforce Pro Suite\t£9,600.00\t£29,702.03\tpartly covered (crm) · moves\tcontacts, companies, deals and the pipeline are covered; service desks, marketing automation, commerce and the suite’s integrations are not\nMicrosoft Dynamics 365 Finance\t£3,876.00\t£11,992.20\tpartly covered (ledger) · stays\tthe double-entry books are covered; bank feeds and filing to the tax office are not\nMicrosoft Dynamics 365 Human Resources\t£2,491.20\t£7,707.68\tnot covered · stays\tnothing in the office covers this\n\nOver 3 years, each year after the first rising by UK CPI (3.1%): today £49,401.91; with the grown office £19,699.88, the lines that stay; saved £29,702.03 (£9,600.00 this year). Partly covered lines you kept: £11,992.20, still on the bill until the team that uses them decides. Not covered by the office: £7,707.68, the same on both sides."
+   },
+   {
+    "label": "example: years 10, submit",
+    "result": "Service\tA year now\tOver 10 years\tThe grown office\tWhy\nSalesforce Pro Suite\t£9,600.00\t£110,561.43\tpartly covered (crm) · moves\tcontacts, companies, deals and the pipeline are covered; service desks, marketing automation, commerce and the suite’s integrations are not\nMicrosoft Dynamics 365 Finance\t£3,876.00\t£44,639.18\tpartly covered (ledger) · stays\tthe double-entry books are covered; bank feeds and filing to the tax office are not\nMicrosoft Dynamics 365 Human Resources\t£2,491.20\t£28,690.68\tnot covered · stays\tnothing in the office covers this\n\nOver 10 years, each year after the first rising by UK CPI (3.1%): today £183,891.29; with the grown office £73,329.86, the lines that stay; saved £110,561.43 (£9,600.00 this year). Partly covered lines you kept: £44,639.18, still on the bill until the team that uses them decides. Not covered by the office: £28,690.68, the same on both sides."
+   },
+   {
+    "label": "example: years 11, submit",
+    "result": "years: 1 to 10."
+   },
+   {
+    "label": "example: years 3, CRM unticked (change event)",
+    "result": "Service\tA year now\tOver 3 years\tThe grown office\tWhy\nSalesforce Pro Suite\t£9,600.00\t£29,702.03\tpartly covered (crm) · stays\tcontacts, companies, deals and the pipeline are covered; service desks, marketing automation, commerce and the suite’s integrations are not\nMicrosoft Dynamics 365 Finance\t£3,876.00\t£11,992.20\tpartly covered (ledger) · stays\tthe double-entry books are covered; bank feeds and filing to the tax office are not\nMicrosoft Dynamics 365 Human Resources\t£2,491.20\t£7,707.68\tnot covered · stays\tnothing in the office covers this\n\nOver 3 years, each year after the first rising by UK CPI (3.1%): today £49,401.91; with the grown office £49,401.91, the lines that stay; saved £0.00 (£0.00 this year). Partly covered lines you kept: £41,694.23, still on the bill until the team that uses them decides. Not covered by the office: £7,707.68, the same on both sides."
+   },
+   {
+    "label": "example: CRM people 2.5",
+    "result": "People on each line: a whole number from 0."
+   },
+   {
+    "label": "example: CRM people 10 and ticked again",
+    "result": "Service\tA year now\tOver 3 years\tThe grown office\tWhy\nSalesforce Pro Suite\t£9,600.00\t£29,702.03\tpartly covered (crm) · moves\tcontacts, companies, deals and the pipeline are covered; service desks, marketing automation, commerce and the suite’s integrations are not\nMicrosoft Dynamics 365 Finance\t£3,876.00\t£11,992.20\tpartly covered (ledger) · stays\tthe double-entry books are covered; bank feeds and filing to the tax office are not\nMicrosoft Dynamics 365 Human Resources\t£2,491.20\t£7,707.68\tnot covered · stays\tnothing in the office covers this\n\nOver 3 years, each year after the first rising by UK CPI (3.1%): today £49,401.91; with the grown office £19,699.88, the lines that stay; saved £29,702.03 (£9,600.00 this year). Partly covered lines you kept: £11,992.20, still on the bill until the team that uses them decides. Not covered by the office: £7,707.68, the same on both sides."
+   },
+   {
+    "label": "calculator: submit with nothing typed",
+    "result": "a cost case starts from the owner's own list: there is none."
+   },
+   {
+    "label": "calculator: three lines typed, one partly-covered ticked, add a line pressed",
+    "result": "Service\tA year now\tOver 3 years\tThe grown office\tWhy\nPipedrive\t£1,152.00\t£3,564.24\tcovered (crm) · moves\tcontacts, companies, deals and the pipeline, kept on your own machine\nXero Standard\t£396.00\t£1,225.21\tpartly covered (ledger) · moves\tthe double-entry books are covered; bank feeds and filing to the tax office are not\nZoom Pro\t£299.80\t£927.57\tnot covered · stays\tnothing in the office covers this\n\nOver 3 years, each year after the first rising by UK CPI (3.1%): today £5,717.02; with the grown office £927.57, the lines that stay; saved £4,789.45 (£1,548.00 this year). Partly covered lines you kept: £0.00, still on the bill until the team that uses them decides. Not covered by the office: £927.57, the same on both sides."
+   },
+   {
+    "label": "calculator: a bad amount",
+    "result": "every item has a name, a whole amount, per month or per year, and whole seats."
+   },
+   {
+    "label": "calculator: years 0",
+    "result": "years: 1 to 10."
+   }
+  ],
+  "questionsOpened": 26,
+  "links": [
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#what",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#start",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#how",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#demo",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#blueprint",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#results",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#business",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#cost",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#security",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#rollout",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#risks",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#board",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#paper",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#words",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/#faq",
+    "status": "anchor ok",
+    "type": null
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/office/",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/seeds/stock.full",
+    "status": 200,
+    "type": "application/octet-stream"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/l1.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/l1b2.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://github.com/sjgant80-hub/seed-laptop/commit/7f03325588d124c35c3cb11663a8ada4d655695a",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://github.com/sjgant80-hub/seed-laptop/commit/22be1436e2e84512429a4d26c2d8456e611d8d04",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/demo.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://github.com/sjgant80-hub/seed-laptop/commit/d09cf13d4aea3f5963a2379414f14807617e5ba7",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/measure/claims.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/measure/seal2.md",
+    "status": 200,
+    "type": "text/markdown; charset=utf-8"
+   },
+   {
+    "href": "https://github.com/sjgant80-hub/seed-laptop/commit/726b5da6c64ccd228d77ffbcbbd4ea69294a870e",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/witness.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://github.com/sjgant80-hub/seed-laptop/tree/main/receipts",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://github.com/sjgant80-hub/seed-laptop/commit/f46ffc2e3b722efdcf563c10bb416e4437d2a345",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://github.com/sjgant80-hub/seed-laptop/commit/e140bcc63221c6b58aa791a3c8080f829a1b4570",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://www.salesforce.com/uk/sales/pricing/",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://www.microsoft.com/en-gb/dynamics-365/products/finance/pricing",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://www.microsoft.com/en-gb/dynamics-365/products/human-resources/pricing",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/consumerpriceinflation/august2026",
+    "status": 200,
+    "type": "text/html;charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/vendor/sovereign-enterprise/data/basis.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/vendor/sovereign-enterprise/SOURCES.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/l6b.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/l6c2.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/l4.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://www.ai-nativesolutions.com/",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/receipts/walks.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://sjgant80-hub.github.io/seed-laptop/seeds/publisher.json",
+    "status": 200,
+    "type": "application/json; charset=utf-8"
+   },
+   {
+    "href": "https://github.com/sjgant80-hub/seed-laptop",
+    "status": 200,
+    "type": "text/html; charset=utf-8"
+   }
+  ],
+  "unlabelledControls": 0,
+  "headings": 46,
+  "phone": {
+   "width": 375,
+   "scrollWidth": 375,
+   "overflowing": []
+  },
+  "dark": {
+   "background": "rgb(18, 20, 24)",
+   "text": "rgb(233, 235, 239)"
+  },
+  "contrast": {
+   "method": "WCAG 2 relative-luminance ratio of the page's own colour tokens (page/page.css), computed from their hex values",
+   "light": {
+    "ink/bg": 15.59,
+    "dim/bg": 5.84,
+    "dim/panel": 6.32,
+    "accent/bg": 5.82,
+    "accent-ink/accent": 6.29,
+    "bad/bg": 6.77,
+    "warn/bg": 5.48
+   },
+   "dark": {
+    "ink/bg": 15.45,
+    "dim/bg": 7.16,
+    "dim/panel": 6.55,
+    "accent/bg": 9.75,
+    "accent-ink/accent": 9.54,
+    "bad/bg": 8.13,
+    "warn/bg": 9.97
+   },
+   "lowest": 5.48,
+   "note": "every pair at or above 4.5:1; this is not a WCAG audit and the page claims none"
+  },
+  "office": "The office page opened from the hero button showed its own skeleton (an empty rail and a Kar box that did nothing) while its service worker stored 64 files one after another, with nothing on screen saying why. In a second fresh profile the worker was still installing at 13 s and activated at 15 s, and only then did the plant screen appear. Each of the 64 files, fetched from the served site, matched its pin (0 bad), so nothing was broken: it was slow and silent."
+ },
+ "personas": [
+  {
+   "role": "CFO",
+   "found": [
+    {
+     "gap": "The sources table quoted the basis describing CPI as \"applied every year to pay, seats and electricity\": the basis's words for the estate's wider case, while this case applies it to rent only. \"estate basis 2026-09-30\" did not say what the date was.",
+     "changed": "A \"Used here for\" column beside the basis's own words; the date shown as \"sourced 2026-09-30\", as the basis's own note defines it."
+    },
+    {
+     "gap": "The case counts rent only, and did not say so: nothing on the one-off cost of moving a team, or on support.",
+     "changed": "The cost note says the case counts the rent only; a move's one-off staff time and any support agreed with the supplier have no sourced figure, so neither is typed in, and the reader adds their own."
+    },
+    {
+     "gap": "The worked example has no office-suite line, the rent most companies pay, and gave no reason.",
+     "changed": "The example says the sourced basis holds no office-suite list price, so it is left out rather than typed in, and points to the calculator for the reader's own invoice."
+    },
+    {
+     "gap": "The role cards named a function (Finance, Operations), not the title a buyer scans for.",
+     "changed": "CEO, CFO, COO, CTO and CISO, DPO named on the cards; \"The teams who use it\"."
+    }
+   ],
+   "held": [
+    "Every worked-example action and every calculator action gave the kernel's answer or its stated refusal (record.actions, verbatim).",
+    "Every figure in the case links its source; all four sources answered 200."
+   ]
+  },
+  {
+   "role": "CTO and CISO",
+   "found": [
+    {
+     "gap": "No answer on certification (ISO 27001, Cyber Essentials, SOC 2).",
+     "changed": "A question answered: the software carries none and nothing is hosted, so it sits inside the scope the buyer's own certification covers for those devices; what an auditor can check is published."
+    },
+    {
+     "gap": "No answer on third-party code and the supply chain.",
+     "changed": "A question answered: no registry package (package.json has no dependencies); every estate file copied at a named commit and pinned by SHA-256, each list linked; GitHub's runner fetches the blocks again at every commit."
+    },
+    {
+     "gap": "The console showed two 404s: receipts/l7.json (L7 is unmeasured; the page shows it as UNMEASURED, by design) and receipts/witness-ci.json (the gate's receipt from GitHub's runner, not yet committed).",
+     "changed": "receipts/witness-ci.json is committed from GitHub's run of this work; l7.json stays absent until an owner gives a list."
+    },
+    {
+     "gap": "The traced run read \"Chrome Chrome/155.0.8059.85\".",
+     "changed": "It reads \"Chrome 155.0.8059.85\"."
+    }
+   ],
+   "held": [
+    "Each security claim links its receipt (l1, l4, l6b, l6c2): every link answered 200."
+   ]
+  },
+  {
+   "role": "COO",
+   "found": [
+    {
+     "gap": "The page drew its results, gate, trace, demo and cost case only after fetching 15 files one after another: ready at 3727 ms on desktop and 23204 ms on one phone-width reload, showing \"Reading the sourced prices…\" until then.",
+     "changed": "Every file is fetched at once."
+    },
+    {
+     "gap": "Opening the office from the hero button showed a dead office for about 15 s on a first visit (record.office).",
+     "changed": "The office hides what it has not yet decided to show (a panel's own display rule no longer overrides hidden), says it is storing itself on the device while it does, says why if storing fails, and its service worker fetches and checks all 64 files at once; one missing or changed file still refuses the whole install."
+    }
+   ],
+   "held": [
+    "At 375 px there is no horizontal page scroll and nothing overflows; the dark scheme applies; no control is without a label.",
+    "Roll-out by week, regrowing a lost laptop, working offline, and what Stage 1 does not do (colleagues sharing one office) are answered on the page."
+   ]
+  },
+  {
+   "role": "Procurement lead",
+   "found": [
+    {
+     "gap": "The \"seal 2\" link opened measure/seal2.md served as text/markdown: a raw file, which a browser may download rather than show.",
+     "changed": "It links to GitHub's rendered view."
+    }
+   ],
+   "held": [
+    "The supplier is named (AI Native Solutions; its site answered 200), the licence is MIT, support, service levels, warranty and liability are agreed per deployment, the exit is standard formats, and every part's licence is listed (seedmind's is MIT by its NOTICE).",
+    "The page makes no accessibility claim; the walk checked labels, headings, phone width, dark mode and colour contrast only (record.contrast), which is not a WCAG audit."
+   ]
+  }
+ ],
+ "changedIn": "the commit that adds this file"
+}
