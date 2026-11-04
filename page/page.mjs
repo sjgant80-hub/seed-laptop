@@ -11,7 +11,7 @@ const get = async (p) => { try { const r = await fetch(p, { cache: 'no-store' })
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const pounds = (pence) => '£' + (pence / 100).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const secs = (ms) => (ms / 1000).toFixed(2) + ' s';
-const table = (head, rows) => '<table><thead><tr>' + head.map((h) => '<th>' + esc(h) + '</th>').join('') + '</tr></thead><tbody>' + rows.map((r) => '<tr>' + r.map((c) => '<td>' + c + '</td>').join('') + '</tr>').join('') + '</tbody></table>';
+const table = (head, rows) => '<table><thead><tr>' + head.map((h) => '<th>' + esc(h) + '</th>').join('') + '</tr></thead><tbody>' + rows.map((r) => '<tr>' + r.map((c, i) => '<td' + (i && head[i] ? ' data-label="' + esc(head[i]) + '"' : '') + '>' + c + '</td>').join('') + '</tr>').join('') + '</tbody></table>';   // on a phone each cell carries its column's name
 
 const CLAIMS = [
   ['L1a', 'l1', 'The full seed grows the office with no network at all, every block hash-verified, within 10 seconds.'],
