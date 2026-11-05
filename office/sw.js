@@ -43,5 +43,8 @@ self.addEventListener('fetch', (e) => {
     })());
     return;
   }
-  e.respondWith((async () => (await caches.match(url.origin + url.pathname)) || fetch(e.request))());
+  // a folder's address is its index.html: office/ (the live page's link, the manifest's start_url) is stored only as
+  // office/index.html, so looked up by its exact path it missed the store and needed the network (claim L1e)
+  const path = url.pathname.endsWith('/') ? url.pathname + 'index.html' : url.pathname;
+  e.respondWith((async () => (await caches.match(url.origin + path)) || fetch(e.request))());
 });
