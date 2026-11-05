@@ -1,0 +1,96 @@
+{
+ "kind": "seed-laptop.receipt",
+ "v": 1,
+ "claims": "L1e",
+ "commit": "153634fb10eb9e306e7e820cadbc830e7d249829",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-1255U",
+  "cores": 12,
+  "node": "v25.7.0"
+ },
+ "facts": {
+  "bound": {
+   "seconds": 10
+  },
+  "at": {
+   "commit": "153634fb10eb9e306e7e820cadbc830e7d249829",
+   "chrome": "Chrome/156.0.8078.79",
+   "installed": true,
+   "refused": true,
+   "startUrl": "/office/",
+   "visits": [
+    {
+     "as": "office/",
+     "url": "/office/",
+     "opens": true,
+     "ms": 600,
+     "title": "Seed Office",
+     "plant": true,
+     "controlled": true
+    },
+    {
+     "as": "start_url",
+     "url": "/office/",
+     "opens": true,
+     "ms": 303,
+     "title": "Seed Office",
+     "plant": true,
+     "controlled": true
+    },
+    {
+     "as": "office/index.html",
+     "url": "/office/index.html",
+     "opens": true,
+     "ms": 306,
+     "title": "Seed Office",
+     "plant": true,
+     "controlled": true
+    }
+   ]
+  },
+  "before": {
+   "commit": "76c2f679d36ee9767f0dda5c9871fb72dd5b443f",
+   "chrome": "Chrome/156.0.8078.79",
+   "installed": true,
+   "refused": true,
+   "startUrl": "/office/",
+   "visits": [
+    {
+     "as": "office/",
+     "url": "/office/",
+     "opens": false,
+     "ms": null,
+     "title": "127.0.0.1",
+     "plant": false,
+     "controlled": false
+    },
+    {
+     "as": "start_url",
+     "url": "/office/",
+     "opens": false,
+     "ms": null,
+     "title": "127.0.0.1",
+     "plant": false,
+     "controlled": false
+    },
+    {
+     "as": "office/index.html",
+     "url": "/office/index.html",
+     "opens": true,
+     "ms": 572,
+     "title": "Seed Office",
+     "plant": true,
+     "controlled": true
+    }
+   ]
+  }
+ },
+ "verdicts": [
+  {
+   "id": "L1e",
+   "verdict": "HELD",
+   "says": "In Chrome, after one visit and with the server stopped (its port refused): at 153634f office/ opened (0.60 s), start_url opened (0.30 s), office/index.html opened (0.31 s); at 76c2f67, before the fix, office/ did NOT open, start_url did NOT open, office/index.html opened (0.57 s)."
+  }
+ ]
+}

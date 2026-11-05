@@ -19,7 +19,8 @@ const CLAIMS = [
   ['L1b2', 'l1b2', 'The fix for L1b\'s probe, sealed before its own run: the same steps, every block read inside its own frame.'],
   ['L1c', 'l1', 'A tampered seed grows nothing.'],
   ['L1d', 'l1', 'A light seed pulls its blocks from the owner\'s own mirror and grows the identical office.'],
-  ['L2a', 'l2', 'Real PDF, DOCX, XLSX, email, calendar, contact, CSV, image and zip files come in with sealed fidelity.'],
+  ['L1e', 'l1e', 'After one visit, the office opens again with its origin unreachable, at every address a person or an installed app opens it by (sealed before its fix).'],
+  ['L2a', 'l2','Real PDF, DOCX, XLSX, email, calendar, contact, CSV, image and zip files come in with sealed fidelity.'],
   ['L2b', 'l2', 'A hostile corpus is refused or quarantined, and the core never parses one byte of any file.'],
   ['L2c', 'l2', 'The parser sandbox has no network, cannot write or start processes, and is capped in memory and time.'],
   ['L3', 'l3', 'Files the office writes open in mainstream readers and carry nothing of its internals.'],
@@ -32,7 +33,7 @@ const CLAIMS = [
   ['L7', 'l7', 'The cost case, from a real user\'s own subscription list.'],
   ['G1', 'witness', 'Every kernel is mutation-gated clean and never throws on garbage.'],
 ];
-const FILES = ['l1', 'l1b2', 'l2', 'l3', 'l3b', 'l4', 'l5', 'l6', 'l6b', 'l6c2', 'l7', 'witness', 'witness-ci'];
+const FILES = ['l1', 'l1b2', 'l1e', 'l2', 'l3', 'l3b', 'l4', 'l5', 'l6', 'l6b', 'l6c2', 'l7', 'witness', 'witness-ci'];
 const commitLink = (c) => (c ? ' <a href="https://github.com/sjgant80-hub/seed-laptop/commit/' + esc(c) + '">' + esc(c.slice(0, 7)) + '</a>' : '');
 
 function receipts(files) {
