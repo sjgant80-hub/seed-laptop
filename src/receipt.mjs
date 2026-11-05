@@ -68,6 +68,10 @@ const RULES = {
     facts: { device: hexid },
     says: (f) => 'A new device (' + short(f.device) + ') is on your list of devices, signed with your phrase.',
   },
+  unpaired: {
+    facts: { device: hexid },
+    says: (f) => 'A device (' + short(f.device) + ') is off your list of devices, signed with your phrase: this device sends it nothing more and reads nothing it sends, and each of your other devices does the same from the next time it meets one that holds the new list.',
+  },
   exported: {
     facts: { file: name, format: name, bytes: count },
     says: (f) => 'You saved ' + f.file + ' (' + f.format + ', ' + plural(f.bytes, 'byte', 'bytes') + ') to this device. It carries nothing of your office\'s keys or internals.',

@@ -15,7 +15,15 @@
 //   sealRoster(body, founder)         → Promise<{ ok, text } | refusal>       (canonical JSON, Ed25519 by the founder)
 //   openRoster(text, founderId)       → Promise<{ ok, n, devices } | { ok: false, why }>
 //   keysOf(devices)                   → Map(slot → key)  | null when two devices share a slot (the roster refuses it)
-//   batches(ops, max)                 → the ops in batches whose JSON is at most max characters (one op per batch at least)
+//   named(door, key)                  → true only when the door's roster names this device key: the one test before
+//                                       anything of the store is sealed for a peer, so a device that is not on the
+//                                       owner's newest list (one never paired, or one taken off) is sent nothing
+//   without(roster, key, me)          → { ok, body } the next roster's body, numbered on, with every device of an opened
+//                                       roster but key | refusal (a device does not take itself off; the last device
+//                                       stays, as a roster names one at least). The founder seals it (sealRoster);
+//                                       each device adopts it as the newest list, and from then on the door refuses
+//                                       the device left off and named() sends it nothing
+//   batches(ops, max)                → the ops in batches whose JSON is at most max characters (one op per batch at least)
 //   seal({ to, ops }, device, counter)→ Promise<{ ok, bytes } | refusal>   a LIGHT packet, kind JSON, signed by the device
 //   hear(bytes, door)                 → Promise<{ ok, from, slot, counter, to, ops, clock } | { ok: false, stage, why }>
 //        (clock = the sender's store clock, if it sent a well-formed one, else {}: what the sender holds)
@@ -62,6 +70,21 @@ export function keysOf(devices) {
     m.set(s, d.key);
   }
   return m;
+}
+
+export function named(door, key) {
+  if (!isObj(door) || !(door.keys instanceof Map) || typeof key !== 'string' || !HEX64.test(key)) return false;
+  return door.keys.get(slotOf(unhex(key))) === key;
+}
+
+export function without(roster, key, me) {
+  if (!isObj(roster) || !Number.isSafeInteger(roster.n) || roster.n < 1 || !Array.isArray(roster.devices) || !roster.devices.every(isObj)) return no('not an opened roster');
+  if (typeof key !== 'string' || !HEX64.test(key)) return no('a device is named by its key');
+  if (key === me) return no('a device does not take itself off the list: take it off from another of your devices');
+  const devices = roster.devices.filter((d) => d.key !== key);
+  if (devices.length === roster.devices.length) return no('that device is not on the list');
+  if (devices.length < 1) return no('the list keeps one device at least');
+  return { ok: true, body: rosterBody(roster.n + 1, devices) };
 }
 
 export async function sealRoster(body, founder) {

@@ -95,8 +95,13 @@
       <h2>Your devices</h2>
       <p>One identity, many devices. Each device has a key of its own; your phrase signs the list of your devices, and every change that passes between them is a signed packet checked before it is read. Pairing uses codes you copy from one device to the other: no server, and no address on the internet is ever asked for.</p>
       <p id="dev-me" class="runtime"></p>
+      <div id="dev-listed" hidden>
+        <h3>On your list</h3>
+        <ul id="dev-list" class="dev-list"></ul>
+        <p class="runtime">A lost or stolen device: type your phrase below, then take it off the list here. From then on this device sends it nothing and refuses what it sends; your other devices do the same from the next time they meet one that holds the new list.</p>
+      </div>
       <fieldset><legend>Pair a new device</legend>
-        <input id="dev-phrase" type="password" autocomplete="current-password" placeholder="Your phrase (it signs the new device in)" aria-label="Your phrase">
+        <input id="dev-phrase" type="password" autocomplete="current-password" placeholder="Your phrase (it signs your list of devices)" aria-label="Your phrase">
         <div class="exports"><button id="dev-offer">Make a pairing code</button><button id="dev-join">Join with a code</button></div>
         <textarea id="dev-code" rows="4" placeholder="The code from the other device goes here" aria-label="Pairing code"></textarea>
         <div class="exports"><button id="dev-accept">Use this code</button></div>

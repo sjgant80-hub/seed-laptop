@@ -78,7 +78,7 @@ test('imported, quarantined, exported: the edges leave receipts', () => {
   assert.equal(receipt('quarantined', { file: 'a.pdf', why: '' }, AT), null);
   assert.equal(receipt('exported', { file: 'quote.pdf', format: 'pdf', bytes: 1 }, AT).says, "You saved quote.pdf (pdf, 1 byte) to this device. It carries nothing of your office's keys or internals.");
   assert.equal(receipt('exported', { file: 'quote.pdf', format: 'pdf', bytes: 2048 }, AT).says.includes('2048 bytes'), true);
-  assert.deepEqual(Object.keys(KINDS), ['grew', 'refused', 'opened', 'saved', 'asked', 'imported', 'quarantined', 'backed-up', 'regrown', 'upgraded', 'synced', 'paired', 'exported']);
+  assert.deepEqual(Object.keys(KINDS), ['grew', 'refused', 'opened', 'saved', 'asked', 'imported', 'quarantined', 'backed-up', 'regrown', 'upgraded', 'synced', 'paired', 'unpaired', 'exported']);
 });
 
 test('backed-up, regrown, synced, paired', () => {
@@ -88,6 +88,8 @@ test('backed-up, regrown, synced, paired', () => {
   assert.equal(receipt('synced', { changes: 3 }, AT).says, '3 changes arrived from your other device, each checked before it was read.');
   assert.equal(receipt('paired', { device: h }, AT).says, 'A new device (abababab) is on your list of devices, signed with your phrase.');
   assert.equal(receipt('paired', { device: 'zz' }, AT), null);
+  assert.equal(receipt('unpaired', { device: h }, AT).says, 'A device (abababab) is off your list of devices, signed with your phrase: this device sends it nothing more and reads nothing it sends, and each of your other devices does the same from the next time it meets one that holds the new list.');
+  assert.equal(receipt('unpaired', { device: 'zz' }, AT), null);
 });
 
 test('upgraded: an office brought across from an earlier seed, its orphaned blocks named only when there are some', () => {

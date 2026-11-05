@@ -56,6 +56,9 @@ button:focus-visible, .file:focus-within, input:focus-visible { outline: 2px sol
 .file-list .bad { color: var(--bad); }
 .file-view pre { white-space: pre-wrap; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: .8rem; max-height: 50vh; overflow: auto; }
 .exports { display: flex; flex-wrap: wrap; gap: .4rem; margin: .5rem 0; }
+.dev-list { list-style: none; padding: 0; margin: .3rem 0; display: flex; flex-direction: column; gap: .35rem; }
+.dev-list li { font-family: var(--mono); font-size: .85rem; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; }
+.devices h3 { font-size: 1rem; margin: .8rem 0 .2rem; }
 .write fieldset { border: 1px solid var(--line); border-radius: var(--radius); margin: 0 0 1rem; padding: .8rem; display: flex; flex-direction: column; gap: .4rem; max-width: 44rem; }
 .write input, .write textarea { font: inherit; padding: .45rem .6rem; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); }
 .write label { display: flex; gap: .4rem; align-items: center; }

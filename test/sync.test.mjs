@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { rosterBody, sealRoster, openRoster, keysOf, batches, seal, hear, MAX_DEVICES } from '../src/sync.mjs';
+import { rosterBody, sealRoster, openRoster, keysOf, named, without, batches, seal, hear, MAX_DEVICES } from '../src/sync.mjs';
 import { makeIdentity, slotOf, unhex } from '../vendor/fall-kit-core/identity.mjs';
 
 const founder = () => makeIdentity(new Uint8Array(32).fill(1));
@@ -105,4 +105,47 @@ test('sync at its exact edges: every guard of the roster, the packet body and it
   assert.match((await seal({ to: 'x', ops: [] }, a, 1.5)).why, /counter from 1/);
   assert.deepEqual(batches(['a', 'a', 'a'], 10), [['a', 'a'], ['a']], 'each op counts its JSON and a comma; two fit 10 exactly');
   assert.deepEqual(batches(['a', 'a', 'a'], 9), [['a'], ['a'], ['a']]);
+});
+
+test('named and without: a device taken off the newest list is sent nothing, and what it sends is refused at the door', async () => {
+  const f = await founder(), a = await dev(2), b = await dev(3), c = await dev(4), d = await dev(5);
+  const r1 = await openRoster((await sealRoster(rosterBody(1, [{ name: 'a', key: a.id }, { name: 'b', key: b.id }, { name: 'c', key: c.id }]), f)).text, f.id);
+  const door1 = { keys: keysOf(r1.devices), last: new Map(), me: a.id };
+  for (const x of [a, b, c]) assert.equal(named(door1, x.id), true, 'every device on the list is named');
+  assert.equal(named(door1, d.id), false, 'a device never paired is sent nothing');
+  const w = without(r1, c.id, a.id);
+  assert.equal(w.ok, true);
+  assert.equal(w.body.n, 2, 'the next list is numbered on, so every device takes it as the newest');
+  assert.deepEqual(w.body.devices.map((x) => x.key), [a.id, b.id].sort());
+  const r2 = await openRoster((await sealRoster(w.body, f)).text, f.id);
+  assert.equal(r2.ok, true); assert.equal(r2.n, 2);
+  const door2 = { keys: keysOf(r2.devices), last: new Map(), me: a.id };
+  assert.equal(named(door2, c.id), false, 'the device taken off is sent nothing');
+  assert.equal(named(door2, b.id), true, 'the others still are');
+  const h = await hear((await seal({ to: a.id, ops: [] }, c, 1)).bytes, door2);
+  assert.equal(h.ok, false); assert.equal(h.stage, 'sender', 'what the device taken off sends is refused at the door');
+  assert.equal((await hear((await seal({ to: a.id, ops: [] }, b, 1)).bytes, door2)).ok, true);
+  // named: only a well-formed key that the roster holds at its own slot
+  const bad = 'g'.repeat(64);
+  assert.equal(named({ keys: new Map([[slotOf(unhex(bad)), bad]]) }, bad), false, 'a key that is not 64 hex characters is never named');
+  assert.equal(named({ keys: new Map([[slotOf(unhex(c.id)), b.id]]) }, c.id), false, 'another key at its slot is not this key');
+  assert.equal(named({ keys: new Map([[slotOf(unhex(c.id)), c.id]]) }, c.id), true);
+  for (const door of [null, 5, 'x', [], {}, { keys: {} }, { keys: [[slotOf(unhex(a.id)), a.id]] }]) assert.equal(named(door, a.id), false, 'no door, no roster: ' + JSON.stringify(door));
+  for (const key of [5, null, undefined, a.id.toUpperCase(), a.id.slice(1), a.id + '0', '']) assert.equal(named(door1, key), false, 'not a device key: ' + String(key));
+  // without: every refusal, and the edges
+  assert.match(without(r1, a.id, a.id).why, /does not take itself off/);
+  assert.match(without(r1, d.id, a.id).why, /not on the list/);
+  for (const key of ['zz', 5, null, bad, c.id.toUpperCase()]) assert.match(without(r1, key, a.id).why, /named by its key/, 'key ' + String(key));
+  const one = await openRoster((await sealRoster(rosterBody(1, [{ name: 'b', key: b.id }]), f)).text, f.id);
+  assert.match(without(one, b.id, a.id).why, /one device at least/);
+  for (const r of [null, 5, [], { n: 0, devices: [{ key: b.id }] }, { n: 1.5, devices: [{ key: b.id }] }, { n: '1', devices: [{ key: b.id }] }, { n: 1, devices: 'x' }, { n: 1, devices: [5, { key: b.id }] }, { ...r1, n: 0 }]) {
+    assert.match(without(r, b.id, a.id).why, /not an opened roster/, JSON.stringify(r));
+  }
+  const two = await openRoster((await sealRoster(rosterBody(1, [{ name: 'a', key: a.id }, { name: 'b', key: b.id }]), f)).text, f.id);
+  const w2 = without(two, b.id, a.id);
+  assert.equal(w2.ok, true, 'two devices: one comes off and the other stays');
+  assert.equal(w2.body.n, 2);
+  assert.deepEqual(w2.body.devices, [{ name: 'a', key: a.id }]);
+  assert.equal((await sealRoster(w2.body, f)).ok, true, 'the founder seals it');
+  assert.equal(without({ n: 7, devices: two.devices }, b.id, a.id).body.n, 8);
 });
