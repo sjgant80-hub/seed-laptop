@@ -30,9 +30,17 @@
 //   cost      — the cost case from the owner's own list, item by item, in whole pence (organ 7)
 //   rentcase  — the cost case over the years: the sourced basis (CPI, list prices), the sealed map's coverage, the
 //               reader's own lines and choices, in whole pence (the page's cost case, after liveware's mintcase)
+//   judge     — measure/judge.mjs, the sealed claims judged on measured facts: every verdict on the page comes from it.
+//               Outside G1, whose scope is src/; gated by its own tests (test/judge.test.mjs, and
+//               test/judge-rules.test.mjs, which re-judges every committed receipt to the verdict and sentence it was
+//               written with). Not in the fuzz: it is an instrument sealed as measured and left unchanged, its byFormat
+//               reads only the facts its own measure wrote (an array holding null throws there), and judge() itself
+//               turns a rule or sentence that throws into FAILED, never a throw (tested)
 // NOT gated, each with its reason: tools/** (local I/O and orchestration, re-derived by each measure's --check);
 // office/** glue (browser I/O; its decisions live in the kernels above); vendor/** and blocks/** (gated in their own
-// repos, pinned byte-identical by their --check tools); .witness/** (the gate itself, pinned to witness v0.6).
+// repos, pinned byte-identical by their --check tools); .witness/** (the gate itself, pinned to witness v0.6);
+// measure/** other than the judge (the instruments' I/O: each drives a browser, a process or a capture and writes its
+// facts; what those facts mean is decided only by the judge).
 //
 //   node witness-all.mjs [kernel …] [--receipt]
 import { runMutations } from './.witness/witness.mjs';
@@ -73,6 +81,7 @@ export const PAIRS = [
   ['sync', 'src/sync.mjs', ['test/sync.test.mjs', FUZZ]],
   ['cost', 'src/cost.mjs', ['test/cost.test.mjs', FUZZ]],
   ['rentcase', 'src/rentcase.mjs', ['test/rentcase.test.mjs', FUZZ]],
+  ['judge', 'measure/judge.mjs', ['test/judge.test.mjs', 'test/judge-rules.test.mjs']],
 ];
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {

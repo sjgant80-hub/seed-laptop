@@ -124,6 +124,7 @@ const KERNEL_WHAT = {
   sync: 'The owner\'s devices: the founder-signed roster, LIGHT packets through the door (organ 6).',
   cost: 'The cost case from the owner\'s own list, item by item, in whole pence, with the sealed coverage map (organ 7).',
   rentcase: 'The cost case over the years: the sourced basis (UK CPI, list prices), the sealed map\'s coverage, the reader\'s own lines and choices.',
+  judge: 'The sealed claims judged on measured facts: each rule as its seal wrote it, and one plain sentence of what was measured. Every verdict on this page comes from it; its tests re-judge every committed receipt.',
 };
 
 function gate(w, ci) {

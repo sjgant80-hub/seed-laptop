@@ -133,13 +133,13 @@
   <h3>Built in order, each organ proven before the next</h3>
   <p>Seven organs, in the order the spec set: base and runtime; seed and germination; the office; the edges; the vault; devices; the cost case and the demo. Every claim was sealed in writing before the code that measures it (<a href="measure/claims.json">seal 1</a>, then <a href="https://github.com/sjgant80-hub/seed-laptop/blob/main/measure/seal2.md">seal 2</a> fixing the instruments, the seed and the corpus before any measured run). A claim that fails stays failed, with its numbers.</p>
   <div id="gate" class="tablewrap" aria-live="polite"><p style="padding:.8rem">Reading the mutation gate…</p></div>
-  <p>Every pure kernel passes the witness mutation gate: each comparison, operator and constant in it is changed one at a time, and the tests must catch every change. Each kernel also takes 2,000 hostile inputs per function without throwing.</p>
+  <p>Every pure kernel passes the witness mutation gate: each comparison, operator and constant in it is changed one at a time, and the tests must catch every change. Each kernel in <code>src/</code> also takes 2,000 hostile inputs per function without throwing. The judge (<code>measure/judge.mjs</code>), which turns each claim's measured facts into the verdict shown in Results, is gated the same way: its tests re-judge every committed receipt to the verdict and sentence it was written with, and every mutant of it must be caught.</p>
 </div></section>
 
 <section id="results"><div class="wrap">
   <div class="kicker">Results</div>
   <h2>Every sealed claim, as measured</h2>
-  <p>Read straight from the committed receipts in <a href="https://github.com/sjgant80-hub/seed-laptop/tree/main/receipts">receipts/</a>. Each links the commit it was measured at.</p>
+  <p>Read straight from the committed receipts in <a href="https://github.com/sjgant80-hub/seed-laptop/tree/main/receipts">receipts/</a>. Each verdict was given by the judge (<code>measure/judge.mjs</code>), which applies the claim's sealed rule to the facts its run measured; each links the commit it was measured at.</p>
   <div class="tablewrap"><table>
     <thead><tr><th>Claim</th><th>Sealed as</th><th>Verdict</th><th>Measured</th></tr></thead>
     <tbody id="receipt-rows"><tr><td colspan="4">Reading the receipts…</td></tr></tbody>
