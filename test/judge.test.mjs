@@ -84,3 +84,42 @@ test('judge: HELD, FAILED, UNMEASURED; a toxic fact fails, never throws', () => 
   assert.deepEqual(judge([{ id: 'L1a' }], { L1a: null }), [{ id: 'L1a', verdict: 'UNMEASURED', says: 'not measured' }]);
   assert.equal(judge([{ id: 'L1d' }], { L1d: l1d() })[0].verdict, 'HELD', 'a claim with no bound');
 });
+
+// seal 1f (measure/claims-f.json): L1e, the office opening again with its origin unreachable
+const visit = (as, o = {}) => ({ as, url: '/office/', opens: true, ms: 1200, title: 'Seed Office', plant: true, controlled: true, ...o });
+const l1eRun = (commit, o = {}) => ({ commit, chrome: 'HeadlessChrome/1', installed: true, refused: true, startUrl: '/office/', visits: [visit('office/'), visit('start_url'), visit('office/index.html')], ...o });
+const l1e = (o = {}) => ({
+  at: l1eRun('a'.repeat(40)),
+  before: l1eRun('76c2f67' + 'b'.repeat(33), { visits: [visit('office/', { opens: false, ms: null, title: 'x', plant: false, controlled: false }), visit('start_url', { opens: false, ms: null }), visit('office/index.html')] }),
+  ...o,
+});
+const B1e = { seconds: 10 };
+
+test('L1e: every condition, the order of the addresses, the bound exactly, and the instrument must see the fault', () => {
+  assert.equal(RULES.L1e(l1e(), B1e), true);
+  const at = (o) => l1e({ at: l1eRun('a'.repeat(40), o) });
+  const atVisit = (i, o) => { const v = [visit('office/'), visit('start_url'), visit('office/index.html')]; v[i] = { ...v[i], ...o }; return at({ visits: v }); };
+  for (const i of [0, 1, 2]) {
+    assert.equal(RULES.L1e(atVisit(i, { opens: false }), B1e), false, 'address ' + i + ' must open');
+    assert.equal(RULES.L1e(atVisit(i, { ms: 10000 }), B1e), true, 'exactly the bound holds');
+    assert.equal(RULES.L1e(atVisit(i, { ms: 10001 }), B1e), false, 'past the bound fails');
+    assert.equal(RULES.L1e(atVisit(i, { ms: null }), B1e), false, 'no time is not within the bound');
+  }
+  assert.equal(RULES.L1e(at({ installed: false }), B1e), false, 'the first visit must install the worker');
+  assert.equal(RULES.L1e(at({ refused: false }), B1e), false, 'the port must refuse once the server is stopped');
+  assert.equal(RULES.L1e(at({ visits: [visit('office/'), visit('office/index.html'), visit('start_url')] }), B1e), false, 'the claim\'s order');
+  assert.equal(RULES.L1e(at({ visits: [visit('office/'), visit('start_url')] }), B1e), false, 'all three addresses');
+  assert.equal(RULES.L1e(at({ commit: 5 }), B1e), false);
+  // the run before the fix: it must install and be refused too, and office/ must NOT open there
+  const was = (o) => l1e({ before: { ...l1e().before, ...o } });
+  assert.equal(RULES.L1e(was({ visits: [visit('office/'), visit('start_url'), visit('office/index.html')] }), B1e), false, 'an instrument that sees no fault proves nothing');
+  assert.equal(RULES.L1e(was({ installed: false }), B1e), false);
+  assert.equal(RULES.L1e(was({ refused: false }), B1e), false);
+  assert.equal(RULES.L1e(was({ commit: 'c'.repeat(40) }), B1e), false, 'the run before is 76c2f67');
+  assert.equal(RULES.L1e(l1e({ at: l1eRun('76c2f67' + 'b'.repeat(33)) }), B1e), false, 'two different commits');
+  assert.equal(RULES.L1e(l1e({ before: null }), B1e), false);
+  assert.equal(RULES.L1e(l1e({ at: undefined }), B1e), false);
+  assert.equal(SAYS.L1e(l1e()), 'In Chrome, after one visit and with the server stopped (its port refused): at aaaaaaa office/ opened (1.20 s), start_url opened (1.20 s), office/index.html opened (1.20 s); at 76c2f67, before the fix, office/ did NOT open, start_url did NOT open, office/index.html opened (1.20 s).');
+  assert.deepEqual(judge([{ id: 'L1e', bound: B1e }], { L1e: l1e() }).map((v) => v.verdict), ['HELD']);
+  assert.deepEqual(judge([{ id: 'L1e', bound: B1e }], { L1e: { at: 'x' } }).map((v) => v.verdict), ['FAILED']);
+});

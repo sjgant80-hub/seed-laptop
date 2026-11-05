@@ -97,6 +97,17 @@ export const RULES = {
     median(f.runs.map((r) => r.ms)) <= b.median_seconds * 1000 && f.wrongRefused === true && f.wrongRestored === false &&
     f.headerFlips === 37 * 8 && f.headerRefused === f.headerFlips && f.bodyFlips === b.body_flips && f.bodyRefused === f.bodyFlips && f.otherState === 0 &&
     f.actions > 0 && f.observed === f.actions && f.enforced === 0,
+  // seal 1f: the three addresses, in the claim's order; the fix must open all three, and the instrument must see the
+  // fault at 76c2f67 (office/ not opening there), or it cannot tell the fault from the fix
+  L1e: (f, b) => {
+    const AS = ['office/', 'start_url', 'office/index.html'];
+    const run = (m) => Boolean(m) && typeof m.commit === 'string' && m.installed === true && m.refused === true &&
+      Array.isArray(m.visits) && m.visits.length === AS.length && AS.every((as, i) => m.visits[i] && m.visits[i].as === as);
+    const at = f.at, was = f.before;
+    return run(at) && run(was) && at.commit !== was.commit && was.commit.startsWith('76c2f67') &&
+      all(at.visits, (v) => v.opens === true && typeof v.ms === 'number' && v.ms <= b.seconds * 1000) &&
+      was.visits[0].opens === false;
+  },
 };
 
 export const SAYS = {
@@ -115,6 +126,7 @@ export const SAYS = {
   L6c2: (f) => { const t = f.tab || {}; return f.tab ? 'In a Chrome tab, every frame found after it opened: ' + t.actions + ' of ' + t.plan + ' planned actions made (' + t.unmade + ' not made), ' + t.receipts + ' receipts, ' + t.left + ' requests left the page (' + t.refused + ' refused inside the browser).' : 'Not measured yet.'; },
   L6b: (f) => { const a = f.ci || {}; return f.ci ? "From below, only what the guest sent, on GitHub's runner: " + a.packets + ' packets, ' + a.egress + ' to any undeclared destination, ' + a.toSink + ' to the mail stand-in (' + a.outsideWindows + ' outside the ' + a.sends + ' send windows, ' + a.sentOk + ' sends accepted); ' + a.actions + ' actions, ' + a.receipts + ' receipts.' : 'Not measured yet.'; },
   L4: (f) => f.runs.filter((r) => r.ok && r.identical).length + ' of ' + f.runs.length + ' regrowths on a wiped folder restored all ' + f.keys + ' entries byte for byte (median ' + secs(median(f.runs.map((r) => r.ms))) + ', each with a new device key, the watch observe-only); the wrong phrase ' + (f.wrongRefused && !f.wrongRestored ? 'restored nothing' : 'was NOT refused cleanly') + '; ' + (f.headerRefused + f.bodyRefused) + ' of ' + (f.headerFlips + f.bodyFlips) + ' one-bit changes refused, ' + f.otherState + ' gave another state; the fresh watch refused ' + f.enforced + ' of ' + f.actions + ' owner actions.',
+  L1e: (f) => { const one = (m) => m.visits.map((v) => v.as + (v.opens ? ' opened' + (typeof v.ms === 'number' ? ' (' + secs(v.ms) + ')' : '') : ' did NOT open')).join(', '); return 'In Chrome, after one visit and with the server stopped (its port refused): at ' + f.at.commit.slice(0, 7) + ' ' + one(f.at) + '; at ' + f.before.commit.slice(0, 7) + ', before the fix, ' + one(f.before) + '.'; },
   L3: (f) => { const n = (r, w) => (r ? Object.keys(READERS[w]).filter((k) => r.readers && r.readers[k] && !r.readers[k].missing).length + ' of ' + Object.keys(READERS[w]).length + ' readers present, ' + (readersHold(r, w) ? 'every file opened and read back equal' : 'NOT every file opened and read back equal') : 'not measured'); return "On GitHub's runner: " + n(f.ci, 'ci') + '; on this laptop: ' + n(f.local, 'local') + '; internal markers found: ' + (leaksIn(f.ci) + leaksIn(f.local)) + '.'; },
 };
 
