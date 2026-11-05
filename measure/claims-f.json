@@ -1,0 +1,17 @@
+{
+ "kind": "seed-laptop.claims",
+ "v": 1,
+ "seal": "1f",
+ "sealed": "2026-11-05",
+ "sealed_before": "the fix, the instrument and the run: this file is committed alone, before office/sw.js changes, before measure/l1e.mjs or its rule in measure/judge.mjs exists, and before any measured run",
+ "why": "Found on 2026-11-05 by an unsealed scratch run while finishing the build, not by any sealed claim: on a loopback origin, after one visit to office/ and with the server then stopped, office/index.html opened from the service worker's store, but office/ itself showed Chrome's error page. office/ is the address the live page's 'Open the office' button links to, and the manifest's start_url (./) resolves to it, so an installed office would not have opened with the network gone. The worker looks a request up by its exact path, and it stores the page as office/index.html, never as office/. L1b2 and the recorded demo opened office/ while the server was up and went offline inside the page; neither reloaded it with the network gone, so none of the sealed claims could see this. The page's sentence 'after that it opens with the network unplugged' was true only for office/index.html. L1e is sealed before the fix, so the fix is judged by a rule written before it.",
+ "claims": [
+  {
+   "id": "L1e",
+   "organ": "office",
+   "says": "After one visit, the office opens again with its origin unreachable, at every address a person or an installed app opens it by.",
+   "held_if": "Chrome headless with its own throwaway profile for each commit measured; the office served by tools/serve.mjs on a fixed loopback port from a folder holding exactly one commit's files (git archive, nothing uncommitted); office/ opened once and left until its service worker controls the page and the planting screen shows; the server then stopped, and Node's own connection to that port refused; then, in the same profile, three addresses opened in turn: office/ (the live page's link), the manifest's start_url resolved against the manifest's own address, and office/index.html. An address OPENS if, within the bound, the page is the office (its title is 'Seed Office', the planting screen is visible) and the worker controls it. Measured at the commit under test (the commit that holds the fix) and, in the same run, at 76c2f67 (the last commit before the fix). HELD if: at the commit under test the first visit installed the worker, the stopped port refused, and all three addresses OPEN; and the instrument sees the fault this claim was written for: at 76c2f67 the first visit installed the worker, the stopped port refused, and office/ does NOT open. If the run at 76c2f67 opens office/ too, the instrument cannot tell the fault from the fix and L1e is FAILED.",
+   "bound": { "seconds": 10 }
+  }
+ ]
+}
