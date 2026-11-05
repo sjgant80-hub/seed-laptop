@@ -19,7 +19,7 @@ export function installDevices(ctx) {
   const st = { last: ctx.saved.last || {}, clocks: ctx.saved.clocks || {}, counter: ctx.saved.counter || 0 };
   const persist = () => ctx.save({ roster: roster ? roster.text : null, ...st });
   const say = (t) => { $('dev-says').textContent = t; };
-  $('dev-me').textContent = 'This device: ' + ctx.name + ' · key ' + ctx.me.id.slice(0, 12) + '…';
+  $('dev-me').textContent = 'This device · key ' + ctx.me.id.slice(0, 12) + '…';
 
   // the devices on the newest list, each but this one with a way to take it off (the phrase signs the new list)
   function render() {

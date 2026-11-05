@@ -179,6 +179,7 @@ function show(id) {
   for (const b of $('rail').children) b.setAttribute('aria-current', b.dataset.id === id ? 'page' : 'false');
   const PANELS = ['kar', 'files', 'write', 'backup', 'devices', 'receipts'];
   for (const panel of PANELS) $(panel).hidden = id !== panel;
+  $('frames').hidden = PANELS.includes(id);   // a panel has the whole stage: the blocks' frames give it back their half
   for (const [bid, f] of frames) f.hidden = bid !== id;
   if (id === 'receipts') renderReceipts();
   if (id === 'files') edges.render();
