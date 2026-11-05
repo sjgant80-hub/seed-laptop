@@ -29,7 +29,8 @@ gated like every other kernel. The amounts and choices are the reader's own; no 
 
 Powered by the Konomi architecture, created by Thomas Frumkin.
 
-The behaviour watch follows Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service LLC — "GEP-Based
-Security: Behavioral Entropy Signatures for Cybersecurity and DevOps," 2025 (CC BY 4.0).
+The behaviour watch follows Gary W. Floyd, Lumiea Systems Research Division — ThunderStruck Service, LLC — "GEP-Based
+Security: Behavioral Entropy Signatures for Cybersecurity and DevOps," 2025 (CC BY 4.0). The knowledge notebook
+(seedmind) dreams with Gary W. Floyd's dream-cycle design, from his Nexus system.
 
 Supplied by AI Native Solutions (https://www.ai-nativesolutions.com). MIT, no licence fee.
