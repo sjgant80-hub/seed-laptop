@@ -1,0 +1,78 @@
+{
+ "kind": "seed-laptop.walk",
+ "v": 1,
+ "url": "https://sjgant80-hub.github.io/seed-laptop/",
+ "commitWalked": "b464461bff700633c3311942827be14b2b2b3d0e",
+ "at": "2026-11-05",
+ "walker": "Kar, as Claude Opus 5.5 (a frontier model, not a local one), reading the served page cold as four buyers in turn, after the day's changes (L1e, the credits in the office). The persona findings are its reading.",
+ "how": "The served page (it matched the commit walked byte for byte) opened in Chrome in Claude's browser pane; every section read after the page had read its receipts (window.__page set), with the results table, the failures, the gate table, the trace, the worked example and the sources read from what the page drew. Then, for the CISO's question about a lost laptop, the office's devices panel was driven in three headless Chromes (three devices, two owners) at the commit walked and after the fix: tools/devices-check.mjs, its record receipts/devices-check.json.",
+ "record": {
+  "claimRows": ["L1a:HELD", "L1b:FAILED", "L1b2:HELD", "L1c:HELD", "L1d:HELD", "L1e:HELD", "L2a:HELD", "L2b:FAILED", "L2c:HELD", "L3:FAILED", "L3b:HELD", "L4:HELD", "L5:HELD", "L6:FAILED", "L6b:HELD", "L6c2:FAILED", "L7:UNMEASURED", "G1:HELD"],
+  "tally": "12 held, 5 failed (kept, never re-run until they pass), 1 not measured, of 18 claims, each sealed before the code or the run that measures it.",
+  "workedExample": "Over 3 years, each year after the first rising by UK CPI (3.1%): today £49,401.91; with the grown office £19,699.88, the lines that stay; saved £29,702.03 (£9,600.00 this year). Partly covered lines you kept: £11,992.20, still on the bill until the team that uses them decides. Not covered by the office: £7,707.68, the same on both sides.",
+  "gate": "On GitHub's runner: 1499 of 1501 mutants killed across 29 kernels, at commit 2351761, Node v25.9.0, run 41892669678 (its receipt). On a laptop: 1433 of 1435 across 28 kernels, at commit 726b5da (its receipt)."
+ },
+ "personas": [
+  {
+   "role": "CFO",
+   "found": [],
+   "held": [
+    "The worked example read the same as the walk of 4 November (record.workedExample): the kernel's sums on the basis's list prices, every line covered, partly covered or not, and why.",
+    "Every external figure is cited beside its number (ONS, Salesforce, Microsoft), the case counts rent only and says so, and no price of the supplier's appears anywhere."
+   ]
+  },
+  {
+   "role": "CTO and CISO",
+   "found": [
+    {
+     "gap": "Nothing answered what a lost or stolen laptop can reach, or how to shut it out. Checking it found a fault: a device that already held the owner's list of devices sent its office (the store's versions, sealed for that device) to any device it was joined to by pairing codes, even one on no list of the owner's, when no phrase was typed. In the check at the commit walked, the first device sent a device of another owner 2 such packets. There was also no way to take a device off the list, though src/sync.mjs's own header said a lost device is shut out by the next roster.",
+     "changed": "src/sync.mjs: named(door, key), the one test before anything of the store is sealed for a peer, and without(roster, key, me), the next list without one device; both tested and mutation-gated. The office sends its store and its list only to a device the newest signed list names, hands the newest list to such a device whenever two meet, shows the list, and takes a device off it with the phrase (a new receipt kind, unpaired). The check after the fix: 0 packets to the other owner's device, 0 to a device taken off, and what the device taken off sent was refused at the sender check. The page's Risks section says the fault was found and fixed before its check, so it is not a sealed claim; the question is answered under Questions."
+    },
+    {
+     "gap": "Every verdict on the page comes from measure/judge.mjs, and nothing said whether the judge itself is tested; it was not mutation-gated.",
+     "changed": "witness-all.mjs gates the judge with test/judge.test.mjs and test/judge-rules.test.mjs, which re-judges every committed receipt to the verdict and sentence it was written with; locally 370 of 370 mutants killed, none baselined; the blueprint and the results say so."
+    },
+    {
+     "gap": "No answer on how to report a security problem or how a fix arrives.",
+     "changed": "A question answered: report through AI Native Solutions' site; a fix arrives as a new signed seed, planted when the owner chooses; a company that is its own publisher can build and sign one itself."
+    }
+   ],
+   "held": [
+    "Pinning, the signed seed, the sandboxed readers, egress measured from below, the vault's cipher, certification and third-party code are each answered, with their receipts linked."
+   ]
+  },
+  {
+   "role": "COO",
+   "found": [
+    {
+     "gap": "Nothing said what happens to a leaver's work, when each person's office is their own.",
+     "changed": "A question answered: the roll-out keeps each person's phrase in the company's password manager and their latest vault with the company's backups, so any machine regrows that office (claim L4); a device that does not come back is taken off the list."
+    }
+   ],
+   "held": [
+    "Roll-out by week, support and training, scale, colleagues sharing one office (not in Stage 1) and offline working are answered."
+   ]
+  },
+  {
+   "role": "Procurement lead",
+   "found": [
+    {
+     "gap": "No answer on whether a data processing agreement with the supplier is needed.",
+     "changed": "A question answered: the software sends none of the buyer's data to the supplier, so there is no processing by the supplier to cover; support that ever handles data is set in that deployment's agreement."
+    },
+    {
+     "gap": "The page made no accessibility claim but did not say so; a public-sector buyer asks first.",
+     "changed": "A question answered straight: not audited against WCAG 2.2, no conformance level claimed; what the walks checked named as not an audit."
+    },
+    {
+     "gap": "The figures in the page's plain text (L1c's bits, L4's vault bits, the seed's sizes, the vault's rounds, the file caps, the sandbox's limits) were typed into the HTML, and nothing tied them to the receipts and constants they came from.",
+     "changed": "test/page.test.mjs reads each from its receipt, kernel constant or committed file in every test run; each matched."
+    }
+   ],
+   "held": [
+    "The supplier is named, the licence is MIT with no fee, support, service levels, warranty and liability are agreed per deployment, the exit is standard formats, and every part's licence and source are listed."
+   ]
+  }
+ ],
+ "changedIn": "the commit that adds this file"
+}

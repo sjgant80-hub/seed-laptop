@@ -1,0 +1,88 @@
+{
+ "kind": "seed-laptop.devices-check",
+ "v": 1,
+ "note": "A development check, not a sealed claim: written after the fault was found and fixed. Each run serves one commit exactly as committed.",
+ "at": "2026-11-05T19:24:43.003Z",
+ "machine": {
+  "os": "win32 10.0.26200",
+  "node": "v25.7.0"
+ },
+ "runs": [
+  {
+   "commit": "ccc47a6980704d1c381e07e123cf4eb586163fba",
+   "chrome": "Chrome/158.0.8127.18",
+   "pair": {
+    "open": true,
+    "aSays": "Connected to your other device.",
+    "bSays": "Paired: this device is on your list of devices.",
+    "aList": [],
+    "bList": [],
+    "aSent": {
+     "bin": 2,
+     "txt": 1
+    },
+    "bSent": {
+     "bin": 1,
+     "txt": 0
+    }
+   },
+   "otherOwner": {
+    "open": true,
+    "packetsAtoC": 2,
+    "textsAtoC": 0,
+    "aSays": "Connected to your other device.",
+    "cSays": "Connected to your other device."
+   },
+   "takenOff": {
+    "met": true,
+    "control": false
+   }
+  },
+  {
+   "commit": "07a7f5ecd4453a910e85e2df1c7c78397507c97a",
+   "chrome": "Chrome/158.0.8127.18",
+   "pair": {
+    "open": true,
+    "aSays": "Connected to your other device.",
+    "bSays": "Paired: this device is on your list of devices.",
+    "aList": [
+     "this device · key 1614c44b3983…",
+     "another of your devices · key 1a2049e633b4… Take off the list"
+    ],
+    "bList": [
+     "another of your devices · key 1614c44b3983… Take off the list",
+     "this device · key 1a2049e633b4…"
+    ],
+    "aSent": {
+     "bin": 2,
+     "txt": 1
+    },
+    "bSent": {
+     "bin": 1,
+     "txt": 0
+    }
+   },
+   "otherOwner": {
+    "open": true,
+    "packetsAtoC": 0,
+    "textsAtoC": 0,
+    "aSays": "Connected, but that device is not on your list of devices: nothing is shared with it until you pair it with your phrase.",
+    "cSays": "Connected, but that device is not on your list of devices: nothing is shared with it until you pair it with your phrase."
+   },
+   "takenOff": {
+    "met": true,
+    "control": true,
+    "aList": [
+     "this device · key 1614c44b3983…"
+    ],
+    "bList": [
+     "another of your devices · key 1614c44b3983… Take off the list"
+    ],
+    "bSays": "This device is not on your list of devices, so your other devices send it nothing; pair it with your phrase to share with it.",
+    "packetsAtoB": 0,
+    "aSaysOfB": "A packet was refused at the sender check.",
+    "aReceipt": "A device (1a2049e6) is off your list of devices, signed with your phrase: this device sends it nothing more and reads nothing it sends, and each of your other devices does the same from the next time it meets one that holds the new list."
+   }
+  }
+ ]
+}

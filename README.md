@@ -18,6 +18,7 @@ measured run (`measure/seal2.md`, seal 2); each is measured once, and a failed c
 | the mutation gate | `node witness-all.mjs` (one kernel: `node witness-all.mjs pdf`) |
 | a claim's measurement | `node measure/l1.mjs` … `node measure/l6.mjs local` (each refuses to run on data that differs from seal 2) |
 | the office reopening with the network gone (L1e) | `node measure/l1e.mjs` (headless Chrome; serves HEAD and 76c2f67 exactly as committed, then stops the server) |
+| the devices panel, three browsers (a development check, not a sealed claim) | `node tools/devices-check.mjs <commit> …` → `receipts/devices-check.json` |
 | mail in, from your own account | `node tools/imap.mjs --host <imap host> --user <you> --pass-env <ENV VAR> --out <folder>` |
 
 Layers: `base/` (the minimal base, defined), `src/runtime.mjs`, `vendor/fall-kit-core` (the foundation), `blocks/`
