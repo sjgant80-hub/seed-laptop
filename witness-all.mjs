@@ -37,6 +37,8 @@
 //               reads only the facts its own measure wrote (an array holding null throws there), and judge() itself
 //               turns a rule or sentence that throws into FAILED, never a throw (tested)
 // NOT gated, each with its reason: tools/** (local I/O and orchestration, re-derived by each measure's --check);
+// src/parse/run.mjs (the sandbox process's entry: stdin in, one line of JSON out, under Node's permission model; what it
+// returns is decided by src/parse/index.mjs, gated above as read, and its shape is checked again by the office);
 // office/** glue (browser I/O; its decisions live in the kernels above); vendor/** and blocks/** (gated in their own
 // repos, pinned byte-identical by their --check tools); .witness/** (the gate itself, pinned to witness v0.6);
 // measure/** other than the judge (the instruments' I/O: each drives a browser, a process or a capture and writes its

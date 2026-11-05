@@ -40,10 +40,16 @@ function receipts(files) {
   const rows = CLAIMS.map(([id, file, says]) => {
     const r = files[file];
     let v = r && Array.isArray(r.verdicts) ? r.verdicts.find((x) => x.id === id) : null;
-    if (id === 'G1' && r) {
-      const ci = files['witness-ci'];
-      v = { verdict: r.clean ? 'HELD' : 'FAILED', says: 'On a laptop: ' + r.killed + ' of ' + r.total + ' mutants killed across ' + r.kernels.length + ' kernels' + (r.clean ? ', none capped, no unreviewed survivor' : '') + '.'
-        + (ci && Array.isArray(ci.kernels) ? ' On GitHub\'s runner at ' + String(ci.commit || '').slice(0, 7) + ': ' + ci.killed + ' of ' + ci.total + ' across ' + ci.kernels.length + ' kernels, ' + (ci.clean ? 'clean' : 'NOT clean') + '.' : '')
+    if (id === 'G1' && r && Array.isArray(r.kernels)) {
+      // G1's sealed scope is the kernels in src/: each half is counted on those rows only, and the verdict needs both halves
+      // clean. The judge (measure/judge.mjs) is gated in the same run but sits outside that scope, so it is told apart.
+      const ci = files['witness-ci'] && Array.isArray(files['witness-ci'].kernels) ? files['witness-ci'] : null;
+      const inG1 = (k) => /^src\//.test(String(k.src)), sum = (ks, f) => ks.reduce((a, k) => a + k[f], 0);
+      const half = (w) => { const ks = w.kernels.filter(inG1); return { ks, killed: sum(ks, 'killed'), total: sum(ks, 'total'), clean: ks.length > 0 && ks.every((k) => k.clean) }; };
+      const lap = half(r), run = ci ? half(ci) : null, judge = ci ? ci.kernels.filter((k) => !inG1(k)) : [];
+      v = { verdict: lap.clean && (!run || run.clean) ? 'HELD' : 'FAILED', says: 'On a laptop: ' + lap.killed + ' of ' + lap.total + ' mutants killed across ' + lap.ks.length + ' kernels in src/' + (lap.clean ? ', none capped, no unreviewed survivor' : ', NOT clean') + '.'
+        + (run ? ' On GitHub\'s runner at ' + String(ci.commit || '').slice(0, 7) + ': ' + run.killed + ' of ' + run.total + ' across ' + run.ks.length + ' kernels in src/, ' + (run.clean ? 'clean' : 'NOT clean') + '.' : '')
+        + judge.map((k) => ' In the same run, outside G1\'s scope, ' + k.src + ' (the judge): ' + k.killed + ' of ' + k.total + ', ' + (k.clean ? 'clean' : 'NOT clean') + '.').join('')
         + ' The hostile-input battery (2,000 inputs per function) runs in every test pass.' };
     }
     return { id, says, verdict: v ? v.verdict : 'UNMEASURED', measured: v ? v.says : 'Not measured yet.', commit: r && r.commit ? r.commit : null };

@@ -1,16 +1,16 @@
 {
  "kind": "seed-laptop.witness",
  "v": 1,
- "commit": "235176177f9b364f682210808197684d86a73696",
+ "commit": "54040a4740e27c50752abc4b78b69330d08916fd",
  "node": "v25.9.0",
  "ci": {
-  "run": "41892669678",
-  "url": "https://github.com/sjgant80-hub/seed-laptop/actions/runs/41892669678",
+  "run": "42094930045",
+  "url": "https://github.com/sjgant80-hub/seed-laptop/actions/runs/42094930045",
   "runner": "Linux ubuntu26"
  },
  "clean": true,
- "killed": 1499,
- "total": 1501,
+ "killed": 1887,
+ "total": 1889,
  "kernels": [
   {
    "name": "runtime",
@@ -275,8 +275,8 @@
   {
    "name": "sync",
    "src": "src/sync.mjs",
-   "killed": 57,
-   "total": 57,
+   "killed": 75,
+   "total": 75,
    "ignored": 0,
    "survived": 0,
    "capped": false,
@@ -297,6 +297,16 @@
    "src": "src/rentcase.mjs",
    "killed": 58,
    "total": 58,
+   "ignored": 0,
+   "survived": 0,
+   "capped": false,
+   "clean": true
+  },
+  {
+   "name": "judge",
+   "src": "measure/judge.mjs",
+   "killed": 370,
+   "total": 370,
    "ignored": 0,
    "survived": 0,
    "capped": false,
