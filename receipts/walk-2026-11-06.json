@@ -1,0 +1,67 @@
+{
+ "kind": "seed-laptop.walk",
+ "v": 1,
+ "url": "https://sjgant80-hub.github.io/seed-laptop/",
+ "commitWalked": "e14a4a8",
+ "recheckedAt": "c5c9850",
+ "at": "2026-11-06",
+ "walker": "Kar, as Claude Opus 5.5 (a frontier model, not a local one), reading the served page cold as four buyers in turn, then the office it opens. The persona findings are its reading.",
+ "how": "Before the walk, the page's code was read against the receipts it draws from. Then the served page (index.html, page/page.mjs, office/precache.mjs and receipts/witness-ci.json each matched the commit walked byte for byte) was opened cold by measure/walk-served.mjs in headless Chrome/158.0.8127.18 with a throwaway profile, at desktop width, at phone width (375 px) and in the dark scheme: every section read after the page had read its receipts, every cost-case button pressed with good and bad inputs, every question opened, every link fetched, and the office opened from the hero button. After the fix in c5c9850 was served, the same walk ran again. The record it writes (.out/walk-served/record.json) is not committed; this file quotes it.",
+ "record": {
+  "claimRows": ["L1a:HELD", "L1b:FAILED", "L1b2:HELD", "L1c:HELD", "L1d:HELD", "L1e:HELD", "L2a:HELD", "L2b:FAILED", "L2c:HELD", "L3:FAILED", "L3b:HELD", "L4:HELD", "L5:HELD", "L6:FAILED", "L6b:HELD", "L6c2:FAILED", "L7:UNMEASURED", "G1:HELD"],
+  "tally": "12 held, 5 failed (kept, never re-run until they pass), 1 not measured, of 18 claims, each sealed before the code or the run that measures it.",
+  "g1Row": "On a laptop: 1433 of 1435 mutants killed across 28 kernels in src/, none capped, no unreviewed survivor. On GitHub's runner at 54040a4: 1517 of 1519 across 29 kernels in src/, clean. In the same run, outside G1's scope, measure/judge.mjs (the judge): 370 of 370, clean. The hostile-input battery (2,000 inputs per function) runs in every test pass.",
+  "gate": "On GitHub's runner: 1887 of 1889 mutants killed across 30 kernels, at commit 54040a4, Node v25.9.0, run 42094930045 (its receipt). On a laptop: 1433 of 1435 across 28 kernels, at commit 726b5da (its receipt).",
+  "workedExample": "Over 3 years, each year after the first rising by UK CPI (3.1%): today £49,401.91; with the grown office £19,699.88, the lines that stay; saved £29,702.03 (£9,600.00 this year). Partly covered lines you kept: £11,992.20, still on the bill until the team that uses them decides. Not covered by the office: £7,707.68, the same on both sides.",
+  "officeAtWalked": "The office grows here. Not available: Kar can use a model on this machine.",
+  "officeAtRecheck": "The office grows here. Optional, and not on this device: a local model for Kar to use.",
+  "links": "55 links: 15 to the page's own sections, each present; 40 fetched, every one answered below 400.",
+  "console": "Only three failed loads, all expected: receipts/l7.json twice (L7 is not measured, so its receipt does not exist and the page shows it as not measured, never as a number) and /favicon.ico at the host's root, which is not this site's.",
+  "phone": "At 375 px the page is 375 px wide: no sideways scroll.",
+  "dark": "In the dark scheme the page draws on rgb(18, 20, 24) with ink rgb(233, 235, 239)."
+ },
+ "personas": [
+  {
+   "role": "CFO",
+   "found": [],
+   "held": [
+    "The worked example read the same as the walks of 4 and 5 November (record.workedExample): the kernel's sums on the basis's list prices, each line covered, partly covered or not, and why; ten years, unticking the CRM line and changing its people each worked it out again.",
+    "Bad inputs were refused in words, never summed: 2.5 people ('a whole number from 0'), 11 years and 0 years ('1 to 10'), an amount typed as 'twelve' ('every item has a name, a whole amount, per month or per year, and whole seats'), and an empty list ('a cost case starts from the owner's own list: there is none').",
+    "Every external figure is cited beside its number (ONS, Salesforce, Microsoft); the case counts rent only and says so; no price of the supplier's appears anywhere."
+   ]
+  },
+  {
+   "role": "CTO and CISO",
+   "found": [
+    {
+     "gap": "The blueprint says the judge (measure/judge.mjs), which gives every verdict on the page, is mutation-gated like the kernels, but the gate table beneath it had no row for the judge: the page drew the table from receipts/witness-ci.json at 2351761, a run from before the judge was gated (ccc47a6) and before src/sync.mjs and src/receipt.mjs changed (07a7f5e). Found reading page/page.mjs against that receipt before the walk.",
+     "changed": "e14a4a8: receipts/witness-ci.json is the gate job's own receipt from run 42094930045 at 54040a4, committed byte for byte as it came: 30 kernels clean, the judge 370 of 370 among them, sync 75 of 75. The G1 row counts G1's sealed scope (the kernels in src/) on each half and is HELD only when both halves are clean; the judge, outside that scope, is named apart with its own count (record.g1Row)."
+    }
+   ],
+   "held": [
+    "The browser console showed nothing but the expected failed loads (record.console); every link answered.",
+    "Pinning, the signed seed, the sandboxed readers, egress measured from below, the vault's cipher, a lost or stolen device, reporting a security problem, certification and third-party code are each answered, with their receipts linked."
+   ]
+  },
+  {
+   "role": "COO",
+   "found": [
+    {
+     "gap": "Opening the office from the hero button, as a new starter would, the planting screen ended 'The office grows here. Not available: Kar can use a model on this machine.' A tab never finds a local model, so every visitor read a sentence that seemed to say Kar was not available, on the office's first screen.",
+     "changed": "c5c9850: src/runtime.mjs names each optional extra as what it adds, so one name reads right whether it is there or not, and the sentence says the missing ones are optional (record.officeAtRecheck). The rules for what counts as found, the needs and the tiers are unchanged; its tests hold each sentence exactly; runtime 3 of 3 mutants killed locally."
+    }
+   ],
+   "held": [
+    "Roll-out by week, leavers, support and training, scale to 200 people, colleagues sharing one office (not in Stage 1) and working offline are answered."
+   ]
+  },
+  {
+   "role": "Procurement lead",
+   "found": [],
+   "held": [
+    "The supplier is named (AI Native Solutions, through its site); the licence is MIT with no fee; support, service levels, warranty and liability are agreed per deployment; the exit is standard formats; a processing agreement and accessibility (not audited, no level claimed) are answered straight; every part's licence and source are listed."
+   ]
+  }
+ ],
+ "changedIn": ["e14a4a8", "c5c9850", "the commit that adds this file"]
+}
