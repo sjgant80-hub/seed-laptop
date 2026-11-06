@@ -13,6 +13,7 @@
 //              sandbox (files from outside are parsed in a sandbox), inflate (zip-based files: DOCX, XLSX, zip),
 //              webrtc (devices sync directly), webgpu (a model runs in the tab), serviceworker (the office opens with
 //              no network), localModel (Kar can use a model on this machine)
+//            each named, in GIVES, as what it adds, so a sentence reads the same whether it is here or not
 //
 //   tierOf(found) → { ok: true, tier: 'full' | 'core', missing: [], absent: [...], gives: [...], says }
 //                 | { ok: false, tier: 'none', missing: [...], absent: [...], gives: [], says }
@@ -26,12 +27,12 @@
 export const NEEDS = Object.freeze(['ed25519', 'sha256', 'aesgcm', 'pbkdf2', 'storage']);
 export const EXTRAS = Object.freeze(['sandbox', 'inflate', 'webrtc', 'webgpu', 'serviceworker', 'localModel']);
 export const GIVES = Object.freeze({
-  sandbox: 'files from outside are parsed in a sandbox',
-  inflate: 'zip-based files (DOCX, XLSX, zip) can be read',
-  webrtc: 'devices sync directly with each other',
-  webgpu: 'a language model can run in this tab',
-  serviceworker: 'the office opens with no network',
-  localModel: 'Kar can use a model on this machine',
+  sandbox: 'files from outside read in a sandbox',
+  inflate: 'reading zip-based files (DOCX, XLSX, zip)',
+  webrtc: 'devices syncing directly with each other',
+  webgpu: 'a language model running in this tab',
+  serviceworker: 'opening with no network',
+  localModel: 'a local model for Kar to use',
 });
 
 /** Did the probe find this one? Own property, exactly true; anything that throws is not found. */
@@ -47,7 +48,7 @@ export function tierOf(f) {
   }
   const gives = EXTRAS.filter((n) => !absent.includes(n)).map((n) => GIVES[n]);
   const says = absent.length
-    ? 'The office grows here. Not available: ' + absent.map((n) => GIVES[n]).join('; ') + '.'
-    : 'The office grows here, with everything: ' + gives.join('; ') + '.';
+    ? 'The office grows here. Optional, and not on this device: ' + absent.map((n) => GIVES[n]).join('; ') + '.'
+    : 'The office grows here, with every optional extra: ' + gives.join('; ') + '.';
   return { ok: true, tier: absent.length ? 'core' : 'full', missing, absent, gives, says };
 }

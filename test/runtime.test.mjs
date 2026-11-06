@@ -21,7 +21,7 @@ test('every need and every extra → full, says everything', () => {
   assert.deepEqual(r.missing, []);
   assert.deepEqual(r.absent, []);
   assert.deepEqual(r.gives, EXTRAS.map((n) => GIVES[n]));
-  assert.equal(r.says, 'The office grows here, with everything: ' + EXTRAS.map((n) => GIVES[n]).join('; ') + '.');
+  assert.equal(r.says, 'The office grows here, with every optional extra: ' + EXTRAS.map((n) => GIVES[n]).join('; ') + '.');
 });
 
 test('every need, one extra absent → core, names what is not available', () => {
@@ -33,7 +33,7 @@ test('every need, one extra absent → core, names what is not available', () =>
   assert.deepEqual(r.missing, []);
   assert.equal(r.gives.length, EXTRAS.length - 1);
   assert.ok(!r.gives.includes(GIVES.webgpu));
-  assert.equal(r.says, 'The office grows here. Not available: a language model can run in this tab.');
+  assert.equal(r.says, 'The office grows here. Optional, and not on this device: a language model running in this tab.');
 });
 
 test('needs only → core with every extra absent', () => {
@@ -42,7 +42,7 @@ test('needs only → core with every extra absent', () => {
   assert.equal(r.tier, 'core');
   assert.deepEqual(r.absent, [...EXTRAS]);
   assert.deepEqual(r.gives, []);
-  assert.equal(r.says, 'The office grows here. Not available: ' + EXTRAS.map((n) => GIVES[n]).join('; ') + '.');
+  assert.equal(r.says, 'The office grows here. Optional, and not on this device: ' + EXTRAS.map((n) => GIVES[n]).join('; ') + '.');
 });
 
 test('each need, missing alone → none, named', () => {
